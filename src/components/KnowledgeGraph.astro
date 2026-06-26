@@ -1,0 +1,313 @@
+---
+import { tabs } from '../data/roadmap';
+---
+
+<section class="tight" id="learning" data-reveal>
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <div class="label">Learning</div>
+      <h2 class="display">
+        What I'm <em>currently learning</em><span class="dot">.</span>
+      </h2>
+    </div>
+
+    <div class="tab-bar" data-reveal id="tab-bar">
+      {tabs.map(t => (
+        <button class="tab-btn" data-tab={t.id}>{t.label}</button>
+      ))}
+    </div>
+
+    <div class="tab-panel" id="tab-panel">
+      <div class="graph-wrapper" id="graph-wrapper">
+        <div class="zoom-controls">
+          <button class="zoom-btn" data-zoom-out aria-label="Zoom out">−</button>
+          <span class="zoom-level" id="zoom-level">100%</span>
+          <button class="zoom-btn" data-zoom-in aria-label="Zoom in">+</button>
+          <button class="zoom-btn" data-zoom-reset aria-label="Reset zoom">⟲</button>
+        </div>
+        <div class="graph-inner" id="graph-inner">
+          <svg class="svg-overlay" id="svg-overlay">
+            <defs>
+              <marker id="arrow-active" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ED6F5C" />
+              </marker>
+              <marker id="arrow-inactive" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#4A4640" />
+              </marker>
+            </defs>
+          </svg>
+          <div class="nodes-container" id="nodes-container"></div>
+        </div>
+      </div>
+
+      <div class="drawer" id="drawer">
+        <div class="drawer-title" id="drawer-title"></div>
+        <div class="drawer-desc" id="drawer-desc"></div>
+        <ul class="subtopic-list" id="subtopic-list"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="roadmap-data" style="display:none" data-tabs={JSON.stringify(tabs)}></div>
+<script>
+  const tabsData = JSON.parse(document.getElementById('roadmap-data').dataset.tabs);
+  const isMobile = window.innerWidth <= 640;
+
+  let currentTab = tabsData[0].id;
+  let zoom = 1;
+  let panX = 0, panY = 0;
+  let isDragging = false;
+  let dragStartX, dragStartY;
+  let drawerOpen = false;
+
+  const tabBar = document.getElementById('tab-bar');
+  const nodesContainer = document.getElementById('nodes-container');
+  const svgOverlay = document.getElementById('svg-overlay');
+  const graphInner = document.getElementById('graph-inner');
+  const graphWrapper = document.getElementById('graph-wrapper');
+  const drawer = document.getElementById('drawer');
+  const drawerTitle = document.getElementById('drawer-title');
+  const drawerDesc = document.getElementById('drawer-desc');
+  const subtopicList = document.getElementById('subtopic-list');
+  const zoomLevel = document.getElementById('zoom-level');
+
+  function layoutTopics(topics) {
+    const total = topics.length;
+    const row1Count = Math.ceil(total / 2);
+    return topics.map((t, i) => {
+      const row = i < row1Count ? 0 : 1;
+      const ri = row === 0 ? i : i - row1Count;
+      const rc = row === 0 ? row1Count : (total - row1Count) || 1;
+      const spacing = 100 / (rc + 1);
+      return { ...t, x: spacing * (ri + 1), y: row === 0 ? 28 : 68 };
+    });
+  }
+
+  function getStateClass(state) {
+    switch (state) {
+      case 'completed': return 'node--completed';
+      case 'active': return 'node--active';
+      default: return 'node--planned';
+    }
+  }
+
+  function getArrowState(sourceState, targetState) {
+    if (sourceState === 'planned') return 'inactive';
+    if (sourceState === 'active' && targetState === 'planned') return 'inactive';
+    return 'active';
+  }
+
+  function renderGraph(tabId) {
+    const tab = tabsData.find(t => t.id === tabId);
+    if (!tab) return;
+    const topics = layoutTopics(tab.topics);
+    const topicMap = {};
+    topics.forEach(t => { topicMap[t.id] = t; });
+
+    if (isMobile) {
+      nodesContainer.innerHTML = '';
+      svgOverlay.style.display = 'none';
+      graphInner.style.transform = 'none';
+      graphInner.style.cursor = 'default';
+
+      topics.forEach(t => {
+        const node = document.createElement('div');
+        node.className = `graph-node ${getStateClass(t.state)}`;
+        node.dataset.topicId = t.id;
+        const dot = document.createElement('span');
+        dot.className = 'node-dot';
+        node.appendChild(dot);
+        node.appendChild(document.createTextNode(t.label));
+        node.addEventListener('click', () => toggleDrawer(t));
+        nodesContainer.appendChild(node);
+      });
+      return;
+    }
+
+    svgOverlay.style.display = 'block';
+    nodesContainer.innerHTML = '';
+
+    topics.forEach(t => {
+      const node = document.createElement('div');
+      node.className = `graph-node ${getStateClass(t.state)}`;
+      node.style.left = t.x + '%';
+      node.style.top = t.y + '%';
+      node.dataset.topicId = t.id;
+      const dot = document.createElement('span');
+      dot.className = 'node-dot';
+      node.appendChild(dot);
+      node.appendChild(document.createTextNode(t.label));
+
+      if (t.state !== 'planned') {
+        node.addEventListener('click', () => toggleDrawer(t));
+      }
+      nodesContainer.appendChild(node);
+    });
+
+    let svgContent = '';
+    topics.forEach(t => {
+      if (!t.dependsOn || t.dependsOn.length === 0) return;
+      t.dependsOn.forEach(depId => {
+        if (!topicMap[depId]) return;
+        const dep = topicMap[depId];
+        const state = getArrowState(dep.state, t.state);
+        const cls = state === 'active' ? 'connection-line--active' : 'connection-line--inactive';
+        const marker = state === 'active' ? 'url(#arrow-active)' : 'url(#arrow-inactive)';
+        svgContent += `<line class="connection-line ${cls}" x1="${dep.x}" y1="${dep.y}" x2="${t.x}" y2="${t.y}" marker-end="${marker}" />`;
+      });
+    });
+    svgOverlay.innerHTML = svgContent;
+    svgOverlay.style.display = 'block';
+  }
+
+  function toggleDrawer(topic) {
+    if (drawerOpen && drawerTitle.textContent === topic.label) {
+      drawer.classList.remove('open');
+      drawerOpen = false;
+      return;
+    }
+    drawerTitle.textContent = topic.label;
+    drawerDesc.textContent = topic.description;
+    subtopicList.innerHTML = '';
+    topic.subtopics.forEach(s => {
+      const li = document.createElement('li');
+      li.className = 'subtopic-item';
+      const marker = document.createElement('span');
+      marker.className = 'marker';
+      li.appendChild(marker);
+      li.appendChild(document.createTextNode(s.label));
+      li.addEventListener('click', () => {
+        li.classList.toggle('done');
+        marker.textContent = li.classList.contains('done') ? '✓' : '';
+      });
+      subtopicList.appendChild(li);
+    });
+    drawer.classList.add('open');
+    drawerOpen = true;
+  }
+
+  function switchTab(tabId) {
+    if (tabId === currentTab) return;
+    const panel = document.getElementById('tab-panel');
+    panel.classList.add('switching');
+    setTimeout(() => {
+      drawer.classList.remove('open');
+      drawerOpen = false;
+      currentTab = tabId;
+      renderGraph(tabId);
+      resetZoom();
+      panel.classList.remove('switching');
+    }, 200);
+
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+  }
+
+  tabBar.addEventListener('click', e => {
+    const btn = e.target.closest('.tab-btn');
+    if (btn) switchTab(btn.dataset.tab);
+  });
+
+  function applyTransform() {
+    if (isMobile) return;
+    graphInner.style.transform = `scale(${zoom}) translate(${panX}px, ${panY}px)`;
+    zoomLevel.textContent = Math.round(zoom * 100) + '%';
+  }
+
+  function resetZoom() {
+    zoom = 1; panX = 0; panY = 0;
+    applyTransform();
+  }
+
+  graphWrapper.addEventListener('wheel', e => {
+    if (isMobile) return;
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    const oldZoom = zoom;
+    zoom = Math.max(0.5, Math.min(3, zoom + delta));
+    const rect = graphWrapper.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    panX = mx - (mx - panX) * (zoom / oldZoom);
+    panY = my - (my - panY) * (zoom / oldZoom);
+    applyTransform();
+  }, { passive: false });
+
+  graphInner.addEventListener('mousedown', e => {
+    if (isMobile || e.button !== 0) return;
+    isDragging = true;
+    dragStartX = e.clientX - panX;
+    dragStartY = e.clientY - panY;
+    graphInner.style.cursor = 'grabbing';
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    panX = e.clientX - dragStartX;
+    panY = e.clientY - dragStartY;
+    applyTransform();
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      graphInner.style.cursor = 'grab';
+    }
+  });
+
+  (function() {
+    let touchStartX, touchStartY, touchDist = 0;
+    let touchPanX, touchPanY;
+
+    graphWrapper.addEventListener('touchstart', e => {
+      if (isMobile) return;
+      if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchPanX = panX;
+        touchPanY = panY;
+      } else if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        touchDist = Math.sqrt(dx * dx + dy * dy);
+      }
+    }, { passive: true });
+
+    graphWrapper.addEventListener('touchmove', e => {
+      if (isMobile) return;
+      e.preventDefault();
+      if (e.touches.length === 1) {
+        panX = touchPanX + (e.touches[0].clientX - touchStartX);
+        panY = touchPanY + (e.touches[0].clientY - touchStartY);
+        applyTransform();
+      } else if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const scale = dist / touchDist;
+        const oldZoom = zoom;
+        zoom = Math.max(0.5, Math.min(3, zoom * scale));
+        const rect = graphWrapper.getBoundingClientRect();
+        const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+        const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+        panX = cx - (cx - panX) * (zoom / oldZoom);
+        panY = cy - (cy - panY) * (zoom / oldZoom);
+        applyTransform();
+        touchDist = dist;
+      }
+    }, { passive: false });
+
+    graphWrapper.addEventListener('touchend', () => {});
+  })();
+
+  document.querySelector('[data-zoom-in]').addEventListener('click', () => {
+    zoom = Math.min(3, zoom + 0.25); applyTransform();
+  });
+  document.querySelector('[data-zoom-out]').addEventListener('click', () => {
+    zoom = Math.max(0.5, zoom - 0.25); applyTransform();
+  });
+  document.querySelector('[data-zoom-reset]').addEventListener('click', resetZoom);
+
+  renderGraph(currentTab);
+  document.querySelector('.tab-btn').classList.add('active');
+</script>

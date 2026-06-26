@@ -22,6 +22,13 @@ import ThemeToggle from './ThemeToggle.astro';
       <div class="nav-side">
         <ThemeToggle />
         <a href="/files/Khairy_Shaheen_CV.pdf" class="nav-cta" download>Resume</a>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="4" y1="7" x2="20" y2="7"/>
+            <line x1="4" y1="12" x2="20" y2="12"/>
+            <line x1="4" y1="17" x2="20" y2="17"/>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -143,6 +150,17 @@ import ThemeToggle from './ThemeToggle.astro';
   const nav = document.getElementById('main-nav');
   let lastY = 0;
   let ticking = false;
+
+  const toggle = document.getElementById('nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  if (toggle && navLinks) {
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  }
 
   window.addEventListener('scroll', () => {
     if (!ticking) {
