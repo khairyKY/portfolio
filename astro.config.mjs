@@ -4,6 +4,6 @@ import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  site: 'https://khairy-ky.vercel.app',
+  site: 'https://portfolio-khairyky.vercel.app',
   adapter: vercel(),
 });
