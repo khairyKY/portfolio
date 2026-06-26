@@ -3,9 +3,9 @@ import { tabs } from '../data/roadmap';
 ---
 
 <section class="tight" id="learning" data-reveal>
-  <div class="container">
+  <div class="container learning-page">
     <div class="section-header" data-reveal>
-      <div class="label">Learning</div>
+      <div class="label">Roadmap</div>
       <h2 class="display">
         What I'm <em>currently learning</em><span class="dot">.</span>
       </h2>
@@ -26,7 +26,7 @@ import { tabs } from '../data/roadmap';
           <button class="zoom-btn" data-zoom-reset aria-label="Reset zoom">⟲</button>
         </div>
         <div class="graph-inner" id="graph-inner">
-          <svg class="svg-overlay" id="svg-overlay">
+          <svg class="svg-overlay" id="svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
             <defs>
               <marker id="arrow-active" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="#ED6F5C" />
@@ -139,9 +139,7 @@ import { tabs } from '../data/roadmap';
       node.appendChild(dot);
       node.appendChild(document.createTextNode(t.label));
 
-      if (t.state !== 'planned') {
-        node.addEventListener('click', () => toggleDrawer(t));
-      }
+      node.addEventListener('click', () => toggleDrawer(t));
       nodesContainer.appendChild(node);
     });
 

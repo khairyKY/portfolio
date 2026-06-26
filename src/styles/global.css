@@ -503,9 +503,8 @@ a { color: inherit; text-decoration: none; }
   animation: node-pulse 2.5s ease-in-out infinite;
 }
 .graph-node.node--planned {
-  opacity: 0.45;
-  filter: grayscale(0.5);
-  pointer-events: none;
+  opacity: 0.55;
+  filter: grayscale(0.4);
 }
 .graph-node .node-dot {
   width: 6px; height: 6px;
@@ -710,3 +709,6 @@ a { color: inherit; text-decoration: none; }
   .drawer { padding: 0 16px; }
   .drawer.open { padding: 16px; }
 }
+
+.learning-page .graph-wrapper { min-height: 60vh; }
+.learning-page .graph-inner { height: 60vh; }
