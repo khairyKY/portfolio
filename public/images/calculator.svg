@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="bg" cx="40%" cy="30%" r="80%"><stop offset="0%" stop-color="#1b2d2e"/><stop offset="100%" stop-color="#0f0e12"/></radialGradient>
+    <radialGradient id="or1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#00BFFF" stop-opacity=".35"/><stop offset="100%" stop-color="#00BFFF" stop-opacity="0"/></radialGradient>
+    <radialGradient id="or2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#A78BFA" stop-opacity=".2"/><stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/></radialGradient>
+    <linearGradient id="gl" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="rgba(255,255,255,.08)"/><stop offset="100%" stop-color="rgba(255,255,255,.02)"/></linearGradient>
+    <linearGradient id="gb" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="rgba(255,255,255,.15)"/><stop offset="100%" stop-color="rgba(255,255,255,.04)"/></linearGradient>
+    <filter id="bL"><feGaussianBlur stdDeviation="50"/></filter>
+    <filter id="noise"><feTurbulence type="fractalNoise" baseFrequency=".65" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .04 0"/></filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <ellipse cx="300" cy="300" rx="350" ry="280" fill="url(#or1)" filter="url(#bL)"/>
+  <ellipse cx="900" cy="300" rx="300" ry="250" fill="url(#or2)" filter="url(#bL)"/>
+  <rect x="60" y="260" width="420" height="110" rx="16" fill="url(#gl)" stroke="url(#gb)" stroke-width="1"/>
+  <circle cx="90" cy="290" r="4" fill="#00BFFF"/>
+  <text x="110" y="305" font-family="'Inter Tight',system-ui,sans-serif" font-size="15" font-weight="600" fill="#00BFFF" letter-spacing=".18em" text-transform="uppercase">Project</text>
+  <text x="110" y="343" font-family="'Inter Tight',system-ui,sans-serif" font-size="28" font-weight="700" fill="rgba(255,255,255,.92)" letter-spacing="-.01em">Scientific Calculator</text>
+  <rect x="60" y="550" width="80" height="28" rx="999" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+  <text x="76" y="566" font-family="'Inter Tight',system-ui,sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,.5)" letter-spacing=".14em" text-transform="uppercase">Backend</text>
+  <text x="1160" y="600" font-family="'Playfair Display',serif" font-style="italic" font-size="52" font-weight="500" fill="rgba(255,255,255,.04)" text-anchor="end">CALC</text>
+  <rect width="1200" height="630" fill="url(#noise)" style="mix-blend-mode: overlay;"/>
+</svg>

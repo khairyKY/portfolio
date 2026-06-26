@@ -1,0 +1,116 @@
+---
+const projects = [
+  { title: 'Shaheen E-Commerce', description: 'Ongoing improvements to a Laravel 12 bilingual e-commerce — bug fixes, new features, and production maintenance across 100+ routes.', tags: ['Full-Stack', 'Frontend', 'Backend'], tech: ['Laravel 12', 'Livewire 3', 'Filament 4', 'MySQL'], slug: 'shaheen-ecommerce' },
+  { title: 'Customer Ordering System', description: 'Full-stack vertical-slice e-commerce — React frontend, FastAPI backend, security middleware, Playwright E2E. My project with team contributors.', tags: ['Full-Stack', 'Frontend', 'Backend'], tech: ['React 18', 'FastAPI', 'Tailwind', 'Playwright'], slug: 'customer-ordering-system' },
+  { title: 'Scentura → Aeron ERP', description: 'Contributed the Aeron frontend prototype (23 React route modules) for a 22-app Django ERP with event-sourced inventory and ML forecasting.', tags: ['Full-Stack', 'Frontend', 'UI/UX'], tech: ['React 19', 'TypeScript', 'shadcn/ui', 'Framer Motion'], slug: 'scentura-erp' },
+  { title: 'MRL Eye Classification', description: 'DenseNet121 drowsiness detector — contributed model training with real-time webcam inference and temporal smoothing.', tags: ['AI/ML'], tech: ['PyTorch', 'OpenCV', 'CUDA', 'DenseNet'], slug: 'mrl-eye-classification' },
+  { title: 'ICON Automotive', description: 'Luxury automotive brand UI demo with interactive product showcase and stream browsing experience.', tags: ['Frontend', 'UI/UX'], tech: ['React', 'Vite', 'Tailwind', 'Vercel'], slug: 'icon-automotive' },
+  { title: 'Bellissimo Coffee Shop', description: 'Liquid Glass design system with circadian lighting engine and animated BaristaButton. Entirely my own project.', tags: ['Frontend', 'UI/UX'], tech: ['React 19', 'Vite', 'Tailwind', 'Framer Motion'], slug: 'bellissimo-coffee-shop' },
+  { title: 'ErgoX-UI', description: 'SwiftUI gaze-controlled interface using ARKit TrueDepth — contributed UI components, messaging views, and media player logic.', tags: ['Frontend', 'UI/UX'], tech: ['SwiftUI', 'ARKit', 'Swift', 'iPhone'], slug: 'ergox-ui' },
+  { title: 'Study Guides', description: 'Community study resources for Embedded Systems, Algorithms, and Computer Networks — built as offline-first HTML with interactive features.', tags: ['Frontend'], tech: ['HTML/CSS', 'JavaScript', 'Python'], slug: 'networks-study-guide' },
+  { title: 'Hospital Management System', description: 'Python desktop app with tkinter GUI, SQLite database, and role-based dashboards — contributed auth, database layer, and admin panels.', tags: ['Backend'], tech: ['Python', 'tkinter', 'SQLite'], slug: 'hospital-management-system' },
+  { title: 'Arduino Robotics', description: '3 autonomous subsystems: maze solver, light seeker, and Bluetooth arena robot with environmental sensing.', tags: ['Embedded'], tech: ['Arduino C++', 'RemoteXY', 'HC-SR04'], slug: 'arduino-robotics' },
+  { title: 'Heartbeat Monitor', description: 'Real-time heart rate monitor with Arduino Uno and pulse sensor — 92% signal accuracy, under 2s LCD latency.', tags: ['Embedded'], tech: ['Arduino Uno', 'C++', 'Pulse Sensor'], slug: 'heartbeat-monitor' },
+  { title: 'Scientific Calculator', description: 'Python GUI calculator with 15+ advanced math operations, modular OOP, and 40% reduction in input errors.', tags: ['Backend'], tech: ['Python', 'Tkinter', 'OOP'], slug: 'scientific-calculator' }
+];
+
+const filters = ['All', 'Full-Stack', 'Frontend', 'UI/UX', 'Backend', 'AI/ML', 'Embedded'];
+const filterColors = ['#ED6F5C', '#A78BFA', '#00BFFF', '#4ECDC4', '#E9B94A', '#34D399', '#ED6F5C'];
+---
+
+<section id="projects">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <div class="label">Projects</div>
+      <h2 class="display">
+        What I've <em>built</em><span class="dot">.</span>
+      </h2>
+    </div>
+
+    <div class="pill-bar" data-reveal id="filter-bar">
+      {filters.map((f, i) => (
+        <button class="pill" data-filter={f === 'All' ? 'all' : f} data-color={filterColors[i]}>
+          {f}
+        </button>
+      ))}
+    </div>
+
+    <div class="project-grid" id="project-grid">
+      {projects.map((p, i) => (
+        <article class="card" data-reveal data-tags={p.tags.join(',')}>
+          <a href={`/project/${p.slug}`}>
+            <div class="num">
+              <span>{String.fromCharCode(0x2170 + i)}.</span>
+              {p.tags.length > 0 && <span class="tag">{p.tags[0]}</span>}
+            </div>
+            <h3>{p.title}</h3>
+            <p>{p.description}</p>
+            <div class="card-tech">
+              {p.tech.slice(0, 4).map(t => <span class="tech-pill">{t}</span>)}
+            </div>
+            <div class="arrow-mark">
+              <svg width="14" height="14" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" fill="none" stroke-width="1.6"/></svg>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pill-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .card-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 14px;
+  }
+  .card { padding-bottom: 32px; }
+  .card[data-hidden] { display: none; }
+  @media (max-width: 1080px) {
+    .project-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .project-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const filterBar = document.getElementById('filter-bar');
+  const grid = document.getElementById('project-grid');
+  const cards = grid?.querySelectorAll('.card');
+
+  filterBar?.addEventListener('click', (e) => {
+    const btn = e.target.closest('.pill');
+    if (!btn) return;
+    filterBar.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    cards?.forEach(card => {
+      if (filter === 'all') {
+        card.removeAttribute('data-hidden');
+      } else {
+        const tags = (card.dataset.tags || '').split(',');
+        card.toggleAttribute('data-hidden', !tags.includes(filter));
+      }
+    });
+  });
+
+  filterBar?.querySelector('.pill')?.classList.add('active');
+</script>

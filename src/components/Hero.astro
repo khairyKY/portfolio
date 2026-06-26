@@ -1,0 +1,188 @@
+---
+---
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="label" data-reveal>Engineering Portfolio</div>
+        <h1 class="display" data-reveal>
+          Building <em>production</em> systems<span class="dot">.</span>
+        </h1>
+        <p class="lead" data-reveal>
+          Frontend-focused SWE who ships full-stack — React, TypeScript, SwiftUI, and design systems on the frontend; Laravel, Django, and FastAPI on the backend. I engineer with AI as my copilot, not my replacement.
+        </p>
+        <div class="hero-actions" data-reveal>
+          <a href="#projects" class="btn btn-primary">
+            View Projects
+            <span class="arrow"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" fill="none" stroke-width="1.6"/></svg></span>
+          </a>
+          <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+        </div>
+        <div class="hero-stats" data-reveal>
+          <div class="stat">
+            <span class="stat-ring coral solid">10+</span>
+            <span class="stat-label"><b>Projects</b>Shipped</span>
+          </div>
+          <div class="stat">
+            <span class="stat-ring">22</span>
+            <span class="stat-label"><b>Django Apps</b>In one ERP</span>
+          </div>
+          <div class="stat">
+            <span class="stat-ring coral">5</span>
+            <span class="stat-label"><b>Languages</b>Spoken</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-art" data-reveal="right">
+        <div class="profile-scroll" id="profile-scroll">
+          <div class="profile-ring">
+            <img src="/images/profile.jpg" alt="Khairy Shaheen" class="profile-img" id="profile-img" />
+          </div>
+        </div>
+        <div class="hero-index">
+          <span><span class="n">01</span> Full-Stack</span>
+          <span><span class="n">02</span> AI / ML</span>
+          <span><span class="n">03</span> Embedded</span>
+          <span class="on"><span class="n">04</span> Infrastructure</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding: 0;
+    min-height: calc(100vh - 140px);
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px;
+    align-items: center;
+    width: 100%;
+    padding: 80px 0;
+  }
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+  }
+  .hero-copy .label { margin-bottom: 28px; }
+  .hero-copy .lead { margin-bottom: 30px; max-width: 42ch; font-size: 17px; }
+  .hero h1 {
+    font-size: clamp(44px, 5vw, 78px);
+    line-height: 1.0;
+    margin-bottom: 28px;
+  }
+  .hero-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 38px;
+  }
+  .hero-actions .arrow {
+    width: 16px; height: 16px;
+    display: inline-flex;
+  }
+  .hero-actions .arrow svg { width: 100%; height: 100%; }
+  .hero-stats {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: nowrap;
+  }
+  .stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    white-space: nowrap;
+  }
+  .stat-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    line-height: 1.25;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .stat-label b {
+    display: block;
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 12px;
+  }
+  .hero-art {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+  .profile-scroll {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .profile-ring {
+    width: min(260px, 20vw);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 0 2px var(--line-soft), 0 0 40px 8px rgba(239, 231, 210, 0.18), 0 20px 60px -20px rgba(0,0,0,0.4);
+    transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease;
+  }
+  .profile-ring img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+  body.profile-in-nav .profile-ring {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  .hero-index {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    background: var(--bone);
+    padding: 18px 22px;
+    border: 1px solid var(--line-soft);
+    border-radius: 12px;
+  }
+  .hero-index span {
+    display: block;
+    line-height: 2;
+  }
+  .hero-index .n {
+    color: var(--coral);
+    margin-right: 8px;
+    font-weight: 700;
+  }
+  .hero-index .on {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  @media (max-width: 880px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      padding: 60px 0;
+    }
+    .hero-art { display: none; }
+    .hero { min-height: auto; }
+  }
+  @media (max-width: 480px) {
+    .hero-stats { flex-wrap: wrap; gap: 14px; }
+  }
+</style>

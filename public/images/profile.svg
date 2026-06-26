@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <radialGradient id="profBg" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#2a2620"/>
+      <stop offset="100%" stop-color="#0f0e12"/>
+    </radialGradient>
+    <radialGradient id="profGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ED6F5C" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#ED6F5C" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="profGlass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.08)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
+    </linearGradient>
+    <filter id="profBlur"><feGaussianBlur stdDeviation="40"/></filter>
+    <clipPath id="circle">
+      <circle cx="200" cy="200" r="160"/>
+    </clipPath>
+  </defs>
+  <rect width="400" height="400" fill="url(#profBg)" rx="200"/>
+  <circle cx="200" cy="200" r="180" fill="url(#profGlow)" filter="url(#profBlur)"/>
+  <!-- head silhouette -->
+  <ellipse cx="200" cy="165" rx="48" ry="52" fill="rgba(255,255,255,0.12)"/>
+  <!-- shoulders -->
+  <ellipse cx="200" cy="290" rx="80" ry="50" fill="rgba(255,255,255,0.08)"/>
+  <!-- glass ring -->
+  <circle cx="200" cy="200" r="155" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+</svg>

@@ -1,0 +1,44 @@
+---
+export interface Props {
+  index: number;
+  title: string;
+  description: string;
+  tags: string[];
+  tech: string[];
+  slug: string;
+}
+const { index, title, description, tags, tech, slug } = Astro.props;
+const roman = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi'];
+---
+
+<article class="card" data-reveal>
+  <a href={`/project/${slug}`}>
+    <div class="num">
+      <span>{roman[index]}.</span>
+      {tags.length > 0 && <span class="tag">{tags[0]}</span>}
+    </div>
+    <h3>{title}</h3>
+    <p>{description}</p>
+    <div class="card-tech">
+      {tech.slice(0, 4).map(t => <span class="tech-pill">{t}</span>)}
+    </div>
+    <div class="arrow-mark">
+      <svg width="14" height="14" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" fill="none" stroke-width="1.6"/></svg>
+    </div>
+  </a>
+</article>
+
+<style>
+  .card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .card-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 14px;
+  }
+  .card { padding-bottom: 32px; }
+</style>

@@ -1,0 +1,145 @@
+---
+const experiences = [
+  {
+    company: "Shaheen for Import & Export",
+    role: "Store Support & Onsite Operations Lead",
+    date: "Aug 2022 - Present",
+    location: "Tanta, Egypt",
+    bullets: [
+      "Architected production Laravel 12 e-commerce platform (100+ routes, bilingual AR/EN, Paymob gateway, Filament 4 admin) serving 519 products across 27 Egyptian governorates",
+
+      "Led 4-phase enterprise cloud migration of 1,343 files into 8-folder Drive architecture with Arabic text normalization and Security Quarantine",
+      "Engineered zero-cost federated identity: cPanel IMAP/SMTP → Google IAM → Drive RBAC (5 permission groups)",
+      "Established RACI operational framework across 8 verticals for 10+ person marketing division with Gherkin-style handoff protocols",
+      "Managed domain infrastructure: Cloudflare DNS/SSL, cPanel, Bitwarden, SSH deploy keys, auto-deploy, nightly drift monitoring"
+    ]
+  },
+  {
+    company: "Optima Professional Services",
+    role: "Cybersecurity Intern",
+    date: "2026 - Present",
+    location: "Egypt",
+    bullets: [
+      "Currently interning in cybersecurity operations and practices"
+    ]
+  },
+  {
+    company: "GB Academy (Ghabour Auto)",
+    role: "Mechanical Engineering Intern",
+    date: "2025",
+    location: "Egypt",
+    bullets: [
+      "Interned in suspension, braking, and steering systems engineering"
+    ]
+  },
+  {
+    company: "DEPI Round 5",
+    role: "Cybersecurity Trainee",
+    date: "Jul 2026 - Present",
+    location: "Remote",
+    bullets: []
+  },
+  {
+    company: "PC Building Store",
+    role: "Technical Assistant",
+    date: "Jun 2019 - Aug 2022",
+    location: "Tanta, Egypt",
+    bullets: [
+      "Assembled and configured 40+ custom PC builds for gaming, creative, and business clients",
+      "Diagnosed complex hardware issues: thermal management, BIOS conflicts, driver compatibility",
+      "Advised customers on cost-effective component upgrades, driving repeat business"
+    ]
+  }
+];
+---
+
+<section class="tight" id="experience">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <div class="label">Experience</div>
+      <h2 class="display">
+        Where I've <em>worked</em><span class="dot">.</span>
+      </h2>
+    </div>
+    {experiences.map((exp, i) => (
+      <div class="exp-block" data-reveal>
+        <div class="exp-head">
+          <span class="roman">{String.fromCharCode(0x2160 + i)}.</span>
+          <div>
+            <h3>{exp.company}</h3>
+            <div class="meta">{exp.role} &middot; {exp.location}</div>
+          </div>
+          <span class="exp-date">{exp.date}</span>
+        </div>
+        <ul class="bullets">
+          {exp.bullets.map(b => <li>{b}</li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .exp-block {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .exp-block:last-child { border-bottom: none; }
+  .exp-head {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    gap: 14px;
+    align-items: baseline;
+    margin-bottom: 16px;
+  }
+  .exp-head .roman {
+    font-size: 18px;
+    line-height: 1;
+  }
+  .exp-head h3 {
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .exp-head .meta {
+    font-size: 11px;
+    margin-top: 3px;
+    color: var(--ink-soft);
+  }
+  .exp-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    white-space: nowrap;
+  }
+  .bullets {
+    list-style: none;
+    padding: 0;
+    margin-left: 42px;
+  }
+  .bullets li {
+    position: relative;
+    padding-left: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--coral);
+    opacity: 0.6;
+  }
+  @media (max-width: 768px) {
+    .exp-head { grid-template-columns: 28px 1fr; }
+    .exp-date { grid-column: 1 / -1; text-align: right; }
+    .bullets { margin-left: 0; }
+  }
+</style>

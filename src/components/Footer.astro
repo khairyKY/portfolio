@@ -1,0 +1,118 @@
+---
+const navLinks = [
+  { href: '#about', label: 'About' },
+  { href: '#experience', label: 'Experience' },
+  { href: '#projects', label: 'Projects' },
+  { href: '#skills', label: 'Skills' },
+  { href: '#contact', label: 'Contact' }
+];
+const resources = [
+  { href: '/files/Khairy_Shaheen_CV_Claude.pdf', label: 'Resume (Claude)' },
+  { href: '/files/Khairy_Shaheen_CV_DarkAtelier.pdf', label: 'Resume (Dark Atelier)' },
+  { href: '/files/Khairy_Shaheen_SWE_Claude.pdf', label: 'SWE Resume' },
+  { href: '/files/Khairy_Shaheen_AIML_Claude.pdf', label: 'AI/ML Resume' }
+];
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          {navLinks.map(l => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resumes</h4>
+        <ul>
+          {resources.map(r => <li><a href={r.href} download>{r.label}</a></li>)}
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="mailto:khairy.islam@shaheentire.com">Email</a></li>
+          <li><a href="https://github.com/khairyKY" target="_blank">GitHub</a></li>
+          <li><a href="https://linkedin.com/in/khairyKY" target="_blank">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-mega">
+      <span class="mega-word">SHAHEEN</span>
+      <span class="mega-accent"><em>engineer</em></span>
+    </div>
+    <div class="footer-copy">
+      &copy; {new Date().getFullYear()} Khairy Shaheen. Built with Astro &middot; Open Design &times; Cosmic Dev
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding: 80px 0 40px;
+    border-top: 1px solid var(--line);
+    position: relative;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 48px;
+  }
+  .footer-col h4 {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+  }
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .footer-col a {
+    font-family: var(--body);
+    font-size: 14px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.18s;
+  }
+  .footer-col a:hover { color: var(--coral); }
+  .footer-mega {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+    margin-bottom: 24px;
+  }
+  .mega-word {
+    font-family: var(--sans);
+    font-weight: 900;
+    font-size: clamp(70px, 13vw, 200px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+  }
+  .mega-accent em {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--coral);
+    font-size: clamp(36px, 5vw, 80px);
+  }
+  .footer-copy {
+    font-family: var(--body);
+    font-size: 12px;
+    color: var(--ink-faint);
+    letter-spacing: 0.03em;
+  }
+  @media (max-width: 768px) {
+    .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+  }
+</style>

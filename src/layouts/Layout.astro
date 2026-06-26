@@ -1,0 +1,123 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Khairy Shaheen — Engineer',
+  description = 'Full-stack engineer, AI/ML researcher, and IT operations lead. Building production systems across Python, TypeScript, and embedded platforms.'
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title}</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500&family=Mochiy+Pop+P+One&display=swap" rel="stylesheet" />
+  <script is:inline>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      const preferred = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', preferred);
+    })();
+  </script>
+</head>
+<body>
+  <canvas id="cosmic-canvas"></canvas>
+  <div class="shell">
+    <slot />
+  </div>
+  <script>
+    // CosmicCanvas — two-layer parallax starfield
+    const canvas = document.getElementById('cosmic-canvas') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d')!;
+
+    interface Star {
+      x: number;
+      y: number;
+      r: number;
+      speed: number;
+      alpha: number;
+      color: string;
+    }
+
+    let stars: Star[] = [];
+    let w = 0;
+    let h = 0;
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+
+    function createStars() {
+      const count = Math.floor((w * h) / 6000);
+      stars = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.2 + 0.3,
+        speed: Math.random() * 0.3 + 0.05,
+        alpha: Math.random() * 0.6 + 0.2,
+        color: Math.random() > 0.85 ? '#00BFFF' : Math.random() > 0.9 ? '#ED6F5C' : '#EFE7D2'
+      }));
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      for (const s of stars) {
+        s.y -= s.speed;
+        if (s.y < -2) { s.y = h + 2; s.x = Math.random() * w; }
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha;
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    createStars();
+    draw();
+    window.addEventListener('resize', () => { resize(); createStars(); });
+
+    // Scroll reveal observer
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).dataset.revealed = 'true';
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
+
+    // Profile image → nav shrink observer
+    const hero = document.querySelector('.hero');
+    const body = document.body;
+    if (hero) {
+      const profileObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          body.classList.toggle('profile-in-nav', !entry.isIntersecting);
+        });
+      }, { threshold: 0, rootMargin: '-80px 0px 0px 0px' });
+      profileObserver.observe(hero);
+    }
+
+
+  </script>
+</body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>

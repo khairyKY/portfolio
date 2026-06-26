@@ -1,0 +1,87 @@
+---
+---
+
+<button class="theme-toggle" aria-label="Toggle theme" title="Toggle light/dark mode">
+  <span class="toggle-track">
+    <span class="toggle-icons">
+      <svg class="icon-sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+      <svg class="icon-moon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </span>
+    <span class="toggle-knob"></span>
+  </span>
+</button>
+
+<style>
+  .theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .toggle-track {
+    width: 48px;
+    height: 26px;
+    border-radius: 13px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: background 0.35s ease;
+  }
+  .toggle-icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 6px;
+    color: var(--ink-faint);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .toggle-icons svg {
+    display: block;
+  }
+  .toggle-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04);
+    z-index: 2;
+    pointer-events: none;
+    transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                background 0.35s ease;
+  }
+</style>
+
+<script>
+  const btn = document.querySelector('.theme-toggle');
+  const knob = document.querySelector('.toggle-knob');
+  const track = document.querySelector('.toggle-track');
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    if (knob) knob.style.left = theme === 'dark' ? '24px' : '2px';
+    if (track) track.style.background = theme === 'dark' ? 'var(--ink-mute)' : 'var(--line)';
+  }
+
+  btn?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  // Sync knob on load
+  const initial = document.documentElement.getAttribute('data-theme');
+  if (knob) knob.style.left = initial === 'dark' ? '24px' : '2px';
+  if (track) track.style.background = initial === 'dark' ? 'var(--ink-mute)' : 'var(--line)';
+</script>

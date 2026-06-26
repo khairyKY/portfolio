@@ -1,0 +1,77 @@
+---
+---
+
+<section class="tight" id="about">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <div class="label">About</div>
+      <h2 class="display">
+        Full-stack engineer<br>from <em>Tanta, Egypt</em><span class="dot">.</span>
+      </h2>
+      <p class="lead">
+        Computer Science &amp; Engineering student at <span class="jpn">E-JUST</span>, building production-grade software across
+        the stack — from Django monoliths to SwiftUI gaze-controlled interfaces, Laravel e-commerce
+        to PyTorch classification models. I bridge engineering and operations, shipping code that
+        runs businesses.
+      </p>
+    </div>
+    <div class="about-grid">
+      <div class="about-stat" data-reveal>
+        <div class="stat-ring solid coral large">11+</div>
+        <div><b>Production Systems</b><span>Live in the wild</span></div>
+      </div>
+      <div class="about-stat" data-reveal>
+        <div class="stat-ring solid large">22</div>
+        <div><b>ERP Modules</b><span>Across one Django monolith</span></div>
+      </div>
+      <div class="about-stat" data-reveal>
+        <div class="stat-ring solid coral large">5</div>
+        <div><b>Spoken Languages</b><span>AR · EN · DE · FR · JP</span></div>
+      </div>
+      <div class="about-stat" data-reveal>
+        <div class="stat-ring solid large">7</div>
+        <div><b>Years Engineering</b><span>Since my first build</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .about-stat {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px;
+    background: var(--bone);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .about-stat b {
+    display: block;
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .about-stat span {
+    font-family: var(--body);
+    font-size: 12px;
+    color: var(--ink-mute);
+  }
+  .stat-ring.large {
+    width: 44px; height: 44px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  @media (max-width: 880px) {
+    .about-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .about-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+const skillCategories = [
+  { label: 'Languages', items: 'Python, JavaScript/TypeScript, PHP, C++, C, Dart, Swift, SQL, Arduino C++, LaTeX, MATLAB' },
+  { label: 'Backend', items: 'FastAPI, Django 6 + DRF 3.17, Laravel 12, Express 5, REST API Design' },
+  { label: 'Frontend', items: 'React 19, Tailwind CSS v3/v4, Framer Motion, SwiftUI, Flet, Flutter, HTML5/CSS3' },
+  { label: 'Databases', items: 'PostgreSQL, SQLite, MongoDB, SQLAlchemy ORM, Eloquent ORM' },
+  { label: 'AI/ML', items: 'PyTorch (DenseNet, CUDA), HuggingFace, Google Gemini, OpenCV, Ridge Regression' },
+  { label: 'DevOps & Infra', items: 'Docker Compose, Git, Cloudflare DNS/SSL, cPanel, SSH, ngrok, n8n' },
+  { label: 'Embedded', items: 'ESP32-CAM, Arduino (RemoteXY, NewPing, DHT11, MQ, LDR, HC-SR04), NMEA 0183' },
+  { label: 'Security', items: 'RBAC, JWT/OAuth, Zero-Trust, PII Redaction, Prompt Injection, Nmap' },
+  { label: 'Networking', items: 'Cisco Packet Tracer (OSPF, EIGRP), IMAP/SMTP, SMB/NTFS ACLs' },
+  { label: 'Design & Ops', items: 'Figma, Photoshop, Illustrator, Canva, RACI, Gherkin, Obsidian, Notion' }
+];
+---
+
+<section class="tight" id="skills">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <div class="label">Skills</div>
+      <h2 class="display">
+        Tools & <em>expertise</em><span class="dot">.</span>
+      </h2>
+    </div>
+    <div class="skills-grid" data-reveal>
+      {skillCategories.map(s => (
+        <div class="skill-card">
+          <div class="label">{s.label}</div>
+          <span class="skill-items">{s.items}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .skill-card {
+    padding: 16px 18px;
+    background: var(--bone);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .skill-card .label {
+    margin-bottom: 0;
+    font-size: 10px;
+    color: var(--coral);
+  }
+  .skill-card .label::before {
+    width: 14px;
+  }
+  .skill-items {
+    font-family: var(--body);
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  @media (max-width: 768px) {
+    .skills-grid { grid-template-columns: 1fr; }
+  }
+</style>

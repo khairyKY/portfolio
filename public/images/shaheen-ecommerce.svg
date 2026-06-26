@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="bg" cx="40%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="rgb(107,99,200)"/>
+      <stop offset="100%" stop-color="#0f0e12"/>
+    </radialGradient>
+    <radialGradient id="orb1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#A78BFA" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orb2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgb(247,199,255)" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="rgb(247,199,255)" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ED6F5C" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ED6F5C" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.08)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
+    </linearGradient>
+    <linearGradient id="glass-border" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.04)"/>
+    </linearGradient>
+    <filter id="blurLg"><feGaussianBlur stdDeviation="60"/></filter>
+    <filter id="blurMd"><feGaussianBlur stdDeviation="32"/></filter>
+    <filter id="blurSm"><feGaussianBlur stdDeviation="12"/></filter>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.04 0"/>
+    </filter>
+  </defs>
+
+  <!-- Base -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Ambient glow left -->
+  <ellipse cx="180" cy="320" rx="400" ry="320" fill="url(#glow)" filter="url(#blurLg)"/>
+
+  <!-- Large liquid blob 1 -->
+  <ellipse cx="350" cy="200" rx="320" ry="240" fill="url(#orb1)" filter="url(#blurLg)"/>
+  <!-- Large liquid blob 2 -->
+  <ellipse cx="800" cy="400" rx="350" ry="250" fill="url(#orb2)" filter="url(#blurLg)"/>
+
+  <!-- Secondary blob with accent -->
+  <ellipse cx="950" cy="150" rx="180" ry="140" fill="#A78BFA" opacity="0.12" filter="url(#blurMd)"/>
+
+  <!-- Liquid glass wave shape -->
+  <path d="M0,355 Q300,235 600,335 T1200,285 L1200,630 L0,630 Z" fill="rgba(255,255,255,0.03)" filter="url(#blurSm)"/>
+
+  <!-- Floating glass orbs -->
+  <circle cx="200" cy="180" r="60" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <circle cx="200" cy="180" r="40" fill="rgba(255,255,255,0.03)" filter="url(#blurSm)"/>
+  <circle cx="1000" cy="480" r="80" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+  <circle cx="1000" cy="480" r="50" fill="rgba(255,255,255,0.02)" filter="url(#blurSm)"/>
+
+  <!-- Glass panel card -->
+  <rect x="60" y="260" width="420" height="110" rx="16" fill="url(#glass)" stroke="url(#glass-border)" stroke-width="1"/>
+  <!-- Inner glass highlight -->
+  <rect x="62" y="262" width="416" height="106" rx="15" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+  <!-- Accent dot on glass -->
+  <circle cx="90" cy="290" r="4" fill="#ED6F5C"/>
+
+  <!-- Project title on glass -->
+  <text x="110" y="305" font-family="'Inter Tight',system-ui,sans-serif" font-size="15" font-weight="600" fill="#ED6F5C" letter-spacing="0.18em" text-transform="uppercase">Project</text>
+  <text x="110" y="343" font-family="'Inter Tight',system-ui,sans-serif" font-size="28" font-weight="700" fill="rgba(255,255,255,0.92)" letter-spacing="-0.01em">Shaheen E-Commerce</text>
+
+  <!-- Tag badge -->
+  <rect x="60" y="550" width="90" height="28" rx="999" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <text x="76" y="566" font-family="'Inter Tight',system-ui,sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.5)" letter-spacing="0.14em" text-transform="uppercase">Backend</text>
+
+  <!-- Large initials watermark -->
+  <text x="1160" y="600" font-family="'Playfair Display',serif" font-style="italic" font-size="52" font-weight="500" fill="rgba(255,255,255,0.04)" text-anchor="end">SE</text>
+
+  <!-- Noise overlay -->
+  <rect width="1200" height="630" fill="url(#noise)" style="mix-blend-mode: overlay;"/>
+</svg>
