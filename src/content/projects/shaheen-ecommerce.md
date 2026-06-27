@@ -9,10 +9,12 @@ demo: "https://shaheentire.com"
 image: "/images/shaheen-ecommerce.svg"
 ---
 
-Took over a struggling multi-vendor automotive e-commerce and led a 30-day rescue sprint: **206 commits, 40+ merged PRs, 29 production issues closed.**
+Took over a struggling multi-vendor automotive e-commerce and led a 30-day rescue sprint: **206 commits, 40+ merged PRs, 29 production issues closed.** Restored 38 failing tests to 100% green, deployed zero-touch CI/CD, patched 12 production vulnerabilities, fixed a double 14% VAT overcharge, and restored blocked email delivery.
 
-- Restored 38 failing tests to 100% green and deployed zero-touch CI/CD (GitHub Actions → automated migrations → cache optimization)
-- Patched 12 production-blocking vulnerabilities, fixed a double 14% VAT overcharge, and restored blocked email delivery via Resend
-- Built a multi-region shipping rate matrix across 27 governorates and an intelligent tire-size cross-reference engine
-- Delivered enterprise SEO: 10 JSON-LD schemas, dynamic meta across all pages, image sitemaps, multi-language routes
-- Created an automated lead-capture engine tracking unmet demand with restock notifications and lost-query recovery
+Delivered end-to-end across the full stack — Livewire 3 Volt components, Filament 4 admin resources, Blade templates, Alpine.js, and Tailwind styling:
+
+- CI/CD via GitHub Actions, nightly drift monitoring, automated release notes with Telegram notifications
+- Multi-region shipping rate matrix (27 governorates, 4 size tiers, vendor-split) and intelligent tire-size cross-reference engine (2 up / 2 down)
+- Enterprise SEO: 10 JSON-LD schemas, dynamic meta titles/descriptions, image sitemaps, multi-language hreflang routing
+- Unmet demand tracking (OOS restock notifications + search-not-found capture), WhatsApp click tracking across 6 surfaces
+- Google OAuth via Socialite, email verification via Resend with branded dark-mode templates, saved delivery addresses, avatar crop/zoom/rotate, profile completion banner
