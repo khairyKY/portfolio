@@ -9,7 +9,7 @@ demo: "https://shaheentire.com"
 image: "/images/shaheen-ecommerce.svg"
 ---
 
-Took over a struggling multi-vendor automotive e-commerce and led a 30-day rescue sprint: **206 commits, 40+ merged PRs, 29 production issues closed.** Restored 38 failing tests to 100% green, deployed zero-touch CI/CD, patched 12 production vulnerabilities, fixed a double 14% VAT overcharge, and restored blocked email delivery.
+Took over a struggling multi-vendor automotive e-commerce and led a 30-day rescue sprint: **206 commits, 40+ merged PRs, 29 production issues closed.** Restored 38 failing tests to 100% green, deployed zero-touch CI/CD, patched 12 production vulnerabilities, and restored blocked email delivery.
 
 Delivered end-to-end across the full stack — Livewire 3 Volt components, Filament 4 admin resources, Blade templates, Alpine.js, and Tailwind styling:
 
@@ -18,3 +18,4 @@ Delivered end-to-end across the full stack — Livewire 3 Volt components, Filam
 - Enterprise SEO: 10 JSON-LD schemas, dynamic meta titles/descriptions, image sitemaps, multi-language hreflang routing
 - Unmet demand tracking (OOS restock notifications + search-not-found capture), WhatsApp click tracking across 6 surfaces
 - Google OAuth via Socialite, email verification via Resend with branded dark-mode templates, saved delivery addresses, avatar crop/zoom/rotate, profile completion banner
+- Clickable product cards, checkout invoice/receipt generation, themed add-to-cart toast, and legal policy pages (Terms, Return, Privacy, Shipping)
