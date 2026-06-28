@@ -7,7 +7,10 @@ tech: ["React 19", "TypeScript", "TanStack Router", "shadcn/ui", "Framer Motion"
 github: "https://github.com/mhmmddahmd/scentura-erp"
 demo: null
 image: "/images/scentura.svg"
+# TODO: Replace with real screenshot
 ---
 I contributed the Aeron frontend prototype to this large Django ERP system (primarily built by muhammadelgaar-max with 140+ commits). My addition: a complete Vite + React 19 + TypeScript + shadcn/ui + Framer Motion frontend prototype spanning 23 lazy-loaded route modules (2–9 KB each), 20 shared design-system components, token-based theming with instant dark/light toggle, and WCAG 2.1 AA accessibility.
 
 The main system is a 22-app Django 6 ERP with event-sourced inventory, pure-Python ridge regression forecasting, Shopify integration, and 8-role RBAC. My Aeron prototype branch (~106 files, ~19K lines) was developed locally and never pushed to the remote.
+
+

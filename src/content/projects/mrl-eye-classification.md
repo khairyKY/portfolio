@@ -6,5 +6,8 @@ date: 2025
 tech: ["PyTorch", "OpenCV", "CUDA", "DenseNet", "Python"]
 demo: null
 image: "/images/mrl-eye.svg"
+# TODO: Replace with real screenshot
 ---
 I contributed model training and tuning for this drowsiness detection system. The DenseNet121 model runs real-time webcam inference with temporal frame smoothing to reduce false positives, and triggers audible alerts on detection. Built for the MRL Eye dataset research context.
+
+

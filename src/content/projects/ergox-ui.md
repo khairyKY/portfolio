@@ -7,5 +7,8 @@ tech: ["SwiftUI", "ARKit", "Swift", "GitHub Pages"]
 github: "https://github.com/mhmmddahmd/ErgoX-UI"
 demo: null
 image: "/images/ergox.svg"
+# TODO: Replace with real screenshot
 ---
-I contributed UI components and logic to this SwiftUI eye-gaze tracking interface (GazeUI). My work touched the contacts view, playlist view, and media player with album cover support. The app uses ARKit TrueDepth camera for eye-controlled interaction. Project by mhmmddahmd with 4 total contributors.
+
+I contributed UI components and logic to this SwiftUI gaze-tracking interface (GazeUI). The app utilizes Apple ARKit and TrueDepth hardware sensors to map real-time eye-gaze ocular focus coordinates directly into fluid system interactions and media controls. My work touched the contacts view, playlist view, and media player with album cover support. Project by mhmmddahmd with 4 total contributors.
+
