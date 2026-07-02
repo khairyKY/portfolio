@@ -3,7 +3,7 @@ title: "Shaheen E-Commerce"
 description: "Full-Stack & DevOps contract — rescued an unstable live Laravel 12 e-commerce in a 30-day sprint: 206 commits, 40+ PRs, 29 production issues closed."
 tags: ["Full-Stack", "Backend", "Infrastructure"]
 date: 2025
-tech: ["Laravel 12", "Livewire 3", "Filament 4", "Tailwind v4", "MySQL", "GitHub Actions", "Pest PHP"]
+tech: ["Laravel 12", "Livewire 3", "Filament 4", "Tailwind v4", "SQLite", "GitHub Actions", "Pest PHP"]
 github: "https://github.com/shaheentireofficial/shaheentire-live"
 demo: "https://shaheentire.com"
 image: "/images/shaheen-ecommerce.svg"
