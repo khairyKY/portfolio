@@ -36,6 +36,7 @@
   --line-faint: rgba(239, 231, 210, 0.03);
   --shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.5);
   --texture-opacity: 0;
+  --starfield-opacity: 1;
 }
 
 /* ─── Light Theme ─── */
@@ -59,6 +60,7 @@
   --line-faint: rgba(21, 20, 15, 0.05);
   --shadow: 0 30px 60px -30px rgba(21, 20, 15, 0.18);
   --texture-opacity: 0.92;
+  --starfield-opacity: 0;
 }
 
 /* ─── Reset ─── */
@@ -93,6 +95,16 @@ body::before {
   background-size: auto, auto, 240px 240px;
   mix-blend-mode: multiply;
   opacity: var(--texture-opacity);
+  transition: opacity 400ms ease;
+}
+
+/* ─── Cosmic Starfield (dark mode) ─── */
+#cosmic-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--starfield-opacity);
   transition: opacity 400ms ease;
 }
 
