@@ -5,8 +5,7 @@ tags: ["Full-Stack", "AI/ML"]
 date: 2026
 tech: ["Rust", "Tauri v2", "ONNX Runtime", "whisper.cpp", "llama.cpp", "Vulkan"]
 demo: null
-image: "/images/sotto.svg"
-# TODO: Replace with real screenshot
+image: "/images/sotto.png"
 ---
 A desktop voice-dictation app that runs entirely offline — speak and it transcribes, polishes, and pastes into any application. No cloud dependency.
 

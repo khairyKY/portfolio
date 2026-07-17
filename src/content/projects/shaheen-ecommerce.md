@@ -6,8 +6,7 @@ date: 2025
 tech: ["Laravel 12", "Livewire 3", "Filament 4", "Tailwind v4", "SQLite", "GitHub Actions", "Pest PHP"]
 github: "https://github.com/shaheentireofficial/shaheentire-live"
 demo: "https://shaheentire.com"
-image: "/images/shaheen-ecommerce.svg"
-# TODO: Replace with real screenshot
+image: "/images/shaheen-ecommerce.png"
 ---
 
 Solo-rescued a live multi-vendor marketplace — **215+ master commits (100% code ownership), 40+ PRs, 29 issues closed.**
