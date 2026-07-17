@@ -14,5 +14,5 @@ My CSE323 Software Engineering project — a full-stack vertical-slice e-commerc
 
 Key features I built: auto-populated product images, clickable product cards with quick-preview modal, terminal-style UI rebrand, unrolled print mode with PDF export. Implemented strict middleware security parameters: defensive PII redaction (strips emails/phones/credit cards from logs) and active prompt-injection sanitization guards to isolate LLM touchpoints. E2E tests with Playwright POM pattern.
 
-This project pioneered a Test-Driven Prompting (TDP) workflow — human-led, AI-assisted development using structured prompt libraries and an `.ai/CONTEXT.md` brain file. See the docs/ for the full audit trail.
+Developed with an AI-assisted workflow using structured prompt libraries and an `.ai/CONTEXT.md` brain file for consistent context across sessions.
 
