@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -11,7 +11,8 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { data, body } = project;
+const { data } = project;
+const { Content } = await render(project);
 const tagColors: Record<string, string> = {
   'Backend': '#4ECDC4', 'AI/ML': '#00BFFF', 'Frontend': '#A78BFA',
   'Embedded': '#E9B94A', 'Infrastructure': '#34D399'
@@ -41,9 +42,7 @@ const tagColors: Record<string, string> = {
           )}
 
           <div class="detail-body" data-reveal>
-            {body.split('\n\n').map(p => (
-              <p>{p.trim()}</p>
-            ))}
+            <Content />
           </div>
         </div>
 
@@ -136,6 +135,32 @@ const tagColors: Record<string, string> = {
     color: var(--ink-soft);
   }
   .detail-body p { margin-bottom: 18px; }
+  .detail-body :global(h2) {
+    font-family: var(--sans);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 36px 0 12px;
+    letter-spacing: -0.01em;
+  }
+  .detail-body :global(h2:first-child) { margin-top: 0; }
+  .detail-body :global(ul), .detail-body :global(ol) {
+    margin: 0 0 18px;
+    padding-left: 20px;
+  }
+  .detail-body :global(li) {
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  .detail-body :global(strong) { color: var(--ink); font-weight: 600; }
+  .detail-body :global(code) {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--line-soft);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .detail-body :global(p) { margin-bottom: 18px; }
 
   .sidebar-card {
     background: var(--bone);
