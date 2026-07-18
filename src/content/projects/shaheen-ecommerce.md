@@ -1,6 +1,6 @@
 ---
 title: "Shaheen E-Commerce"
-description: "Solo-rescued a live Laravel 12 e-commerce platform — 215+ commits (100% code ownership), 40+ PRs, 29 production issues closed."
+description: "Solo-rescued a live Laravel 12 e-commerce platform — 300+ commits (100% code ownership), 100+ PRs merged, 55+ production issues closed."
 tags: ["Full-Stack", "Backend", "Infrastructure"]
 date: 2025
 tech: ["Laravel 12", "Livewire 3", "Filament 4", "Tailwind v4", "SQLite", "GitHub Actions", "Pest PHP"]
@@ -9,7 +9,7 @@ demo: "https://shaheentire.com"
 image: "/images/shaheen-ecommerce.png"
 ---
 
-Solo-rescued a live multi-vendor marketplace — **215+ master commits (100% code ownership), 40+ PRs, 29 issues closed.**
+Solo-rescued a live multi-vendor marketplace — **300+ master commits (100% code ownership), 100+ PRs merged, 55+ issues closed.**
 
 Delivered end-to-end across the full stack — Livewire 3 Volt components, Filament 4 admin panel, Blade templates, Alpine.js, and Tailwind v4:
 

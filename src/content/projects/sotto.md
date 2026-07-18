@@ -1,9 +1,9 @@
 ---
 title: "Sotto"
-description: "Offline desktop voice dictation — Rust/Tauri with whisper.cpp (Vulkan GPU, 70x speedup), llama.cpp AI polish, and Harper grammar engine."
+description: "Offline desktop voice dictation — Rust/Tauri with Parakeet ASR (ONNX, Vulkan GPU), llama.cpp AI polish, and Harper grammar engine."
 tags: ["Full-Stack", "AI/ML"]
 date: 2026
-tech: ["Rust", "Tauri v2", "ONNX Runtime", "whisper.cpp", "llama.cpp", "Vulkan"]
+tech: ["Rust", "Tauri v2", "ONNX Runtime", "Parakeet ASR", "llama.cpp", "Vulkan"]
 github: "https://github.com/khairyKY/sotto"
 demo: null
 image: "/images/sotto.png"
@@ -16,7 +16,7 @@ A desktop voice-dictation app that runs **entirely offline** — hold a hotkey, 
 Sotto chains three stages in a single pipeline:
 
 1. **Capture** — global push-to-talk hotkey (Right Ctrl, rebindable) records audio via `cpal`, with a cancel/retry escape hatch.
-2. **Transcribe** — NVIDIA Parakeet v3 int8 model running through ONNX Runtime with Vulkan GPU acceleration (70x faster than CPU).
+2. **Transcribe** — NVIDIA Parakeet v3 int8 model running through ONNX Runtime with Vulkan GPU acceleration (70x faster than CPU). A secondary whisper.cpp engine (Whisper large-v3-turbo, also Vulkan) is wired up for planned multilingual/Arabic support.
 3. **Polish** — two tiers: short phrases get instant rule-based cleanup via Harper grammar engine; longer dictations route to Qwen 2.5 1.5B (Q4_K_M) running locally through a llama.cpp sidecar with full GPU offload.
 
 The polished text is injected directly into the focused application via Windows keystroke simulation.
