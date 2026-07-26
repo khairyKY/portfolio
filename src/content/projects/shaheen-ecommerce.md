@@ -14,7 +14,7 @@ Solo-rescued a live multi-vendor marketplace — **300+ master commits (100% cod
 Delivered end-to-end across the full stack — Livewire 3 Volt components, Filament 4 admin panel, Blade templates, Alpine.js, and Tailwind v4:
 
 - **Double VAT Leak:** Identified and purged a redundant 14% VAT overcharge in `ShippingRateService::vatFor()` that was silently bleeding client revenue.
-- **Checkout Pipeline:** Re-architected a broken P0 Paymob checkout flow into strict DB transactions, unblocking the revenue pipeline.
+- **Checkout Pipeline:** Re-architected a broken P0 checkout flow into strict DB transactions, unblocking the revenue pipeline. (Paymob online-payment gateway integrated behind a feature flag, pending merchant onboarding.)
 - **Ops Rescue & Drift Checking:** Resolved a critical HTTP 500 deploy outage caused by 13,427 divergent server-edited lines. Deployed a 6-workflow CI/CD pipeline and a nightly drift checker.
 - **Security:** Eliminated a P0 CSRF 419 error on logouts via event-delegation token refresh, dropping failure rates from 3 retries to first-click success.
 - Enterprise SEO: 10 JSON-LD schemas, dynamic meta titles/descriptions, image sitemaps, multi-language hreflang routing
