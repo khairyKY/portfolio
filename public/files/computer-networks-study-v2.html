@@ -4557,7 +4557,7 @@ const safeStorage = {
   }
 };
 
-// safeStorage.setItem("embedded_study_mistakes", JSON.stringify([]));
+// safeStorage.setItem("networks_study_mistakes", JSON.stringify([]));
 
 /* ============================================================
    DATA — AVR Timer/Counter & Interrupts
@@ -8116,7 +8116,7 @@ function shuffle(arr){
    ============================================================ */
 function getMistakes() {
   try {
-    const stored = safeStorage.getItem("embedded_study_mistakes");
+    const stored = safeStorage.getItem("networks_study_mistakes");
     return stored ? JSON.parse(stored) : [];
   } catch (e) {
     return [];
@@ -8128,7 +8128,7 @@ function saveMistake(topicId, qNum) {
   const key = `${topicId}-${qNum}`;
   if (!mistakes.includes(key)) {
     mistakes.push(key);
-    safeStorage.setItem("embedded_study_mistakes", JSON.stringify(mistakes));
+    safeStorage.setItem("networks_study_mistakes", JSON.stringify(mistakes));
     updateMistakesButton();
   }
 }
@@ -8138,7 +8138,7 @@ function removeMistake(topicId, qNum) {
   const key = `${topicId}-${qNum}`;
   if (mistakes.includes(key)) {
     mistakes = mistakes.filter(m => m !== key);
-    safeStorage.setItem("embedded_study_mistakes", JSON.stringify(mistakes));
+    safeStorage.setItem("networks_study_mistakes", JSON.stringify(mistakes));
     updateMistakesButton();
   }
 }
@@ -8198,18 +8198,18 @@ const flashDeckOpts = $("#flashDeckOpts");
 const flashSetupSection = $("#flashSetupSection");
 
 function getFlashcardMistakes(){
-  try { return JSON.parse(safeStorage.getItem("flashcard_mistakes")) || []; }
+  try { return JSON.parse(safeStorage.getItem("networks_flashcard_mistakes")) || []; }
   catch(e){ return []; }
 }
 function saveFlashcardMistake(topicId, qText){
   const m = getFlashcardMistakes();
   const k = `${topicId}||${qText}`;
-  if (!m.includes(k)) { m.push(k); safeStorage.setItem("flashcard_mistakes", JSON.stringify(m)); updateFlashMistakesButton(); }
+  if (!m.includes(k)) { m.push(k); safeStorage.setItem("networks_flashcard_mistakes", JSON.stringify(m)); updateFlashMistakesButton(); }
 }
 function removeFlashcardMistake(topicId, qText){
   let m = getFlashcardMistakes();
   const k = `${topicId}||${qText}`;
-  if (m.includes(k)) { m = m.filter(x => x !== k); safeStorage.setItem("flashcard_mistakes", JSON.stringify(m)); updateFlashMistakesButton(); }
+  if (m.includes(k)) { m = m.filter(x => x !== k); safeStorage.setItem("networks_flashcard_mistakes", JSON.stringify(m)); updateFlashMistakesButton(); }
 }
 function updateFlashMistakesButton(){
   const m = getFlashcardMistakes(), btn = $("#flashMistakesBtn");
@@ -9237,7 +9237,7 @@ const safeStorage = {
   }
 };
 
-/* safeStorage.setItem("embedded_study_mistakes", JSON.stringify([]));
+/* safeStorage.setItem("networks_study_mistakes", JSON.stringify([]));
     updateMistakesButton();
     return; */
   }

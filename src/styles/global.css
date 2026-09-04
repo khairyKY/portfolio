@@ -120,19 +120,19 @@ body::before {
 /* ─── Typography Primitives ─── */
 .label {
   font-family: var(--sans);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--coral);
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 .label::before {
   content: '';
-  width: 18px;
-  height: 1px;
+  width: 22px;
+  height: 1.5px;
   background: var(--coral);
   display: inline-block;
 }
@@ -179,6 +179,53 @@ body::before {
   font-weight: 900;
   color: #BC002D;
   letter-spacing: 0.04em;
+}
+
+/* ─── E-JUST composite: kanji seal + vertical tategaki subtitle ─── */
+.ejust {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding-left: 6px;
+  padding-right: 2px;
+  isolation: isolate;
+}
+.ejust__seal {
+  position: absolute;
+  left: -12px;
+  top: -0.55em;
+  font-family: var(--jpn), serif;
+  font-weight: 900;
+  color: rgba(188, 0, 45, 0.16);
+  font-size: 2.6em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  z-index: -1;
+  transform: rotate(-6deg);
+}
+.ejust__roman {
+  font-family: var(--jpn), serif;
+  font-weight: 900;
+  color: #BC002D;
+  letter-spacing: 0.04em;
+  position: relative;
+  z-index: 1;
+}
+.ejust__tategaki {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: var(--jpn), serif;
+  font-weight: 600;
+  font-size: 0.36em;
+  color: rgba(188, 0, 45, 0.65);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+  margin-left: 3px;
+  margin-top: -0.15em;
+  user-select: none;
 }
 
 /* ─── Section Header ─── */

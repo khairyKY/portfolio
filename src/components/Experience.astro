@@ -1,10 +1,18 @@
 ---
+const ICONS: Record<string, string> = {
+  eand: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12a10 10 0 0120 0"/><path d="M5 12a7 7 0 0114 0"/><path d="M9 12a3 3 0 016 0"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg>`,
+  tire: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2.5v6M12 15.5v6M2.5 12h6M15.5 12h6M5.2 5.2l4.2 4.2M14.6 14.6l4.2 4.2M18.8 5.2l-4.2 4.2M9.4 14.6l-4.2 4.2"/></svg>`,
+  shield: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l8 3v6.4c0 4.6-3.3 8.6-8 9.6-4.7-1-8-5-8-9.6V5.5l8-3z"/><path d="M9 12l2 2 4-4"/></svg>`,
+  cpu: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="13" height="13" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="0.5"/><path d="M9 2.5v3M15 2.5v3M9 18.5v3M15 18.5v3M2.5 9h3M2.5 15h3M18.5 9h3M18.5 15h3"/></svg>`
+};
+
 const experiences = [
   {
     company: "e& (Etisalat)",
     role: "UI/UX Design Intern",
     date: "Aug 2026 - Sep 2026",
     location: "Cairo, Egypt (Hybrid)",
+    iconKey: 'eand',
     bullets: [
       "Audited the live e& CX Solutions enterprise site end-to-end: 26 findings, 4 high-severity — including 11 employee emails exposed in page source (escalated to legal as a PDPL risk) and a 38.6 MB homepage from auto-playing background videos",
       "Corrected the team's stack diagnosis (hash-routed Angular SPA, not \"old Bootstrap\"), reframing the search-visibility problem as routing rather than styling",
@@ -16,6 +24,7 @@ const experiences = [
     role: "Sales → Operations → Technical Lead (family business)",
     date: "Aug 2022 - Present",
     location: "Tanta, Egypt",
+    iconKey: 'tire',
     bullets: [
       "Took over shaheentire.com — a production Laravel 12 platform built by an external team — in May 2026 as sole maintainer (100+ routes, bilingual AR/EN, Google OAuth, Filament 4 admin)",
       "Rescued the failing platform: 300+ commits, 100+ PRs merged, 55+ issues closed, 38 failing tests restored to green, zero-touch CI/CD via GitHub Actions",
@@ -29,6 +38,7 @@ const experiences = [
     role: "Cybersecurity Intern",
     date: "21 Jun - 2 Jul 2026",
     location: "New Cairo, Egypt",
+    iconKey: 'shield',
     bullets: [
       "Conducted hands-on labs with Cisco Packet Tracer and Palo Alto firewalls to design secure network topologies and defense perimeters",
       "Performed network scanning and vulnerability assessment using Nmap; completed red team CTF exercises"
@@ -39,6 +49,7 @@ const experiences = [
     role: "Technical Assistant",
     date: "Jun 2019 - Aug 2022",
     location: "Tanta, Egypt",
+    iconKey: 'cpu',
     bullets: [
       "Assembled and configured 40+ custom PC builds for gaming, creative, and business clients",
       "Diagnosed complex hardware issues: thermal management, BIOS conflicts, driver compatibility",
@@ -59,8 +70,8 @@ const experiences = [
     {experiences.map((exp, i) => (
       <div class="exp-block" data-reveal>
         <div class="exp-head">
-          <span class="roman">{String.fromCharCode(0x2160 + i)}.</span>
-          <div>
+          <span class="exp-icon" aria-hidden="true" set:html={ICONS[exp.iconKey]}></span>
+          <div class="exp-title">
             <h3>{exp.company}</h3>
             <div class="meta">{exp.role} &middot; {exp.location}</div>
           </div>
@@ -82,22 +93,30 @@ const experiences = [
   .exp-block:last-child { border-bottom: none; }
   .exp-head {
     display: grid;
-    grid-template-columns: 28px 1fr auto;
-    gap: 14px;
-    align-items: baseline;
+    grid-template-columns: 44px 1fr auto;
+    gap: 16px;
+    align-items: center;
     margin-bottom: 16px;
   }
-  .exp-head .roman {
-    font-size: 18px;
-    line-height: 1;
+  .exp-icon {
+    width: 44px; height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--coral);
+    background: color-mix(in srgb, var(--coral) 8%, var(--bone));
+    border: 1px solid color-mix(in srgb, var(--coral) 22%, var(--line));
+    border-radius: 12px;
+    flex-shrink: 0;
   }
-  .exp-head h3 {
+  .exp-icon svg { width: 22px; height: 22px; }
+  .exp-title h3 {
     font-family: var(--sans);
     font-size: 18px;
     font-weight: 700;
     letter-spacing: -0.01em;
   }
-  .exp-head .meta {
+  .exp-title .meta {
     font-size: 11px;
     margin-top: 3px;
     color: var(--ink-soft);
@@ -111,7 +130,7 @@ const experiences = [
   .bullets {
     list-style: none;
     padding: 0;
-    margin-left: 42px;
+    margin-left: 60px;
   }
   .bullets li {
     position: relative;
@@ -133,8 +152,8 @@ const experiences = [
     opacity: 0.6;
   }
   @media (max-width: 768px) {
-    .exp-head { grid-template-columns: 28px 1fr; }
-    .exp-date { grid-column: 1 / -1; text-align: right; }
+    .exp-head { grid-template-columns: 44px 1fr; }
+    .exp-date { grid-column: 1 / -1; text-align: right; margin-top: 4px; }
     .bullets { margin-left: 0; }
   }
 </style>

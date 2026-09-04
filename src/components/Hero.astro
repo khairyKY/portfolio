@@ -5,12 +5,12 @@
   <div class="container">
     <div class="hero-grid">
       <div class="hero-copy">
-        <div class="label" data-reveal>Engineering Portfolio</div>
+        <div class="label" data-reveal>Portfolio</div>
         <h1 class="display" data-reveal>
-          Building <em>production</em> systems<span class="dot">.</span>
+          I ship the things I <em>need</em><span class="dot">.</span>
         </h1>
         <p class="lead" data-reveal>
-          Frontend-focused SWE who ships full-stack — React, TypeScript, Rust, and SwiftUI on the frontend; Laravel and FastAPI on the backend. I engineer with AI as my copilot, not my replacement.
+          Sotto, Sukoon, Kai's Flow, shaheentire.com — each started as "I want this and it doesn't exist." I build the thing, then ship it.
         </p>
         <div class="hero-actions" data-reveal>
           <a href="#projects" class="btn btn-primary">
@@ -32,6 +32,9 @@
       </div>
       <div class="hero-art" data-reveal="right">
         <div class="profile-scroll" id="profile-scroll">
+          <div class="quote-bubble" id="quote-bubble" aria-hidden="true">
+            <span id="quote-text"></span><span class="quote-cursor">|</span>
+          </div>
           <div class="profile-ring">
             <img src="/images/profile.jpg" alt="Khairy Shaheen" class="profile-img" id="profile-img" />
           </div>
@@ -64,40 +67,19 @@
     width: 100%;
     padding: 80px 0;
   }
-  .hero-copy {
-    display: flex;
-    flex-direction: column;
-  }
+  .hero-copy { display: flex; flex-direction: column; }
   .hero-copy .label { margin-bottom: 28px; }
-  .hero-copy .lead { margin-bottom: 30px; max-width: 42ch; font-size: 17px; }
+  .hero-copy .lead { margin-bottom: 30px; max-width: 44ch; font-size: 17px; }
   .hero h1 {
     font-size: clamp(44px, 5vw, 78px);
     line-height: 1.0;
     margin-bottom: 28px;
   }
-  .hero-actions {
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 38px;
-  }
-  .hero-actions .arrow {
-    width: 16px; height: 16px;
-    display: inline-flex;
-  }
+  .hero-actions { display: inline-flex; align-items: center; gap: 14px; margin-bottom: 38px; }
+  .hero-actions .arrow { width: 16px; height: 16px; display: inline-flex; }
   .hero-actions .arrow svg { width: 100%; height: 100%; }
-  .hero-stats {
-    display: flex;
-    align-items: center;
-    gap: 22px;
-    flex-wrap: nowrap;
-  }
-  .stat {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    white-space: nowrap;
-  }
+  .hero-stats { display: flex; align-items: center; gap: 22px; flex-wrap: nowrap; }
+  .stat { display: inline-flex; align-items: center; gap: 9px; white-space: nowrap; }
   .stat-label {
     font-family: var(--sans);
     font-size: 11px;
@@ -106,26 +88,10 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
-  .stat-label b {
-    display: block;
-    font-weight: 700;
-    color: var(--ink);
-    font-size: 12px;
-  }
-  .hero-art {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-  }
-  .profile-scroll {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
+  .stat-label b { display: block; font-weight: 700; color: var(--ink); font-size: 12px; }
+
+  .hero-art { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; }
+  .profile-scroll { position: relative; width: 100%; display: flex; justify-content: center; }
   .profile-ring {
     width: min(260px, 20vw);
     aspect-ratio: 1;
@@ -134,16 +100,54 @@
     box-shadow: 0 0 0 2px var(--line-soft), 0 0 40px 8px rgba(239, 231, 210, 0.18), 0 20px 60px -20px rgba(0,0,0,0.4);
     transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease;
   }
-  .profile-ring img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-  }
-  body.profile-in-nav .profile-ring {
+  .profile-ring img { width: 100%; height: 100%; display: block; object-fit: cover; }
+  body.profile-in-nav .profile-ring { opacity: 0; transform: scale(0.85); }
+
+  /* Speech bubble */
+  .quote-bubble {
+    position: absolute;
+    top: -14px;
+    right: calc(50% - 180px);
+    max-width: 240px;
+    min-width: 160px;
+    background: var(--bone);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 10px 14px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--ink);
+    box-shadow: 0 10px 30px -12px rgba(0,0,0,0.25);
     opacity: 0;
-    transform: scale(0.85);
+    transform: translateY(4px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    z-index: 3;
   }
+  .quote-bubble.on { opacity: 1; transform: translateY(0); }
+  .quote-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 22px;
+    width: 14px;
+    height: 14px;
+    background: var(--bone);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transform: rotate(45deg);
+  }
+  .quote-cursor {
+    display: inline-block;
+    width: 6px;
+    color: var(--coral);
+    animation: blink 1s steps(2) infinite;
+    margin-left: 1px;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  body.profile-in-nav .quote-bubble { opacity: 0; }
+
   .hero-index {
     font-family: var(--sans);
     font-size: 12px;
@@ -156,25 +160,12 @@
     border: 1px solid var(--line-soft);
     border-radius: 12px;
   }
-  .hero-index span {
-    display: block;
-    line-height: 2;
-  }
-  .hero-index .n {
-    color: var(--coral);
-    margin-right: 8px;
-    font-weight: 700;
-  }
-  .hero-index .on {
-    color: var(--ink);
-    font-weight: 700;
-  }
+  .hero-index span { display: block; line-height: 2; }
+  .hero-index .n { color: var(--coral); margin-right: 8px; font-weight: 700; }
+  .hero-index .on { color: var(--ink); font-weight: 700; }
 
   @media (max-width: 880px) {
-    .hero-grid {
-      grid-template-columns: 1fr;
-      padding: 60px 0;
-    }
+    .hero-grid { grid-template-columns: 1fr; padding: 60px 0; }
     .hero-art { display: none; }
     .hero { min-height: auto; }
   }
@@ -182,3 +173,48 @@
     .hero-stats { flex-wrap: wrap; gap: 14px; }
   }
 </style>
+
+<script>
+  // Typewriter quote bubble
+  const quotes = [
+    "// TODO: sleep",
+    "shipped in prod, tests optional",
+    "it works on my machine",
+    "AI wrote it — I reviewed every line",
+    "the bug was in the config all along",
+    "committed straight to main",
+    "who needs feature flags",
+    "vibes-driven development",
+    "docs will be written soon™",
+    "it's not a bug, it's undocumented"
+  ];
+  const bubble = document.getElementById('quote-bubble');
+  const target = document.getElementById('quote-text');
+  if (bubble && target) {
+    let qi = Math.floor(Math.random() * quotes.length);
+    let typing = false;
+    async function typeNext() {
+      if (typing) return;
+      typing = true;
+      const text = quotes[qi];
+      target.textContent = '';
+      bubble.classList.add('on');
+      for (let i = 0; i < text.length; i++) {
+        target.textContent += text[i];
+        await new Promise(r => setTimeout(r, 45 + Math.random() * 45));
+      }
+      await new Promise(r => setTimeout(r, 3200));
+      // erase
+      for (let i = text.length; i > 0; i--) {
+        target.textContent = text.slice(0, i - 1);
+        await new Promise(r => setTimeout(r, 22));
+      }
+      await new Promise(r => setTimeout(r, 400));
+      qi = (qi + 1) % quotes.length;
+      typing = false;
+      typeNext();
+    }
+    // Kick off after a beat so the reveal animation settles
+    setTimeout(typeNext, 900);
+  }
+</script>

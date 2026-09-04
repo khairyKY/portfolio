@@ -6,13 +6,10 @@
     <div class="section-header" data-reveal>
       <div class="label">About</div>
       <h2 class="display">
-        Full-stack engineer<br>from <em>Tanta, Egypt</em><span class="dot">.</span>
+        I build what I <em>need</em><br>from Tanta, Egypt<span class="dot">.</span>
       </h2>
       <p class="lead">
-        Computer Science &amp; Engineering student at <span class="jpn">E-JUST</span>, building production-grade software across
-        the stack — from Rust desktop apps with on-device ML to SwiftUI gaze-controlled interfaces, Laravel e-commerce
-        to PyTorch classification models. I bridge engineering and operations, shipping code that
-        runs businesses.
+        CS student at <span class="ejust"><span class="ejust__seal" aria-hidden="true">技</span><span class="ejust__roman">E-JUST</span><span class="ejust__tategaki" aria-hidden="true">エジプト日本科学技術大学</span></span> who builds tools I need. Sotto because dictation apps kept my voice in the cloud. Sukoon because reading my own glucose data shouldn't be a chore. Kai's Flow because no planner fit my day. shaheentire.com because the family business needed a working site — 300+ commits and 100+ PRs later, it does. I don't wait to be assigned tickets. I build the thing, then ship it.
       </p>
     </div>
     <div class="about-grid">
@@ -47,23 +44,13 @@
     border: 1px solid var(--line);
     border-radius: 14px;
   }
-  .about-stat b {
-    display: block;
-    font-family: var(--sans);
-    font-size: 14px;
-    color: var(--ink);
-    font-weight: 700;
-  }
-  .about-stat span {
-    font-family: var(--body);
-    font-size: 12px;
-    color: var(--ink-mute);
-  }
-  .stat-ring.large {
-    width: 44px; height: 44px;
-    font-size: 13px;
-    flex-shrink: 0;
-  }
+  .about-stat b { display: block; font-family: var(--sans); font-size: 14px; color: var(--ink); font-weight: 700; }
+  .about-stat span { font-family: var(--body); font-size: 12px; color: var(--ink-mute); }
+  .stat-ring.large { width: 44px; height: 44px; font-size: 13px; flex-shrink: 0; }
+
+  /* Pull lead slightly closer to accommodate taller H2 */
+  #about .lead { max-width: 62ch; }
+
   @media (max-width: 880px) {
     .about-grid { grid-template-columns: repeat(2, 1fr); }
   }

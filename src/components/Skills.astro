@@ -1,30 +1,85 @@
 ---
-const skillCategories = [
-  { label: 'Languages', items: 'Rust, Python, JavaScript/TypeScript, PHP, Kotlin, C++, C, Swift, SQL, Arduino C++, LaTeX' },
-  { label: 'Backend', items: 'FastAPI, Laravel 12 (Livewire 3, Filament 4), Express 5' },
-  { label: 'Frontend & Native', items: 'React 19, Tailwind CSS v3/v4, Framer Motion, Tauri v2, SwiftUI, Jetpack Compose, Flutter' },
-  { label: 'Databases', items: 'PostgreSQL, SQLite, MongoDB, Supabase, SQLAlchemy ORM, Eloquent ORM' },
-  { label: 'AI/ML & On-Device', items: 'PyTorch (DenseNet, ViT, CUDA), ONNX Runtime, whisper.cpp, llama.cpp, HuggingFace, Google Gemini, OpenCV' },
-  { label: 'DevOps & Infra', items: 'Docker Compose, Git, GitHub Actions CI/CD, Cloudflare DNS/SSL, cPanel, SSH' },
-  { label: 'Embedded', items: 'ESP32-CAM, Arduino (RemoteXY, NewPing, DHT11, MQ, LDR, HC-SR04), NMEA 0183' },
-  { label: 'Security & Networking', items: 'Cisco Packet Tracer, Palo Alto, Nmap, RBAC, JWT/OAuth, PII Redaction' },
-  { label: 'Design & Ops', items: 'Figma, Photoshop, Illustrator, Canva, RACI, Obsidian' }
+// Stack — honest framing. Each row lists tech I've shipped with,
+// annotated with the concrete project it's from.
+// The subtitle names the AI-first practice openly.
+const stack = [
+  {
+    label: 'Languages I ship in',
+    items: [
+      { name: 'TypeScript / JavaScript', on: "Kai's Flow, portfolio, Scentura" },
+      { name: 'PHP', on: 'shaheentire.com (Laravel 12)' },
+      { name: 'Rust', on: 'Sotto' },
+      { name: 'Python', on: 'MRL Eye, Customer Ordering' },
+      { name: 'Kotlin', on: 'Sukoon (Android)' },
+      { name: 'Swift', on: 'ErgoX-UI (team contribution)' },
+      { name: 'C / C++', on: 'Arduino robotics, DS coursework' },
+      { name: 'SQL', on: 'shaheentire.com, Customer Ordering' }
+    ]
+  },
+  {
+    label: 'Frameworks & runtimes',
+    items: [
+      { name: 'Laravel 12 (Livewire, Filament)', on: 'shaheentire.com' },
+      { name: 'React 19 + Vite', on: "Kai's Flow, Scentura, Bellissimo" },
+      { name: 'FastAPI', on: 'Customer Ordering' },
+      { name: 'Tauri v2', on: 'Sotto' },
+      { name: 'Jetpack Compose', on: 'Sukoon' },
+      { name: 'Astro', on: 'this portfolio' }
+    ]
+  },
+  {
+    label: 'Data, infra & deploys',
+    items: [
+      { name: 'PostgreSQL / SQLite / Supabase', on: "shaheentire, Kai's Flow" },
+      { name: 'Docker Compose', on: 'Customer Ordering' },
+      { name: 'GitHub Actions CI/CD', on: 'shaheentire (zero-touch deploys)' },
+      { name: 'Cloudflare (DNS/SSL, Workers)', on: "shaheentire, Kai's Flow" },
+      { name: 'cPanel + SSH', on: 'shaheentire (GoDaddy)' }
+    ]
+  },
+  {
+    label: 'AI / ML — on-device',
+    items: [
+      { name: 'ONNX Runtime + Vulkan', on: 'Sotto (70× CPU speedup)' },
+      { name: 'llama.cpp', on: 'Sotto (Qwen 2.5 local)' },
+      { name: 'PyTorch (ViT, DenseNet, CUDA)', on: 'MRL Eye (>96% val acc)' },
+      { name: 'HuggingFace / Gemini API', on: 'Customer Ordering, chatbot' }
+    ]
+  },
+  {
+    label: 'Design & tooling',
+    items: [
+      { name: 'Figma (Variables, Motion, tokens)', on: 'e& internship design system' },
+      { name: 'Git & GitHub', on: 'daily driver' },
+      { name: 'Claude Code (AI-first workflow)', on: 'every project on this page' }
+    ]
+  }
 ];
 ---
 
 <section class="tight" id="skills">
   <div class="container">
     <div class="section-header" data-reveal>
-      <div class="label">Skills</div>
+      <div class="label">Stack</div>
       <h2 class="display">
-        Tools & <em>expertise</em><span class="dot">.</span>
+        Shipped <em>with</em><span class="dot">.</span>
       </h2>
+      <p class="lead">
+        Not "expert in everything" — <em>shipped with everything</em>. I develop AI-first: I use AI coding agents heavily, review every diff myself, and deepen the fundamentals underneath as I go. Each item below links back to a real project on this site.
+      </p>
     </div>
-    <div class="skills-grid" data-reveal>
-      {skillCategories.map(s => (
-        <div class="skill-card">
-          <div class="label">{s.label}</div>
-          <span class="skill-items">{s.items}</span>
+    <div class="stack-grid" data-reveal>
+      {stack.map(group => (
+        <div class="stack-card">
+          <div class="label">{group.label}</div>
+          <ul class="stack-list">
+            {group.items.map(it => (
+              <li>
+                <span class="stack-name">{it.name}</span>
+                <span class="stack-on">{it.on}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       ))}
     </div>
@@ -32,35 +87,63 @@ const skillCategories = [
 </section>
 
 <style>
-  .skills-grid {
+  .stack-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 14px;
   }
-  .skill-card {
-    padding: 16px 18px;
+  .stack-card {
+    padding: 20px 22px;
     background: var(--bone);
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .stack-card .label {
+    margin-bottom: 0;
+    font-size: 11px;
+    color: var(--coral);
+  }
+  .stack-card .label::before { width: 14px; }
+  .stack-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
-  .skill-card .label {
-    margin-bottom: 0;
-    font-size: 10px;
-    color: var(--coral);
-  }
-  .skill-card .label::before {
-    width: 14px;
-  }
-  .skill-items {
-    font-family: var(--body);
+  .stack-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed color-mix(in srgb, var(--line) 70%, transparent);
     font-size: 13px;
-    color: var(--ink-soft);
-    line-height: 1.55;
+    line-height: 1.4;
+  }
+  .stack-list li:last-child { border-bottom: none; }
+  .stack-name {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .stack-on {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 55%;
   }
   @media (max-width: 768px) {
-    .skills-grid { grid-template-columns: 1fr; }
+    .stack-grid { grid-template-columns: 1fr; }
+    .stack-list li { flex-direction: column; align-items: flex-start; gap: 2px; }
+    .stack-on { max-width: 100%; text-align: left; white-space: normal; }
   }
 </style>
