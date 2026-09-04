@@ -8,55 +8,74 @@
       <h2 class="display">
         I build what I <em>need</em><br>from Tanta, Egypt<span class="dot">.</span>
       </h2>
-      <div class="about-body">
-        <p class="lead">
-          I don't wait to be assigned tickets. I build the thing, then ship it. <strong>Sotto</strong> because dictation apps kept my voice in the cloud. <strong>Sukoon</strong> because reading my own glucose data shouldn't be a chore. <strong>Kai's Flow</strong> because no planner fit my day. <strong>shaheentire.com</strong> because the family business needed a working site — 300+ commits and 100+ PRs later, it does. All of this while I'm CS at <span class="ejust"><span class="ejust__seal" aria-hidden="true">技</span><span class="ejust__roman">E-JUST</span></span>.
-        </p>
+      <div class="about-layout">
+        <div class="about-left">
+          <p class="lead">
+            You know that thing that annoys you every single day? The app that makes you tap eight times to see what you need. The tool that's almost right. The software you'd fix in an afternoon if it were yours. Most people file a ticket, complain in the group chat, or just live with it.
+          </p>
+          <p class="lead">
+            I stopped doing that. <strong>Sotto</strong> because a dictation app shouldn't leak my voice to the cloud. <strong>Sukoon</strong> because I have Type 1 diabetes and reading my own glucose data shouldn't be a chore. <strong>Kai's Flow</strong> because every planner assumes I live somebody else's life. <strong>shaheentire.com</strong> because the family business needed a working site — 300+ commits and 100+ PRs later, it does.
+          </p>
+          <p class="lead about-closer">
+            If the thing that would fix your day doesn't exist, build it. I'm a CSE student at <span class="ejust"><span class="ejust__seal" aria-hidden="true">技</span><span class="ejust__roman">E-JUST</span></span>, and every project on this page started as a version of that sentence.
+          </p>
+
+          <div class="about-stats" data-reveal>
+            <div class="about-stat">
+              <div class="stat-ring solid coral large">300+</div>
+              <div><b>Production Commits</b><span>On shaheentire.com</span></div>
+            </div>
+            <div class="about-stat">
+              <div class="stat-ring solid coral large">2</div>
+              <div><b>Spoken Languages</b><span>AR · EN</span></div>
+            </div>
+            <div class="about-stat">
+              <div class="stat-ring solid large">100+</div>
+              <div><b>PRs Merged</b><span>Across projects</span></div>
+            </div>
+          </div>
+        </div>
+
         <div class="about-tategaki" aria-hidden="true">
           <span class="about-tategaki__text">エジプト日本科学技術大学</span>
         </div>
-      </div>
-    </div>
-    <div class="about-grid">
-      <div class="about-stat" data-reveal>
-        <div class="stat-ring solid coral large">300+</div>
-        <div><b>Production Commits</b><span>On shaheentire.com</span></div>
-      </div>
-      <div class="about-stat" data-reveal>
-        <div class="stat-ring solid coral large">2</div>
-        <div><b>Spoken Languages</b><span>AR · EN</span></div>
-      </div>
-      <div class="about-stat" data-reveal>
-        <div class="stat-ring solid large">100+</div>
-        <div><b>PRs Merged</b><span>Across projects</span></div>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  .about-body {
+  .about-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 40px;
+    gap: 48px;
     align-items: stretch;
     margin-top: 22px;
+  }
+  .about-left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
   #about .lead {
     max-width: none;
     margin: 0;
-    font-size: 18px;
-    line-height: 1.65;
+    font-size: 17px;
+    line-height: 1.7;
   }
   #about .lead strong {
     color: var(--ink);
     font-weight: 700;
   }
+  .about-closer {
+    color: var(--ink) !important;
+  }
+
   .about-tategaki {
     display: flex;
     justify-content: center;
     align-items: stretch;
-    padding: 4px 0 4px 24px;
+    padding: 4px 0 4px 32px;
     border-left: 1px solid color-mix(in srgb, #BC002D 30%, transparent);
     min-height: 100%;
   }
@@ -65,18 +84,19 @@
     text-orientation: upright;
     font-family: 'Yuji Syuku', var(--jpn), serif;
     font-weight: 400;
-    font-size: 22px;
+    font-size: 42px;
     line-height: 1.15;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     color: color-mix(in srgb, #BC002D 55%, transparent);
     user-select: none;
+    display: block;
   }
 
-  .about-grid {
+  .about-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 48px;
+    gap: 16px;
+    margin-top: 20px;
   }
   .about-stat {
     display: flex;
@@ -91,13 +111,12 @@
   .about-stat span { font-family: var(--body); font-size: 12px; color: var(--ink-mute); }
   .stat-ring.large { width: 44px; height: 44px; font-size: 13px; flex-shrink: 0; }
 
-  @media (max-width: 880px) {
-    .about-body { grid-template-columns: 1fr; gap: 24px; }
+  @media (max-width: 900px) {
+    .about-layout { grid-template-columns: 1fr; gap: 24px; }
     .about-tategaki { border-left: none; border-top: 1px solid color-mix(in srgb, #BC002D 30%, transparent); padding: 20px 0 0; justify-content: flex-start; }
-    .about-tategaki__text { writing-mode: horizontal-tb; font-size: 16px; letter-spacing: 0.16em; }
-    .about-grid { grid-template-columns: repeat(2, 1fr); }
+    .about-tategaki__text { writing-mode: horizontal-tb; font-size: 22px; letter-spacing: 0.16em; }
   }
-  @media (max-width: 480px) {
-    .about-grid { grid-template-columns: 1fr; }
+  @media (max-width: 640px) {
+    .about-stats { grid-template-columns: 1fr; }
   }
 </style>
