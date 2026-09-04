@@ -8,9 +8,14 @@
       <h2 class="display">
         I build what I <em>need</em><br>from Tanta, Egypt<span class="dot">.</span>
       </h2>
-      <p class="lead">
-        CS student at <span class="ejust"><span class="ejust__seal" aria-hidden="true">技</span><span class="ejust__roman">E-JUST</span><span class="ejust__tategaki" aria-hidden="true">エジプト日本科学技術大学</span></span> who builds tools I need. Sotto because dictation apps kept my voice in the cloud. Sukoon because reading my own glucose data shouldn't be a chore. Kai's Flow because no planner fit my day. shaheentire.com because the family business needed a working site — 300+ commits and 100+ PRs later, it does. I don't wait to be assigned tickets. I build the thing, then ship it.
-      </p>
+      <div class="about-body">
+        <p class="lead">
+          I don't wait to be assigned tickets. I build the thing, then ship it. <strong>Sotto</strong> because dictation apps kept my voice in the cloud. <strong>Sukoon</strong> because reading my own glucose data shouldn't be a chore. <strong>Kai's Flow</strong> because no planner fit my day. <strong>shaheentire.com</strong> because the family business needed a working site — 300+ commits and 100+ PRs later, it does. All of this while I'm CS at <span class="ejust"><span class="ejust__seal" aria-hidden="true">技</span><span class="ejust__roman">E-JUST</span></span>.
+        </p>
+        <div class="about-tategaki" aria-hidden="true">
+          <span class="about-tategaki__text">エジプト日本科学技術大学</span>
+        </div>
+      </div>
     </div>
     <div class="about-grid">
       <div class="about-stat" data-reveal>
@@ -30,10 +35,48 @@
 </section>
 
 <style>
+  .about-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 40px;
+    align-items: stretch;
+    margin-top: 22px;
+  }
+  #about .lead {
+    max-width: none;
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.65;
+  }
+  #about .lead strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .about-tategaki {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    padding: 4px 0 4px 24px;
+    border-left: 1px solid color-mix(in srgb, #BC002D 30%, transparent);
+    min-height: 100%;
+  }
+  .about-tategaki__text {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-family: 'Yuji Syuku', var(--jpn), serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.15;
+    letter-spacing: 0.14em;
+    color: color-mix(in srgb, #BC002D 55%, transparent);
+    user-select: none;
+  }
+
   .about-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+    margin-top: 48px;
   }
   .about-stat {
     display: flex;
@@ -48,10 +91,10 @@
   .about-stat span { font-family: var(--body); font-size: 12px; color: var(--ink-mute); }
   .stat-ring.large { width: 44px; height: 44px; font-size: 13px; flex-shrink: 0; }
 
-  /* Pull lead slightly closer to accommodate taller H2 */
-  #about .lead { max-width: 62ch; }
-
   @media (max-width: 880px) {
+    .about-body { grid-template-columns: 1fr; gap: 24px; }
+    .about-tategaki { border-left: none; border-top: 1px solid color-mix(in srgb, #BC002D 30%, transparent); padding: 20px 0 0; justify-content: flex-start; }
+    .about-tategaki__text { writing-mode: horizontal-tb; font-size: 16px; letter-spacing: 0.16em; }
     .about-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 480px) {

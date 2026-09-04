@@ -68,6 +68,23 @@ const stack = [
         Not "expert in everything" — <em>shipped with everything</em>. I develop AI-first: I use AI coding agents heavily, review every diff myself, and deepen the fundamentals underneath as I go. Each item below links back to a real project on this site.
       </p>
     </div>
+    <div class="stack-featured" data-reveal>
+      <div class="stack-featured__badge">How I work</div>
+      <div class="stack-featured__body">
+        <h3 class="stack-featured__title">AI-first, human-reviewed<span class="dot">.</span></h3>
+        <p class="stack-featured__lead">
+          <strong>Claude Code is my daily driver.</strong> I plan out loud, delegate the scaffolding, and read every diff before it ships. I use AI to accelerate the parts I already understand — not to paper over the parts I don't. Every project on this page shipped this way, and I'm faster because of it.
+        </p>
+        <div class="stack-featured__chips">
+          <span class="chip chip--hero">Claude Code</span>
+          <span class="chip">Claude Design</span>
+          <span class="chip">Claude on the web</span>
+          <span class="chip">MCP tooling</span>
+          <span class="chip">Gemini API</span>
+          <span class="chip">OpenCode</span>
+        </div>
+      </div>
+    </div>
     <div class="stack-grid" data-reveal>
       {stack.map(group => (
         <div class="stack-card">
@@ -87,6 +104,87 @@ const stack = [
 </section>
 
 <style>
+  .stack-featured {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 28px;
+    align-items: start;
+    padding: 28px 32px;
+    margin-bottom: 26px;
+    border-radius: 18px;
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--coral) 12%, var(--bone)) 0%,
+      var(--bone) 65%);
+    border: 1px solid color-mix(in srgb, var(--coral) 30%, var(--line));
+    box-shadow: 0 12px 40px -20px color-mix(in srgb, var(--coral) 40%, transparent);
+    overflow: hidden;
+  }
+  .stack-featured::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--coral);
+  }
+  .stack-featured__badge {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--coral);
+    padding: 8px 14px;
+    background: color-mix(in srgb, var(--coral) 15%, var(--bone));
+    border: 1px solid color-mix(in srgb, var(--coral) 40%, transparent);
+    border-radius: 999px;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+  .stack-featured__title {
+    font-family: var(--sans);
+    font-size: clamp(22px, 2.6vw, 30px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin: 0 0 12px;
+  }
+  .stack-featured__title .dot { color: var(--coral); }
+  .stack-featured__lead {
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0 0 18px;
+    max-width: 68ch;
+  }
+  .stack-featured__lead strong { color: var(--ink); font-weight: 700; }
+  .stack-featured__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--bone);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    letter-spacing: 0.01em;
+  }
+  .chip--hero {
+    background: var(--coral);
+    border-color: var(--coral);
+    color: #fff;
+  }
+  @media (max-width: 640px) {
+    .stack-featured { grid-template-columns: 1fr; padding: 22px; gap: 16px; }
+  }
+
   .stack-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

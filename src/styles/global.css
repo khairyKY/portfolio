@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500&family=Mochiy+Pop+P+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500&family=Mochiy+Pop+P+One&family=Yuji+Syuku&display=swap');
 
 /* ─── Zoom Fix (desktop only) ─── */
 @media (min-width: 768px) {
@@ -181,29 +181,12 @@ body::before {
   letter-spacing: 0.04em;
 }
 
-/* ─── E-JUST composite: kanji seal + vertical tategaki subtitle ─── */
+/* ─── E-JUST composite: inline roman + brush-drawn hanko seal ─── */
 .ejust {
   position: relative;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  padding-left: 6px;
-  padding-right: 2px;
+  display: inline;
+  white-space: nowrap;
   isolation: isolate;
-}
-.ejust__seal {
-  position: absolute;
-  left: -12px;
-  top: -0.55em;
-  font-family: var(--jpn), serif;
-  font-weight: 900;
-  color: rgba(188, 0, 45, 0.16);
-  font-size: 2.6em;
-  line-height: 1;
-  pointer-events: none;
-  user-select: none;
-  z-index: -1;
-  transform: rotate(-6deg);
 }
 .ejust__roman {
   font-family: var(--jpn), serif;
@@ -213,19 +196,19 @@ body::before {
   position: relative;
   z-index: 1;
 }
-.ejust__tategaki {
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-  font-family: var(--jpn), serif;
-  font-weight: 600;
-  font-size: 0.36em;
-  color: rgba(188, 0, 45, 0.65);
-  line-height: 1.05;
-  letter-spacing: 0.04em;
-  align-self: flex-start;
-  margin-left: 3px;
-  margin-top: -0.15em;
+.ejust__seal {
+  position: absolute;
+  right: -22px;
+  top: -0.85em;
+  font-family: 'Yuji Syuku', var(--jpn), serif;
+  font-weight: 400;
+  color: rgba(188, 0, 45, 0.10);
+  font-size: 3.4em;
+  line-height: 1;
+  pointer-events: none;
   user-select: none;
+  z-index: -1;
+  transform: rotate(4deg);
 }
 
 /* ─── Section Header ─── */

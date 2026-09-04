@@ -1,10 +1,12 @@
 ---
-const ICONS: Record<string, string> = {
-  eand: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12a10 10 0 0120 0"/><path d="M5 12a7 7 0 0114 0"/><path d="M9 12a3 3 0 016 0"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg>`,
-  tire: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2.5v6M12 15.5v6M2.5 12h6M15.5 12h6M5.2 5.2l4.2 4.2M14.6 14.6l4.2 4.2M18.8 5.2l-4.2 4.2M9.4 14.6l-4.2 4.2"/></svg>`,
-  shield: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l8 3v6.4c0 4.6-3.3 8.6-8 9.6-4.7-1-8-5-8-9.6V5.5l8-3z"/><path d="M9 12l2 2 4-4"/></svg>`,
-  cpu: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="13" height="13" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="0.5"/><path d="M9 2.5v3M15 2.5v3M9 18.5v3M15 18.5v3M2.5 9h3M2.5 15h3M18.5 9h3M18.5 15h3"/></svg>`
-};
+// Real e& logo (provided by Kai), kept in brand red #E00800. Shaheen uses
+// the site's actual brand PNG so both top roles carry visual identity
+// rather than generic line icons. Optima/PC stay as symbolic line icons.
+const EAND_SVG = `<svg viewBox="0 0 186 128" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="currentColor" d="M157.553 94.256C164.028 82.7057 167.896 69.6891 169.247 57.0622H149.239C148.755 64.8923 147.21 72.8206 144.599 79.8685C141.988 86.8183 138.605 92.9833 134.256 98.1725C127.78 105.806 119.37 110.701 109.899 110.701C98.6861 110.701 90.9537 105.806 87.9581 97.6846H66.4995C63.0195 106.103 54.8053 110.41 44.4622 110.41C33.056 110.41 21.3618 102.089 20.1049 85.1558H87.0888C88.8274 76.8351 95.3057 70.5721 105.84 66.5575C105.84 66.5575 115.602 62.9355 125.269 58.7274C138.608 52.4644 148.66 41.3038 148.66 27.1125C148.66 6.94982 131.648 0 116.28 0C96.8506 0 82.5457 10.2776 82.5457 26.72C82.5457 36.4089 87.7643 45.5118 95.3999 54.6147C91.3412 56.0837 87.4737 57.9425 83.8968 60.2918C77.7119 42.9663 63.5012 31.8084 44.0746 31.8084C18.4604 31.8084 0 51.287 0 78.6911C0 106.095 16.528 127.043 45.4284 127.043C58.6702 127.043 68.7226 122.148 75.6826 115.296C82.7395 122.636 93.3706 127.043 106.419 127.043C122.465 127.043 135.513 120.584 145.565 110.6L158.419 124.792H185.678L157.553 94.256ZM116.28 15.3659C123.625 15.3659 129.619 19.574 129.619 27.8947C129.619 35.5286 125.075 42.969 114.926 47.5695L114.732 47.3733C108.739 40.914 103.038 33.4736 103.038 26.4284C103.135 19.3805 109.32 15.3659 116.28 15.3659ZM43.8835 47.6649C55.5777 47.6649 66.3084 56.2773 66.7902 70.4713H20.008C21.6524 53.2439 34.5066 47.6649 43.8835 47.6649Z"/></svg>`;
+
+const SHIELD_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8 3v6.4c0 4.6-3.3 8.6-8 9.6-4.7-1-8-5-8-9.6V5.5l8-3z"/><path d="M9 12l2 2 4-4"/></svg>`;
+
+const CPU_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="5.5" width="13" height="13" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="0.5"/><path d="M9 2.5v3M15 2.5v3M9 18.5v3M15 18.5v3M2.5 9h3M2.5 15h3M18.5 9h3M18.5 15h3"/></svg>`;
 
 const experiences = [
   {
@@ -12,7 +14,10 @@ const experiences = [
     role: "UI/UX Design Intern",
     date: "Aug 2026 - Sep 2026",
     location: "Cairo, Egypt (Hybrid)",
-    iconKey: 'eand',
+    iconSvg: EAND_SVG,
+    iconColor: '#E00800',
+    iconBg: '#FFEBEA',
+    iconStyle: 'brand',
     bullets: [
       "Audited the live e& CX Solutions enterprise site end-to-end: 26 findings, 4 high-severity — including 11 employee emails exposed in page source (escalated to legal as a PDPL risk) and a 38.6 MB homepage from auto-playing background videos",
       "Corrected the team's stack diagnosis (hash-routed Angular SPA, not \"old Bootstrap\"), reframing the search-visibility problem as routing rather than styling",
@@ -24,7 +29,8 @@ const experiences = [
     role: "Sales → Operations → Technical Lead (family business)",
     date: "Aug 2022 - Present",
     location: "Tanta, Egypt",
-    iconKey: 'tire',
+    iconImg: '/images/shaheen-ecommerce.png',
+    iconStyle: 'brand',
     bullets: [
       "Took over shaheentire.com — a production Laravel 12 platform built by an external team — in May 2026 as sole maintainer (100+ routes, bilingual AR/EN, Google OAuth, Filament 4 admin)",
       "Rescued the failing platform: 300+ commits, 100+ PRs merged, 55+ issues closed, 38 failing tests restored to green, zero-touch CI/CD via GitHub Actions",
@@ -38,7 +44,7 @@ const experiences = [
     role: "Cybersecurity Intern",
     date: "21 Jun - 2 Jul 2026",
     location: "New Cairo, Egypt",
-    iconKey: 'shield',
+    iconSvg: SHIELD_SVG,
     bullets: [
       "Conducted hands-on labs with Cisco Packet Tracer and Palo Alto firewalls to design secure network topologies and defense perimeters",
       "Performed network scanning and vulnerability assessment using Nmap; completed red team CTF exercises"
@@ -49,7 +55,7 @@ const experiences = [
     role: "Technical Assistant",
     date: "Jun 2019 - Aug 2022",
     location: "Tanta, Egypt",
-    iconKey: 'cpu',
+    iconSvg: CPU_SVG,
     bullets: [
       "Assembled and configured 40+ custom PC builds for gaming, creative, and business clients",
       "Diagnosed complex hardware issues: thermal management, BIOS conflicts, driver compatibility",
@@ -67,10 +73,20 @@ const experiences = [
         Where I've <em>worked</em><span class="dot">.</span>
       </h2>
     </div>
-    {experiences.map((exp, i) => (
+    {experiences.map((exp) => (
       <div class="exp-block" data-reveal>
         <div class="exp-head">
-          <span class="exp-icon" aria-hidden="true" set:html={ICONS[exp.iconKey]}></span>
+          <span
+            class={`exp-icon ${exp.iconStyle === 'brand' ? 'exp-icon--brand' : ''}`}
+            style={exp.iconColor ? `color: ${exp.iconColor}; background: ${exp.iconBg || 'var(--bone)'}; border-color: color-mix(in srgb, ${exp.iconColor} 30%, var(--line));` : ''}
+            aria-hidden="true"
+          >
+            {exp.iconSvg
+              ? <span class="exp-icon__inner" set:html={exp.iconSvg}></span>
+              : exp.iconImg
+                ? <img src={exp.iconImg} alt="" class="exp-icon__img" />
+                : null}
+          </span>
           <div class="exp-title">
             <h3>{exp.company}</h3>
             <div class="meta">{exp.role} &middot; {exp.location}</div>
@@ -93,23 +109,47 @@ const experiences = [
   .exp-block:last-child { border-bottom: none; }
   .exp-head {
     display: grid;
-    grid-template-columns: 44px 1fr auto;
-    gap: 16px;
+    grid-template-columns: 56px 1fr auto;
+    gap: 18px;
     align-items: center;
     margin-bottom: 16px;
   }
+  /* 3D-ish icon container: soft shadow + subtle top highlight */
   .exp-icon {
-    width: 44px; height: 44px;
+    width: 56px; height: 56px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: var(--coral);
     background: color-mix(in srgb, var(--coral) 8%, var(--bone));
     border: 1px solid color-mix(in srgb, var(--coral) 22%, var(--line));
-    border-radius: 12px;
+    border-radius: 14px;
     flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.06),
+      0 6px 14px -8px rgba(0,0,0,0.45),
+      0 2px 4px -2px rgba(0,0,0,0.25);
   }
-  .exp-icon svg { width: 22px; height: 22px; }
+  .exp-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(160deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,0.08) 100%);
+    pointer-events: none;
+  }
+  .exp-icon svg { width: 26px; height: 26px; display: block; }
+  .exp-icon__inner { display: inline-flex; }
+  .exp-icon--brand svg { width: 34px; height: auto; max-height: 30px; }
+  .exp-icon__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
   .exp-title h3 {
     font-family: var(--sans);
     font-size: 18px;
@@ -130,7 +170,7 @@ const experiences = [
   .bullets {
     list-style: none;
     padding: 0;
-    margin-left: 60px;
+    margin-left: 74px;
   }
   .bullets li {
     position: relative;
@@ -152,7 +192,7 @@ const experiences = [
     opacity: 0.6;
   }
   @media (max-width: 768px) {
-    .exp-head { grid-template-columns: 44px 1fr; }
+    .exp-head { grid-template-columns: 56px 1fr; }
     .exp-date { grid-column: 1 / -1; text-align: right; margin-top: 4px; }
     .bullets { margin-left: 0; }
   }
