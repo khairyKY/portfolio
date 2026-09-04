@@ -29,8 +29,9 @@ const experiences = [
     role: "Sales → Operations → Technical Lead (family business)",
     date: "Aug 2022 - Present",
     location: "Tanta, Egypt",
-    iconImg: '/images/shaheen-ecommerce.png',
+    iconImg: '/images/shaheen-logo.svg',
     iconStyle: 'brand',
+    iconBg: '#FDECEB',
     bullets: [
       "Took over shaheentire.com — a production Laravel 12 platform built by an external team — in May 2026 as sole maintainer (100+ routes, bilingual AR/EN, Google OAuth, Filament 4 admin)",
       "Rescued the failing platform: 300+ commits, 100+ PRs merged, 55+ issues closed, 38 failing tests restored to green, zero-touch CI/CD via GitHub Actions",
@@ -84,7 +85,7 @@ const experiences = [
             {exp.iconSvg
               ? <span class="exp-icon__inner" set:html={exp.iconSvg}></span>
               : exp.iconImg
-                ? <img src={exp.iconImg} alt="" class="exp-icon__img" />
+                ? <img src={exp.iconImg} alt="" class={`exp-icon__img ${exp.iconStyle === 'brand' ? 'exp-icon__img--contain' : ''}`} />
                 : null}
           </span>
           <div class="exp-title">
@@ -139,15 +140,25 @@ const experiences = [
     border-radius: inherit;
     background: linear-gradient(160deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,0.08) 100%);
     pointer-events: none;
+    z-index: 2;
   }
+  .exp-icon > * { position: relative; z-index: 1; }
   .exp-icon svg { width: 26px; height: 26px; display: block; }
-  .exp-icon__inner { display: inline-flex; }
-  .exp-icon--brand svg { width: 34px; height: auto; max-height: 30px; }
+  .exp-icon__inner { display: inline-flex; align-items: center; justify-content: center; }
+  .exp-icon--brand svg { width: 42px; height: auto; max-height: 34px; }
   .exp-icon__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    position: relative;
+    z-index: 1;
+  }
+  .exp-icon__img--contain {
+    width: 78%;
+    height: 78%;
+    object-fit: contain;
+    margin: auto;
   }
 
   .exp-title h3 {

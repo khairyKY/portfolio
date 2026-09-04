@@ -54,7 +54,7 @@
   .hero {
     position: relative;
     padding: 0;
-    min-height: calc(100vh - 140px);
+    min-height: calc(100vh - 90px);
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--line);
@@ -65,7 +65,7 @@
     gap: 48px;
     align-items: center;
     width: 100%;
-    padding: 80px 0;
+    padding: 24px 0 40px;
   }
   .hero-copy { display: flex; flex-direction: column; }
   .hero-copy .label { margin-bottom: 28px; }
@@ -177,19 +177,21 @@
 <script>
   // Typewriter quote bubble
   const quotes = [
-    "regex? easy. trivial, actually.",
-    "CSS is Turing complete because I said so",
+    "on hour 14 of a 20-minute task",
+    "coffee: applied",
+    "the plant is dead again",
+    "certified overthinker, part-time doer",
+    "step 1: overthink. step 2: ship.",
+    "yes, I'm building another thing",
+    "sleep is a story I tell myself",
+    "somewhere between focused and unhinged",
+    "shipping is the only feature that matters",
+    "will fix it Monday (it's Friday)",
+    "made this in 4 hours, we don't talk about the other 12",
+    "typing loudly = productive",
+    // gentler tech in-jokes, kept last so most viewers land on the human ones first
     "javascript was designed on purpose",
-    "we don't need types, we have vibes",
-    "monorepos solve every problem",
-    "the algorithm just needs more RAM",
-    "just add more Redis",
-    "there are only two hard things in CS: caching, and off-by-one errors, and naming",
-    "you can absolutely parse HTML with regex",
-    "AI wrote this. AI reviewed it. AI is on vacation now.",
-    "yes it's O(n²), no I won't fix it",
-    "the true bottleneck is the developer",
-    "hover states are a rich man's game"
+    "the bug was in the config all along"
   ];
   const bubble = document.getElementById('quote-bubble');
   const target = document.getElementById('quote-text');
