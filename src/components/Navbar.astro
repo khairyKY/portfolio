@@ -10,7 +10,7 @@ import ThemeToggle from './ThemeToggle.astro';
           <img src="/images/profile.jpg" alt="" class="brand-img" id="brand-img" />
           <em class="brand-letter">K</em>
         </span>
-        Khairy Shaheen
+        <span class="brand-text">Khairy Shaheen</span>
       </a>
       <ul class="nav-links">
         <li><a href="/#about">About</a></li>
@@ -72,7 +72,10 @@ import ThemeToggle from './ThemeToggle.astro';
     color: var(--ink);
     text-decoration: none;
     font-size: 18px;
+    white-space: nowrap;
+    min-width: 0;
   }
+  .brand-text { white-space: nowrap; }
   .brand-mark {
     width: 36px; height: 36px;
     display: inline-flex;
@@ -143,6 +146,35 @@ import ThemeToggle from './ThemeToggle.astro';
   .nav-cta:hover { background: #e25e4a; }
   @media (max-width: 880px) {
     .nav-links { display: none; }
+    .nav-inner { gap: 12px; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0; right: 0;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+      padding: 20px 24px;
+      gap: 18px;
+      z-index: 49;
+      box-shadow: 0 12px 30px -12px rgba(0,0,0,0.4);
+    }
+    .nav-links.open a {
+      font-size: 16px;
+      padding: 4px 0;
+    }
+  }
+  @media (max-width: 640px) {
+    /* Kill the Resume CTA + shrink gaps — hamburger owns navigation */
+    .nav-cta { display: none; }
+    .nav-side { gap: 10px; }
+    .nav { padding: 12px 0; }
+    .brand { gap: 10px; font-size: 16px; }
+  }
+  @media (max-width: 420px) {
+    /* Drop the wordmark, keep the K mark. Prevents the 2-line wrap. */
+    .brand-text { display: none; }
   }
 </style>
 

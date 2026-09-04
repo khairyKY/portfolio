@@ -164,11 +164,17 @@
   .hero-index .on { color: var(--ink); font-weight: 700; }
 
   @media (max-width: 880px) {
-    .hero-grid { grid-template-columns: 1fr; padding: 60px 0; }
+    .hero { padding: 24px 0 40px; }
+    .hero-grid { grid-template-columns: 1fr; padding: 0; gap: 20px; }
     .hero-art { display: none; }
-    .hero { min-height: auto; }
   }
   @media (max-width: 480px) {
+    .hero { padding: 18px 0 32px; }
+    .hero-copy .label { margin-bottom: 18px; }
+    .hero h1 { font-size: clamp(38px, 10vw, 54px); margin-bottom: 18px; }
+    .hero-copy .lead { font-size: 15px; margin-bottom: 22px; }
+    .hero-actions { margin-bottom: 24px; gap: 10px; }
+    .hero-actions .btn { padding-inline: 16px; font-size: 13px; }
     .hero-stats { flex-wrap: wrap; gap: 14px; }
   }
 </style>
