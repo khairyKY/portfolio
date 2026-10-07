@@ -21,20 +21,17 @@
         </div>
         <div class="hero-stats" data-reveal>
           <div class="stat">
-            <span class="stat-ring coral solid">300+</span>
+            <span class="stat-ring coral solid">1K+</span>
             <span class="stat-label"><b>Commits</b>On production</span>
           </div>
           <div class="stat">
-            <span class="stat-ring">12</span>
+            <span class="stat-ring">11</span>
             <span class="stat-label"><b>Projects</b>Built</span>
           </div>
         </div>
       </div>
       <div class="hero-art" data-reveal="right">
         <div class="profile-scroll" id="profile-scroll">
-          <div class="quote-bubble" id="quote-bubble" aria-hidden="true">
-            <span id="quote-text"></span><span class="quote-cursor">|</span>
-          </div>
           <div class="profile-ring">
             <img src="/images/profile.jpg" alt="Khairy Shaheen" class="profile-img" id="profile-img" />
           </div>
@@ -102,51 +99,6 @@
   .profile-ring img { width: 100%; height: 100%; display: block; object-fit: cover; }
   body.profile-in-nav .profile-ring { opacity: 0; transform: scale(0.85); }
 
-  /* Speech bubble */
-  .quote-bubble {
-    position: absolute;
-    top: -14px;
-    right: calc(50% - 180px);
-    max-width: 240px;
-    min-width: 160px;
-    background: var(--bone);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 10px 14px;
-    font-family: var(--mono);
-    font-size: 12.5px;
-    line-height: 1.4;
-    color: var(--ink);
-    box-shadow: 0 10px 30px -12px rgba(0,0,0,0.25);
-    opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    pointer-events: none;
-    z-index: 3;
-  }
-  .quote-bubble.on { opacity: 1; transform: translateY(0); }
-  .quote-bubble::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 22px;
-    width: 14px;
-    height: 14px;
-    background: var(--bone);
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    transform: rotate(45deg);
-  }
-  .quote-cursor {
-    display: inline-block;
-    width: 6px;
-    color: var(--coral);
-    animation: blink 1s steps(2) infinite;
-    margin-left: 1px;
-  }
-  @keyframes blink { 50% { opacity: 0; } }
-  body.profile-in-nav .quote-bubble { opacity: 0; }
-
   .hero-index {
     font-family: var(--sans);
     font-size: 12px;
@@ -179,52 +131,3 @@
   }
 </style>
 
-<script>
-  // Typewriter quote bubble
-  const quotes = [
-    "on hour 14 of a 20-minute task",
-    "coffee: applied",
-    "the plant is dead again",
-    "certified overthinker, part-time doer",
-    "step 1: overthink. step 2: ship.",
-    "yes, I'm building another thing",
-    "sleep is a story I tell myself",
-    "somewhere between focused and unhinged",
-    "shipping is the only feature that matters",
-    "will fix it Monday (it's Friday)",
-    "made this in 4 hours, we don't talk about the other 12",
-    "typing loudly = productive",
-    // gentler tech in-jokes, kept last so most viewers land on the human ones first
-    "javascript was designed on purpose",
-    "the bug was in the config all along"
-  ];
-  const bubble = document.getElementById('quote-bubble');
-  const target = document.getElementById('quote-text');
-  if (bubble && target) {
-    let qi = Math.floor(Math.random() * quotes.length);
-    let typing = false;
-    async function typeNext() {
-      if (typing) return;
-      typing = true;
-      const text = quotes[qi];
-      target.textContent = '';
-      bubble.classList.add('on');
-      for (let i = 0; i < text.length; i++) {
-        target.textContent += text[i];
-        await new Promise(r => setTimeout(r, 45 + Math.random() * 45));
-      }
-      await new Promise(r => setTimeout(r, 3200));
-      // erase
-      for (let i = text.length; i > 0; i--) {
-        target.textContent = text.slice(0, i - 1);
-        await new Promise(r => setTimeout(r, 22));
-      }
-      await new Promise(r => setTimeout(r, 400));
-      qi = (qi + 1) % quotes.length;
-      typing = false;
-      typeNext();
-    }
-    // Kick off after a beat so the reveal animation settles
-    setTimeout(typeNext, 900);
-  }
-</script>
