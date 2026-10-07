@@ -212,7 +212,9 @@
   .tc-progress .tc-progress-label{font-size:.7rem;font-weight:600;color:var(--ink-soft);letter-spacing:.02em}
   .tut-card .tc-progress .prog-thin>i{background:var(--tut)}
   .tut-card.coding-pick-card .tc-progress .prog-thin>i{background:#2c5a3b}
-  .tc-done-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--font-display);font-size:.78rem;font-weight:700;line-height:1;margin-left:8px;flex:0 0 auto;cursor:pointer;border:none;padding:0;transition:transform .18s ease, box-shadow .18s ease, background .18s ease, opacity .18s ease;vertical-align:middle}
+  /* 24px, not 20: the global touch-target rule gives every button min-height:24px,
+     which stretched a 20px-wide badge into a 20x24 oval. */
+  .tc-done-badge{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;aspect-ratio:1;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--font-display);font-size:.85rem;font-weight:700;line-height:1;margin-left:8px;flex:0 0 auto;cursor:pointer;border:none;padding:0;transition:transform .18s ease, box-shadow .18s ease, background .18s ease, opacity .18s ease;vertical-align:middle}
   .tc-done-badge.ghost{background:transparent;color:var(--accent);border:1.5px dashed var(--accent);opacity:0;pointer-events:none}
   .tut-card:hover .tc-done-badge.ghost{opacity:.55;pointer-events:auto}
   .tc-done-badge.ghost:hover{opacity:1;background:rgba(191,85,45,.12);box-shadow:0 0 0 4px rgba(191,85,45,.18)}
@@ -652,6 +654,8 @@
   /* Collapsible Setup Section */
   #quizSetupSection, #blitzSetupSection{max-height:0;overflow:hidden;opacity:0;transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease, margin-top 0.3s ease;margin-top:0}
   #quizSetupSection.show-setup, #blitzSetupSection.show-setup{max-height:2000px;opacity:1;margin-top:20px;border-top:1.5px dashed var(--line);padding-top:20px}
+  #quizSetupSection{visibility:hidden;transition-property:max-height,opacity,margin-top,visibility;transition-delay:0s,0s,0s,.35s}
+  #quizSetupSection.show-setup{visibility:visible;transition-delay:0s}
 
   /* Arrow Pointer Container (Viewport Fixed) */
   .arrow-hint-container{position:fixed;bottom:78px;right:110px;z-index:998;pointer-events:none;display:flex;flex-direction:column;align-items:flex-end;animation:floatHint 3s ease-in-out infinite alternate}
@@ -2530,8 +2534,101 @@
   .write-gutter-line.has-error{cursor:pointer}
   .write-gutter-line.has-error:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
 
+  /* The narrow-screen rule floats #homeBtn with display:inline-flex !important,
+     which beat .hide — so a "Home" button sat on the home screen itself. */
+  #homeBtn.hide{display:none !important}
+
+  /* ---- streak / XP: read-only, sits with the nav buttons ---- */
+  .streak-pill{
+    font-family:var(--font-ui);font-size:.8rem;font-weight:600;
+    font-variant-numeric:tabular-nums;white-space:nowrap;
+    padding:8px 12px;border-radius:999px;
+    background:var(--surface);color:var(--ink-soft);border:1.5px solid var(--line);
+  }
+
+  /* ---- exam simulator ---- */
+  .timed-min{display:block;margin-top:8px;font-family:var(--font-ui);font-size:.8rem;color:var(--ink-soft)}
+  .timed-min input{
+    width:64px;margin:0 4px;padding:4px 8px;font:inherit;font-variant-numeric:tabular-nums;
+    border:1.5px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);
+  }
+  .timed-min input:disabled{opacity:.5}
+  .timerpill{
+    font-family:var(--font-display);font-weight:600;font-size:.82rem;font-variant-numeric:tabular-nums;
+    padding:5px 11px;border-radius:999px;white-space:nowrap;margin-inline-end:6px;
+    background:var(--paper-2);color:var(--ink);border:1px solid var(--line);
+  }
+  .timerpill.low{background:var(--bad-bg);color:var(--bad);border-color:var(--bad)}
+
+  /* ---- due queue + weak-topic radar (home) and per-topic results ---- */
+  .due-card{
+    display:flex;align-items:center;gap:16px;margin-top:24px;padding:16px;
+    border:1.5px solid var(--line);border-radius:14px;background:var(--surface);
+  }
+  .due-card .due-text{flex:1 1 auto;display:flex;flex-direction:column;gap:4px;line-height:1.35}
+  .due-card b{font-family:var(--font-display);font-size:1.02rem;color:var(--accent-deep);font-variant-numeric:tabular-nums}
+  .due-card span{font-family:var(--font-ui);font-size:.8rem;color:var(--ink-soft)}
+  .due-card .btn{width:auto;flex:0 0 auto}
+  .radar{margin-top:24px;padding:16px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface)}
+  .radar-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+  .radar-head h3{font-family:var(--font-display);font-size:1.02rem;font-weight:700;color:var(--ink);margin:0}
+  .radar-head span{font-family:var(--font-ui);font-size:.75rem;color:var(--ink-soft)}
+  .radar-row{
+    display:grid;grid-template-columns:minmax(96px,1.2fr) 2fr auto;align-items:center;gap:12px;
+    width:100%;padding:8px;margin:0 -8px;border:0;border-radius:8px;background:none;
+    font:inherit;color:var(--ink);text-align:start;
+    transition:background-color .13s ease;
+  }
+  button.radar-row{cursor:pointer;width:calc(100% + 16px)}
+  button.radar-row:hover{background:var(--paper-2)}
+  .radar-name{font-family:var(--font-ui);font-size:.86rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .radar-name small{display:block;font-weight:400;font-size:.72rem;color:var(--ink-soft)}
+  .radar-bar{height:8px;border-radius:4px;background:color-mix(in srgb, var(--line) 55%, transparent);overflow:hidden}
+  .radar-bar>i{display:block;height:100%;border-radius:0 4px 4px 0;background:var(--accent)}
+  .radar-val{font-family:var(--font-ui);font-size:.8rem;color:var(--ink-soft);font-variant-numeric:tabular-nums;text-align:end;white-space:nowrap}
+  .radar-val b{color:var(--ink)}
+
+  /* ---- "why the miss?" ---- */
+  .why-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}
+  .why-q{font-family:var(--font-ui);font-size:.78rem;font-weight:600;opacity:.85}
+  .why-btn{
+    min-height:32px;padding:4px 12px;border-radius:999px;cursor:pointer;
+    font-family:var(--font-ui);font-size:.78rem;color:inherit;
+    background:transparent;border:1.5px solid currentColor;opacity:.8;
+    transition:opacity .13s ease, background-color .13s ease;
+  }
+  .why-btn:hover{opacity:1}
+  .why-btn[aria-pressed="true"]{opacity:1;background:color-mix(in srgb, currentColor 14%, transparent);font-weight:700}
+
+  .hint-step+.hint-step{margin-top:8px;padding-top:8px;border-top:1px dashed var(--hint-border)}
+  .retry-note{margin-top:8px;padding-top:8px;border-top:1px dashed currentColor;font-size:.9rem}
+  .build-slot{margin-top:16px}
+
+  /* ---- flashcards: recall, then reveal, then grade yourself ---- */
+  .fc-back{
+    padding:16px;border-radius:13px;border:1.5px solid var(--line);background:var(--surface);
+    font-size:1.02rem;line-height:1.5;color:var(--ink);
+    opacity:0;transform:translateY(6px);
+    transition:opacity .2s ease-out, transform .2s ease-out;
+  }
+  .fc-back.show{opacity:1;transform:none}
+  .fc-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .fc-actions .btn{width:auto;flex:1 1 140px}
+  .fc-actions .btn[aria-pressed="true"]{outline:3px solid var(--focus);outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){ .fc-back{transition:none;transform:none} }
+
+  #printSheet{display:none}
+
   /* ---- print: strip the app, keep the material ---- */
   @media print{
+    body.printing-sheet > *:not(#printSheet){display:none !important}
+    body.printing-sheet #printSheet{display:block;font-family:var(--font-body);color:#000}
+    #printSheet h1{font-family:var(--font-display);font-size:20pt;margin:0 0 8pt}
+    #printSheet h2{font-family:var(--font-display);font-size:13pt;margin:14pt 0 6pt;border-bottom:1px solid #999;break-after:avoid}
+    #printSheet section{break-inside:auto}
+    #printSheet dl{columns:2;column-gap:18pt;font-size:9.5pt}
+    #printSheet dt{font-weight:700;break-after:avoid}
+    #printSheet dd{margin:0 0 5pt;break-inside:avoid}
     .nav-cluster, #formulaBtn, #pomoBtn, .pomo-popover, .navbar,
     .arrow-hint-container, .pomo-hint-container, .qactions, .data-row,
     .selfcheck, .mode-grid, .mode-feature-row, .site-footer{display:none !important}
@@ -2572,6 +2669,7 @@
               <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line>
             </svg>
           </button>
+          <span class="streak-pill hide" id="streakPill"></span>
         </div>
         <div style="display:flex;align-items:center;gap:10px">
           <button id="themeBtn" aria-label="Switch between light and dark" title="Light / dark">
@@ -2628,6 +2726,18 @@
       <div class="mode-grid" id="modeGrid"></div>
     </div>
 
+    <button class="btn ghost hide" id="resumeBtn" style="margin-top:16px">Resume quiz</button>
+
+    <!-- Both render only once there is history to show. -->
+    <div class="due-card hide" id="dueCard">
+      <div class="due-text"><b id="dueCount">0 due</b><span>Spaced review — each right answer pushes an item further out, each miss brings it back tomorrow</span></div>
+      <button class="btn small" id="dueBtn">Review now</button>
+    </div>
+    <section class="radar hide" id="radar" aria-labelledby="radarH">
+      <div class="radar-head"><h3 id="radarH">Weak spots</h3><span>Lowest accuracy first · pick one to practise it</span></div>
+      <div id="radarList"></div>
+    </section>
+
     <div id="quizSetupSection">
       <div class="field">
         <label class="lbl" id="lblTopics">Choose topics</label>
@@ -2676,6 +2786,11 @@
           <div class="toggle-txt"><b>Ask my confidence</b><span>Rate how sure you are before the answer shows — a confident miss gets flagged hard</span></div>
           <label class="switch"><input type="checkbox" id="confidenceToggle"><span class="slider"></span><span class="sr-only">Ask my confidence</span></label>
         </div>
+        <div class="toggle-row">
+          <div class="toggle-txt"><b>Exam simulator</b><span>A countdown, answers hidden until the end, the paper collected at zero — then a per-topic breakdown</span>
+            <label class="timed-min">for <input type="number" id="timedMinutes" min="1" max="300" value="30" disabled aria-label="Exam length in minutes"> minutes</label></div>
+          <label class="switch"><input type="checkbox" id="timedToggle"><span class="slider"></span><span class="sr-only">Exam simulator</span></label>
+        </div>
       </div>
 
       <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
@@ -2684,12 +2799,15 @@
       </div>
       <div class="meta-note" id="poolNote" style="margin-top:12px"></div>
 
-      <div class="data-row">
-        <button class="btn ghost small" id="exportBtn">↓ Export progress</button>
-        <button class="btn ghost small" id="importBtn">↑ Import progress</button>
-        <input type="file" id="importFile" accept="application/json,.json" class="sr-only" aria-hidden="true" tabindex="-1">
-        <span class="dr-note">Browsers clear site storage on their own schedule — Safari after about a week idle. Export before a long gap.</span>
-      </div>
+
+    </div>
+
+    <div class="data-row">
+      <button class="btn ghost small" id="exportBtn">↓ Export progress</button>
+      <button class="btn ghost small" id="importBtn">↑ Import progress</button>
+      <button class="btn ghost small hide" id="printBtn">⎙ Print cheat sheet</button>
+      <input type="file" id="importFile" accept="application/json,.json" class="sr-only" aria-hidden="true" tabindex="-1">
+      <span class="dr-note">Browsers clear site storage on their own schedule — Safari after about a week idle. Export before a long gap.</span>
     </div>
   </section>
 
@@ -2734,6 +2852,7 @@
     <div class="topbar">
       <div class="progress"><i id="bar"></i></div>
       <div class="counter" id="counter">1 / 1</div>
+      <div class="timerpill hide" id="timerPill" role="timer" aria-label="Time left">0:00</div>
       <div class="scorepill hide" id="scorepill">0 ✓</div><div class="wrongpill hide" id="wrongpill">0 ✗</div>
     </div>
     <div class="qtag"><span id="qtype">Q1</span><span class="topic" id="qtopic"></span></div>
@@ -2774,6 +2893,10 @@
       <div class="stat g"><div class="v" id="rCorrect">0</div><div class="k">Correct</div></div>
       <div class="stat b"><div class="v" id="rWrong">0</div><div class="k">Wrong</div></div>
       <div class="stat"><div class="v" id="rSkip">0</div><div class="k">Skipped</div></div>
+    </div>
+    <div class="radar hide" id="rTopics">
+      <div class="radar-head"><h3>By topic</h3><span>Where the marks went</span></div>
+      <div id="rTopicList"></div>
     </div>
     <div class="navbar" style="margin-top:0">
       <button class="btn ghost" id="retryBtn">New set</button>
@@ -3074,6 +3197,9 @@
     </div>
   </footer>
 </div><!-- /.site-container -->
+
+<!-- Filled only while printing the cheat sheet, then emptied again. -->
+<div id="printSheet" aria-hidden="true"></div>
 
 
 <script type="application/json" id="course-content">
@@ -7026,6 +7152,859 @@
           }
         }
       ]
+    },
+    {
+      "id": "wk-split",
+      "topic": "p4",
+      "icon": "🧾",
+      "includeDrills": false,
+      "title": "Split the bill",
+      "desc": "Dinner came to 470.53 EGP for three people. Split it so the shares add back to the exact total — no piastre lost or invented.",
+      "steps": [
+        {
+          "title": "A function for the basic split",
+          "html": "<p>Start with the naive version: add the tip, divide by the number of people, hand the answer back. A function that <b>returns</b> its result can be reused anywhere — printed, saved, or fed into more maths.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "___ split_bill(total, people, tip_percent=10):\n    with_tip = total * (1 + tip_percent / 100)\n    ___ with_tip / people",
+            "blanks": [
+              {
+                "answers": [
+                  "def"
+                ],
+                "hint": "The keyword that starts a function."
+              },
+              {
+                "answers": [
+                  "return"
+                ],
+                "hint": "Hand the value back to the caller — not print."
+              }
+            ],
+            "explanation": "<code>tip_percent=10</code> is a default: callers may leave it out. <code>return</code> (not <code>print</code>) is what makes the result usable by the next step."
+          }
+        },
+        {
+          "title": "Money is not a float problem you can ignore",
+          "html": "<p>Try it: <code>split_bill(470.53, 3, 0)</code> gives <code>156.84333333333333</code>. Nobody pays a third of a piastre. Round to two decimal places:</p><div class=\"warn-box\">Rounding each share to 156.84 and multiplying back gives 470.52 — <b>one piastre goes missing</b>. Rounding up to 156.85 invents one. Either way the waiter's total and yours disagree.</div>",
+          "item": {
+            "type": "cloze",
+            "template": "share = ___(split_bill(470.53, 3, 0), 2)\nprint(share * 3)",
+            "blanks": [
+              {
+                "answers": [
+                  "round"
+                ],
+                "hint": "Built in; the second argument is the number of decimal places."
+              }
+            ],
+            "explanation": "<code>round(x, 2)</code> fixes the display, not the arithmetic: <code>156.84 * 3</code> is 470.52. The next step fixes it properly."
+          }
+        },
+        {
+          "title": "Split in whole piastres",
+          "html": "<p>The fix every payment system uses: work in the smallest unit as an <b>integer</b>. 470.53 EGP is 47053 piastres. Integer division gives each person's base share, and the remainder is how many people pay one piastre extra.</p><div class=\"code-block\">47053 // 3   -&gt;  15684   (base share)\n47053 %  3   -&gt;  1       (one person pays one piastre more)</div><p>Write <code>split_fairly(total, people)</code> that prints how many people pay which amount. Use <code>round(total * 100)</code> to get the piastres — <code>470.53 * 100</code> is actually <code>47052.99999999999</code> in floating point.</p>",
+          "item": {
+            "type": "write",
+            "starter": "def split_fairly(total, people):\n    ",
+            "tokens": [
+              {
+                "pattern": "round\\s*\\(\\s*total\\s*\\*\\s*100\\s*\\)",
+                "flags": "",
+                "hint": "convert to whole piastres with round(total * 100)"
+              },
+              {
+                "pattern": "//\\s*people",
+                "flags": "",
+                "hint": "integer-divide by people for the base share"
+              },
+              {
+                "pattern": "%\\s*people",
+                "flags": "",
+                "hint": "the remainder % people counts who pays one more"
+              },
+              {
+                "pattern": "print\\s*\\(",
+                "flags": "",
+                "hint": "print the two groups"
+              }
+            ],
+            "solution": "def split_fairly(total, people):\n    cents = round(total * 100)\n    base = cents // people\n    extra = cents % people\n    print(extra, \"people pay\", (base + 1) / 100)\n    print(people - extra, \"people pay\", base / 100)",
+            "hint": [
+              "Three lines of arithmetic, then two prints.",
+              "cents = round(total * 100), then base = cents // people and extra = cents % people.",
+              "The extra people pay (base + 1) / 100; everyone else pays base / 100."
+            ],
+            "explanation": "For 470.53 and 3: one person pays 156.85, two pay 156.84 — and 156.85 + 156.84 + 156.84 is exactly 470.53."
+          }
+        },
+        {
+          "title": "Wire up the program",
+          "html": "<p>The main program reads the bill, refuses a group of zero (a division by zero crash otherwise), and calls the function. Put the lines in a working order.</p>",
+          "item": {
+            "type": "sequence",
+            "lines": [
+              "total = float(input(\"Bill total (EGP): \"))",
+              "people = int(input(\"How many people? \"))",
+              "if people < 1:",
+              "    print(\"Need at least one person.\")",
+              "else:",
+              "    split_fairly(total, people)"
+            ],
+            "dependencies": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "explanation": "The two reads can go in either order; everything after them depends on <code>people</code> existing and being checked."
+          }
+        },
+        {
+          "title": "The whole program",
+          "html": "<p>Everything together. Try 470.53 between 3, then 100 between 3 (one person pays 33.34), then 0 people.</p><div class=\"code-block\">def split_fairly(total, people):\n    cents = round(total * 100)\n    base = cents // people\n    extra = cents % people\n    print(extra, \"people pay\", (base + 1) / 100)\n    print(people - extra, \"people pay\", base / 100)\n\ntotal = float(input(\"Bill total (EGP): \"))\npeople = int(input(\"How many people? \"))\nif people &lt; 1:\n    print(\"Need at least one person.\")\nelse:\n    split_fairly(total, people)</div><div class=\"key-box\">The lesson reaches far past dinner: banks, shops and payroll all store money as whole units of the smallest coin for exactly this reason.</div>"
+        }
+      ]
+    },
+    {
+      "id": "wk-marks",
+      "topic": "p6",
+      "icon": "📊",
+      "includeDrills": false,
+      "title": "Exam mark analyser",
+      "desc": "Type in a class's marks — typos included — and get the average, the range and who failed.",
+      "steps": [
+        {
+          "title": "Collect marks without crashing on typos",
+          "html": "<p>Read marks until the user presses Enter on an empty line. A mark like <code>7O</code> (letter O) must be reported and skipped, not crash the program.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "marks = []\nwhile True:\n    text = input(\"Mark (blank to finish): \")\n    if text == \"\":\n        ___\n    try:\n        marks.append(float(text))\n    ___ ValueError:\n        print(\"Not a number:\", text)",
+            "blanks": [
+              {
+                "answers": [
+                  "break"
+                ],
+                "hint": "Leave the loop."
+              },
+              {
+                "answers": [
+                  "except"
+                ],
+                "hint": "Catches the error float() raises."
+              }
+            ],
+            "explanation": "<code>float(\"7O\")</code> raises <code>ValueError</code>; the <code>except</code> branch reports it and the loop carries on to the next mark."
+          }
+        },
+        {
+          "title": "Average, highest, lowest",
+          "html": "<p>With the list built, the statistics are one built-in each. One case needs care first: if nobody typed a mark, <code>len(marks)</code> is 0 and the average divides by zero.</p>",
+          "item": {
+            "type": "write",
+            "tokens": [
+              {
+                "pattern": "len\\s*\\(\\s*marks\\s*\\)\\s*==\\s*0|not\\s+marks",
+                "flags": "",
+                "hint": "guard the empty list first"
+              },
+              {
+                "pattern": "sum\\s*\\(\\s*marks\\s*\\)\\s*/\\s*len\\s*\\(\\s*marks\\s*\\)",
+                "flags": "",
+                "hint": "average = sum(marks) / len(marks)"
+              },
+              {
+                "pattern": "max\\s*\\(\\s*marks\\s*\\)",
+                "flags": "",
+                "hint": "max(marks) for the highest"
+              },
+              {
+                "pattern": "min\\s*\\(\\s*marks\\s*\\)",
+                "flags": "",
+                "hint": "min(marks) for the lowest"
+              }
+            ],
+            "solution": "if len(marks) == 0:\n    print(\"No marks entered\")\nelse:\n    average = sum(marks) / len(marks)\n    print(\"Average:\", round(average, 1))\n    print(\"Highest:\", max(marks))\n    print(\"Lowest:\", min(marks))",
+            "hint": [
+              "Check for an empty list before dividing.",
+              "sum(marks) / len(marks) is the average; max() and min() do the rest."
+            ],
+            "explanation": "The guard runs first, so the division is only ever reached with at least one mark."
+          }
+        },
+        {
+          "title": "Count who failed",
+          "html": "<p>A pass is 50 or more. Walk the list once and count the rest.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "failing = 0\nfor m ___ marks:\n    if m ___ 50:\n        failing += 1\nprint(failing, \"student(s) below 50\")",
+            "blanks": [
+              {
+                "answers": [
+                  "in"
+                ],
+                "hint": "for ... in ..."
+              },
+              {
+                "answers": [
+                  "<"
+                ],
+                "hint": "Exactly 50 is a pass."
+              }
+            ],
+            "explanation": "<code>&lt; 50</code>, not <code>&lt;= 50</code>: a mark of exactly 50 passes. Boundary conditions are where marking scripts go wrong."
+          }
+        },
+        {
+          "title": "Letter grades for the report",
+          "html": "<p>Print each mark with a letter: 85 and up is A, 70 and up B, 50 and up C, below that F. Order the lines — the conditions must run from the highest boundary down.</p>",
+          "item": {
+            "type": "sequence",
+            "lines": [
+              "for m in marks:",
+              "    if m >= 85:",
+              "        print(m, \"A\")",
+              "    elif m >= 70:",
+              "        print(m, \"B\")",
+              "    elif m >= 50:",
+              "        print(m, \"C\")",
+              "    else:",
+              "        print(m, \"F\")"
+            ],
+            "dependencies": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ],
+              [
+                5,
+                6
+              ],
+              [
+                6,
+                7
+              ],
+              [
+                7,
+                8
+              ]
+            ],
+            "explanation": "If <code>m &gt;= 50</code> came first, a 95 would print C — the first true branch wins, so the strictest test goes first."
+          }
+        },
+        {
+          "title": "The whole program",
+          "html": "<p>Try: 78, 91, 7O, 45, 50, then Enter. Expect one 'Not a number', an average of 66.0, and one student below 50.</p><div class=\"code-block\">marks = []\nwhile True:\n    text = input(\"Mark (blank to finish): \")\n    if text == \"\":\n        break\n    try:\n        marks.append(float(text))\n    except ValueError:\n        print(\"Not a number:\", text)\n\nif len(marks) == 0:\n    print(\"No marks entered\")\nelse:\n    average = sum(marks) / len(marks)\n    print(\"Average:\", round(average, 1))\n    print(\"Highest:\", max(marks))\n    print(\"Lowest:\", min(marks))\n    failing = 0\n    for m in marks:\n        if m &lt; 50:\n            failing += 1\n    print(failing, \"student(s) below 50\")</div>"
+        }
+      ]
+    },
+    {
+      "id": "wk-budget",
+      "topic": "p7",
+      "icon": "💸",
+      "includeDrills": false,
+      "title": "Monthly budget tracker",
+      "desc": "Log expenses as [name, amount, category], total them by category, and find the biggest one — without falling for max()'s alphabetical trap.",
+      "steps": [
+        {
+          "title": "Store and total the expenses",
+          "html": "<p>Each expense is a small list: <code>[name, amount, category]</code>. The whole budget is a list of those. Index <code>1</code> is always the amount.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "expenses = [[\"rent\", 3000.0, \"home\"], [\"groceries\", 850.5, \"food\"], [\"water\", 15.0, \"food\"]]\nexpenses.___([\"coffee\", 45.0, \"food\"])\ntotal = 0\nfor e in expenses:\n    total += e[___]\nprint(\"Spent:\", total)",
+            "blanks": [
+              {
+                "answers": [
+                  "append"
+                ],
+                "hint": "Adds one element to the end of a list."
+              },
+              {
+                "answers": [
+                  "1"
+                ],
+                "hint": "Positions start at 0: name, amount, category."
+              }
+            ],
+            "explanation": "The total is 3910.5. <code>e[1]</code> works because every inner list keeps the same layout."
+          }
+        },
+        {
+          "title": "Total one category",
+          "html": "<p>How much went on food? Filter as you add: only amounts whose category (index 2) is <code>\"food\"</code>.</p>",
+          "item": {
+            "type": "write",
+            "tokens": [
+              {
+                "pattern": "for\\s+\\w+\\s+in\\s+expenses",
+                "flags": "",
+                "hint": "loop over expenses"
+              },
+              {
+                "pattern": "\\[\\s*2\\s*\\]\\s*==\\s*[\"']food[\"']",
+                "flags": "",
+                "hint": "compare the category (index 2) with \"food\""
+              },
+              {
+                "pattern": "\\+=\\s*\\w+\\s*\\[\\s*1\\s*\\]|sum\\s*\\(",
+                "flags": "",
+                "hint": "add up the amounts (index 1)"
+              }
+            ],
+            "solution": "food_total = 0\nfor e in expenses:\n    if e[2] == \"food\":\n        food_total += e[1]\nprint(\"Food:\", food_total)",
+            "hint": [
+              "Start a running total at 0, loop, and only add when the category matches.",
+              "if e[2] == \"food\": food_total += e[1]"
+            ],
+            "explanation": "Food comes to 910.5 — groceries, water and coffee."
+          }
+        },
+        {
+          "title": "The max() trap",
+          "html": "<p>Which expense was biggest? The obvious line is <code>max(expenses)</code>. Run it and you get <code>['water', 15.0, 'food']</code>.</p><div class=\"warn-box\">Lists compare element by element, starting with the <b>first</b>. The first element is the name, so <code>max</code> found the name latest in the alphabet — 'water' — not the largest amount.</div><p>Track the biggest yourself, comparing amounts:</p>",
+          "item": {
+            "type": "cloze",
+            "template": "biggest = expenses[0]\nfor e in expenses:\n    if e[1] ___ biggest[1]:\n        biggest = ___\nprint(\"Biggest:\", biggest[0], biggest[1])",
+            "blanks": [
+              {
+                "answers": [
+                  ">"
+                ],
+                "hint": "Replace it when this one is larger."
+              },
+              {
+                "answers": [
+                  "e"
+                ],
+                "hint": "Remember the whole expense, not just the amount."
+              }
+            ],
+            "explanation": "Prints <code>Biggest: rent 3000.0</code>. (Later you will meet <code>max(expenses, key=...)</code>, which does this in one line.)"
+          }
+        },
+        {
+          "title": "Top three amounts",
+          "html": "<p>For the summary, pull the amounts into their own list, sort it largest first, and slice off three. Order the lines.</p>",
+          "item": {
+            "type": "sequence",
+            "lines": [
+              "amounts = []",
+              "for e in expenses:",
+              "    amounts.append(e[1])",
+              "amounts.sort(reverse=True)",
+              "print(\"Top 3:\", amounts[:3])"
+            ],
+            "dependencies": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            "explanation": "<code>sort(reverse=True)</code> changes the list in place; <code>[:3]</code> then takes the first three: 3000.0, 850.5, 45.0."
+          }
+        },
+        {
+          "title": "The whole program",
+          "html": "<p>Add your own month's expenses and categories, and try a category with no entries (it should total 0, not crash).</p><div class=\"code-block\">expenses = [[\"rent\", 3000.0, \"home\"], [\"groceries\", 850.5, \"food\"], [\"water\", 15.0, \"food\"]]\nexpenses.append([\"coffee\", 45.0, \"food\"])\n\ntotal = 0\nfor e in expenses:\n    total += e[1]\nprint(\"Spent:\", total)\n\nfood_total = 0\nfor e in expenses:\n    if e[2] == \"food\":\n        food_total += e[1]\nprint(\"Food:\", food_total)\n\nbiggest = expenses[0]\nfor e in expenses:\n    if e[1] &gt; biggest[1]:\n        biggest = e\nprint(\"Biggest:\", biggest[0], biggest[1])\n\namounts = []\nfor e in expenses:\n    amounts.append(e[1])\namounts.sort(reverse=True)\nprint(\"Top 3:\", amounts[:3])</div>"
+        }
+      ]
+    },
+    {
+      "id": "wk-gpa",
+      "topic": "p9",
+      "icon": "🎓",
+      "includeDrills": false,
+      "title": "GPA calculator",
+      "desc": "Turn letter grades and credit hours into a weighted GPA on the 4.0 scale — the calculation your transcript actually uses.",
+      "steps": [
+        {
+          "title": "Grades are a lookup table",
+          "html": "<p>A dictionary maps each letter to its points. Looking a grade up is then one expression, and checking whether a typed grade is valid is one <code>in</code>.</p><div class=\"code-block\">GRADE_POINTS = {\"A+\": 4.0, \"A\": 4.0, \"A-\": 3.7, \"B+\": 3.3, \"B\": 3.0, \"B-\": 2.7,\n                \"C+\": 2.3, \"C\": 2.0, \"C-\": 1.7, \"D+\": 1.3, \"D\": 1.0, \"F\": 0.0}</div>",
+          "item": {
+            "type": "cloze",
+            "template": "grade = input(\"Grade: \").strip().___()\nif grade not ___ GRADE_POINTS:\n    print(\"Unknown grade:\", grade)\nelse:\n    print(grade, \"is worth\", GRADE_POINTS[grade])",
+            "blanks": [
+              {
+                "answers": [
+                  "upper"
+                ],
+                "hint": "Someone will type b+ — the keys are capitals."
+              },
+              {
+                "answers": [
+                  "in"
+                ],
+                "hint": "Membership test on a dictionary checks its keys."
+              }
+            ],
+            "explanation": "<code>.upper()</code> turns <code>b+</code> into <code>B+</code>; <code>not in</code> catches <code>E</code> before <code>GRADE_POINTS[grade]</code> could raise <code>KeyError</code>."
+          }
+        },
+        {
+          "title": "Weight by credit hours",
+          "html": "<p>A 4-hour course counts for more than a 3-hour one. GPA = sum of (points × hours) ÷ total hours.</p><div class=\"code-block\">courses = {\"CSE212\": [\"A\", 3], \"MTH201\": [\"B+\", 4], \"PHY101\": [\"C\", 3]}</div><p>Write the loop that computes and prints the GPA.</p>",
+          "item": {
+            "type": "write",
+            "tokens": [
+              {
+                "pattern": "for\\s+\\w+\\s+in\\s+courses",
+                "flags": "",
+                "hint": "loop over the courses"
+              },
+              {
+                "pattern": "GRADE_POINTS\\s*\\[",
+                "flags": "",
+                "hint": "look the grade up in GRADE_POINTS"
+              },
+              {
+                "pattern": "\\*\\s*hours|hours\\s*\\*",
+                "flags": "",
+                "hint": "multiply points by the credit hours"
+              },
+              {
+                "pattern": "/\\s*total_hours",
+                "flags": "",
+                "hint": "divide by the total hours, not the number of courses"
+              }
+            ],
+            "solution": "total_points = 0\ntotal_hours = 0\nfor code in courses:\n    grade = courses[code][0]\n    hours = courses[code][1]\n    total_points += GRADE_POINTS[grade] * hours\n    total_hours += hours\ngpa = total_points / total_hours\nprint(\"GPA:\", round(gpa, 2))",
+            "hint": [
+              "Keep two running totals: points×hours, and hours.",
+              "Inside the loop: grade = courses[code][0], hours = courses[code][1].",
+              "gpa = total_points / total_hours"
+            ],
+            "explanation": "12 + 13.2 + 6 = 31.2 weighted points over 10 hours: a GPA of 3.12. Averaging the three grade points instead would give 3.1 — wrong, and wrong in a way nobody notices."
+          }
+        },
+        {
+          "title": "Put the program in order",
+          "html": "<p>The finished calculator: define the table, collect the courses, then compute. Order the lines.</p>",
+          "item": {
+            "type": "sequence",
+            "lines": [
+              "GRADE_POINTS = {\"A\": 4.0, \"B+\": 3.3, \"C\": 2.0}",
+              "courses = {}",
+              "courses[\"CSE212\"] = [\"A\", 3]",
+              "total_points = 0",
+              "for code in courses:",
+              "    total_points += GRADE_POINTS[courses[code][0]] * courses[code][1]"
+            ],
+            "dependencies": [
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                4
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "explanation": "The table and the course dictionary must exist before the loop reads them; the running total must be set to 0 before the loop adds to it."
+          }
+        },
+        {
+          "title": "The whole program",
+          "html": "<p>Enter your own term. Blank course code finishes. Try a lowercase grade and a grade that does not exist.</p><div class=\"code-block\">GRADE_POINTS = {\"A+\": 4.0, \"A\": 4.0, \"A-\": 3.7, \"B+\": 3.3, \"B\": 3.0, \"B-\": 2.7,\n                \"C+\": 2.3, \"C\": 2.0, \"C-\": 1.7, \"D+\": 1.3, \"D\": 1.0, \"F\": 0.0}\ncourses = {}\nwhile True:\n    code = input(\"Course code (blank to finish): \").strip().upper()\n    if code == \"\":\n        break\n    grade = input(\"Grade: \").strip().upper()\n    if grade not in GRADE_POINTS:\n        print(\"Unknown grade:\", grade)\n        continue\n    hours = int(input(\"Credit hours: \"))\n    courses[code] = [grade, hours]\n\ntotal_points = 0\ntotal_hours = 0\nfor code in courses:\n    grade = courses[code][0]\n    hours = courses[code][1]\n    total_points += GRADE_POINTS[grade] * hours\n    total_hours += hours\nif total_hours == 0:\n    print(\"No courses entered\")\nelse:\n    print(\"GPA:\", round(total_points / total_hours, 2))</div>"
+        }
+      ]
+    },
+    {
+      "id": "wk-attendance",
+      "topic": "p9",
+      "icon": "🗓️",
+      "includeDrills": false,
+      "title": "Attendance tracker",
+      "desc": "Count who attended each session and flag everyone below the 75% line — including the student who never came at all.",
+      "steps": [
+        {
+          "title": "Count with .get()",
+          "html": "<p>Each session gives a list of who was present. A dictionary counts per name. The first time a name appears it is not a key yet, so <code>attended[name] += 1</code> would raise <code>KeyError</code>.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "attended = {}\nfor name in present_today:\n    attended[name] = attended.___(name, ___) + 1",
+            "blanks": [
+              {
+                "answers": [
+                  "get"
+                ],
+                "hint": "Returns a default when the key is missing."
+              },
+              {
+                "answers": [
+                  "0"
+                ],
+                "hint": "Someone seen for the first time has attended 0 sessions so far."
+              }
+            ],
+            "explanation": "<code>attended.get(name, 0)</code> is 0 for a new name and the running count otherwise — one line, no <code>if</code>."
+          }
+        },
+        {
+          "title": "Loop over every session",
+          "html": "<p>The log is a list of sessions, each a list of names. Count the sessions as you go. Order the lines.</p>",
+          "item": {
+            "type": "sequence",
+            "lines": [
+              "attended = {}",
+              "sessions = 0",
+              "for day in log:",
+              "    sessions += 1",
+              "    for name in day:",
+              "        attended[name] = attended.get(name, 0) + 1"
+            ],
+            "dependencies": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "explanation": "<code>sessions += 1</code> belongs to the outer loop (once per day), not the inner one (once per student) — so it sits at the outer indent, before the inner loop starts."
+          }
+        },
+        {
+          "title": "Flag who is at risk",
+          "html": "<p>Loop over the full class <b>roster</b>, not over <code>attended</code>. A student who never came is not in <code>attended</code> at all — loop over it and they are silently skipped, which is exactly the student you most need to flag.</p>",
+          "item": {
+            "type": "write",
+            "tokens": [
+              {
+                "pattern": "for\\s+\\w+\\s+in\\s+roster",
+                "flags": "",
+                "hint": "loop over the roster, not the dictionary"
+              },
+              {
+                "pattern": "\\.get\\s*\\(\\s*\\w+\\s*,\\s*0\\s*\\)",
+                "flags": "",
+                "hint": "use .get(name, 0) so absent students count as 0"
+              },
+              {
+                "pattern": "/\\s*sessions",
+                "flags": "",
+                "hint": "divide by the number of sessions"
+              },
+              {
+                "pattern": "<\\s*75",
+                "flags": "",
+                "hint": "flag anyone under 75%"
+              }
+            ],
+            "solution": "for name in roster:\n    pct = attended.get(name, 0) / sessions * 100\n    if pct < 75:\n        print(name, \"is at\", round(pct), \"% - at risk\")",
+            "hint": [
+              "Loop over roster; look each name up with .get(name, 0).",
+              "pct = attended.get(name, 0) / sessions * 100"
+            ],
+            "explanation": "With <code>.get(name, 0)</code>, a student with no attendance shows up at 0% instead of vanishing from the report."
+          }
+        },
+        {
+          "title": "The whole program",
+          "html": "<p>Four sessions. Omar came to one, Mariam to all, Youssef to three, and Salma to none. Expect Omar at 25% and Salma at 0% flagged.</p><div class=\"code-block\">roster = [\"Mariam\", \"Omar\", \"Youssef\", \"Salma\"]\nlog = [[\"Mariam\", \"Omar\", \"Youssef\"],\n       [\"Mariam\", \"Youssef\"],\n       [\"Mariam\"],\n       [\"Mariam\", \"Youssef\"]]\n\nattended = {}\nsessions = 0\nfor day in log:\n    sessions += 1\n    for name in day:\n        attended[name] = attended.get(name, 0) + 1\n\nfor name in roster:\n    pct = attended.get(name, 0) / sessions * 100\n    if pct &lt; 75:\n        print(name, \"is at\", round(pct), \"% - at risk\")</div>"
+        }
+      ]
+    },
+    {
+      "id": "wk-contacts",
+      "topic": "p9",
+      "icon": "📇",
+      "includeDrills": false,
+      "title": "Contact book (capstone)",
+      "desc": "Functions, a dictionary, validation and a menu loop — everything from the course in one program you would actually use.",
+      "steps": [
+        {
+          "title": "Add, with validation",
+          "html": "<p>An Egyptian mobile number is 11 digits starting with <code>01</code>. Write <code>add_contact(book, name, phone)</code>: reject a bad number with a message and <code>return False</code>; otherwise store it and <code>return True</code>.</p>",
+          "item": {
+            "type": "write",
+            "starter": "def add_contact(book, name, phone):\n    ",
+            "tokens": [
+              {
+                "pattern": "def\\s+add_contact\\s*\\(\\s*book\\s*,\\s*name\\s*,\\s*phone\\s*\\)",
+                "flags": "",
+                "hint": "keep the given header"
+              },
+              {
+                "pattern": "isdigit\\s*\\(\\s*\\)",
+                "flags": "",
+                "hint": "phone.isdigit() rejects letters and spaces"
+              },
+              {
+                "pattern": "len\\s*\\(\\s*phone\\s*\\)\\s*==\\s*11|len\\s*\\(\\s*phone\\s*\\)\\s*!=\\s*11",
+                "flags": "",
+                "hint": "check the length is 11"
+              },
+              {
+                "pattern": "book\\s*\\[\\s*name\\s*\\]\\s*=\\s*phone",
+                "flags": "",
+                "hint": "store it: book[name] = phone"
+              },
+              {
+                "pattern": "return\\s+(True|False)",
+                "flags": "",
+                "hint": "return True or False"
+              }
+            ],
+            "solution": "def add_contact(book, name, phone):\n    if not (phone.isdigit() and len(phone) == 11 and phone.startswith(\"01\")):\n        print(\"Phone must be 11 digits starting with 01\")\n        return False\n    book[name] = phone\n    return True",
+            "hint": [
+              "Validate first, store second.",
+              "phone.isdigit() and len(phone) == 11 and phone.startswith(\"01\")"
+            ],
+            "explanation": "Returning True/False lets the menu decide what to say, instead of the function assuming it is always talking to a person."
+          }
+        },
+        {
+          "title": "Find",
+          "html": "<p>Look a name up without risking a <code>KeyError</code>.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "def find_contact(book, name):\n    if name ___ book:\n        print(name, \":\", book[name])\n    else:\n        print(\"No contact called\", name)",
+            "blanks": [
+              {
+                "answers": [
+                  "in"
+                ],
+                "hint": "Membership on a dict tests the keys."
+              }
+            ],
+            "explanation": "The <code>in</code> test guards the lookup, so <code>book[name]</code> only runs for names that exist."
+          }
+        },
+        {
+          "title": "Delete",
+          "html": "<p><code>dict.pop(key, default)</code> removes a key and returns its value — or the default if the key was never there, instead of raising.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "def delete_contact(book, name):\n    removed = book.___(name, None)\n    if removed is ___:\n        print(\"Nothing to delete\")\n    else:\n        print(\"Deleted\", name)",
+            "blanks": [
+              {
+                "answers": [
+                  "pop"
+                ],
+                "hint": "Removes and returns."
+              },
+              {
+                "answers": [
+                  "None"
+                ],
+                "hint": "The default you passed in — capital N."
+              }
+            ],
+            "explanation": "<code>is None</code> (not <code>== None</code>) is the idiomatic test, and Python is case-sensitive: <code>none</code> is just an undefined name."
+          }
+        },
+        {
+          "title": "The menu loop",
+          "html": "<p>Keep showing the menu until the user quits. Order the lines.</p>",
+          "item": {
+            "type": "sequence",
+            "lines": [
+              "book = {}",
+              "while True:",
+              "    choice = input(\"1) Add  2) Find  3) Delete  4) List  5) Quit: \")",
+              "    if choice == \"5\":",
+              "        break",
+              "    elif choice == \"4\":",
+              "        for name in sorted(book):",
+              "            print(name, book[name])"
+            ],
+            "dependencies": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ],
+              [
+                5,
+                6
+              ],
+              [
+                6,
+                7
+              ]
+            ],
+            "explanation": "<code>sorted(book)</code> gives the names alphabetically; the dictionary itself keeps insertion order."
+          }
+        },
+        {
+          "title": "The whole program",
+          "html": "<p>The finished contact book. Try adding a number with a letter in it, finding someone who does not exist, and deleting twice.</p><div class=\"code-block\">def add_contact(book, name, phone):\n    if not (phone.isdigit() and len(phone) == 11 and phone.startswith(\"01\")):\n        print(\"Phone must be 11 digits starting with 01\")\n        return False\n    book[name] = phone\n    return True\n\ndef find_contact(book, name):\n    if name in book:\n        print(name, \":\", book[name])\n    else:\n        print(\"No contact called\", name)\n\ndef delete_contact(book, name):\n    removed = book.pop(name, None)\n    if removed is None:\n        print(\"Nothing to delete\")\n    else:\n        print(\"Deleted\", name)\n\nbook = {}\nwhile True:\n    choice = input(\"1) Add  2) Find  3) Delete  4) List  5) Quit: \")\n    if choice == \"5\":\n        break\n    elif choice == \"4\":\n        for name in sorted(book):\n            print(name, book[name])\n    elif choice in (\"1\", \"2\", \"3\"):\n        name = input(\"Name: \").strip().title()\n        if choice == \"1\":\n            if add_contact(book, name, input(\"Phone: \").strip()):\n                print(\"Saved.\")\n        elif choice == \"2\":\n            find_contact(book, name)\n        else:\n            delete_contact(book, name)\n    else:\n        print(\"Pick 1 to 5.\")</div><div class=\"key-box\">Next steps if you want to keep going: save the book to a file with <code>open()</code> so it survives a restart, and let one name hold several numbers (a list as the value).</div>"
+        }
+      ]
+    },
+    {
+      "id": "wk-clash",
+      "topic": "p10",
+      "icon": "⏰",
+      "includeDrills": false,
+      "title": "Timetable clash detector",
+      "desc": "Each course is a set of time slots. Set intersection finds clashes; union and difference find your free time.",
+      "steps": [
+        {
+          "title": "A clash is an intersection",
+          "html": "<p>Store each course's meeting times as a set of strings like <code>\"Tue-12\"</code>. Two courses clash exactly where their sets overlap.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "cse212 = {\"Sun-10\", \"Tue-12\", \"Wed-08\"}\nmth201 = {\"Mon-10\", \"Tue-12\", \"Thu-14\"}\nclash = cse212 ___ mth201\nif clash:\n    print(\"Clash at\", clash)",
+            "blanks": [
+              {
+                "answers": [
+                  "&"
+                ],
+                "hint": "The set operator for 'in both'."
+              }
+            ],
+            "explanation": "<code>cse212 &amp; mth201</code> is <code>{'Tue-12'}</code>. An empty set is falsy, so <code>if clash:</code> is enough."
+          }
+        },
+        {
+          "title": "Check every pair of courses",
+          "html": "<p>With a whole timetable, compare every pair exactly once. Sorting the codes and starting the inner loop at <code>i + 1</code> skips comparing a course with itself and checking A–B and then B–A.</p><div class=\"code-block\">timetable = {\"CSE212\": {\"Sun-10\", \"Tue-12\"}, \"MTH201\": {\"Tue-12\", \"Thu-14\"},\n             \"PHY101\": {\"Sun-10\", \"Mon-08\"}, \"ENG105\": {\"Wed-12\"}}</div>",
+          "item": {
+            "type": "write",
+            "tokens": [
+              {
+                "pattern": "range\\s*\\(\\s*i\\s*\\+\\s*1",
+                "flags": "",
+                "hint": "start the inner loop at i + 1"
+              },
+              {
+                "pattern": "&|\\.intersection\\s*\\(",
+                "flags": "",
+                "hint": "intersect the two sets"
+              },
+              {
+                "pattern": "if\\s+\\w+",
+                "flags": "",
+                "hint": "only report non-empty overlaps"
+              },
+              {
+                "pattern": "print\\s*\\(",
+                "flags": "",
+                "hint": "print each clash"
+              }
+            ],
+            "solution": "codes = sorted(timetable)\nfor i in range(len(codes)):\n    for j in range(i + 1, len(codes)):\n        a = codes[i]\n        b = codes[j]\n        both = timetable[a] & timetable[b]\n        if both:\n            print(a, \"and\", b, \"clash at\", sorted(both))",
+            "hint": [
+              "codes = sorted(timetable) gives a list you can index.",
+              "for i in range(len(codes)): for j in range(i + 1, len(codes)):"
+            ],
+            "explanation": "Finds CSE212–MTH201 at Tue-12 and CSE212–PHY101 at Sun-10, each reported once."
+          }
+        },
+        {
+          "title": "Find your free slots",
+          "html": "<p>Union every course's slots into one 'busy' set, then subtract it from all the slots in the week.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "busy = set()\nfor code in timetable:\n    busy = busy ___ timetable[code]\nfree = all_slots ___ busy\nprint(sorted(free))",
+            "blanks": [
+              {
+                "answers": [
+                  "|"
+                ],
+                "hint": "Union: in either set."
+              },
+              {
+                "answers": [
+                  "-"
+                ],
+                "hint": "Difference: in the first but not the second."
+              }
+            ],
+            "explanation": "<code>set()</code> — not <code>{}</code>, which is an empty <b>dictionary</b> — starts the union. <code>all_slots - busy</code> is every slot nothing is scheduled in."
+          }
+        },
+        {
+          "title": "The whole program",
+          "html": "<p>Swap in your own term's timetable. Every slot label must be spelled identically — <code>\"Tue-12\"</code> and <code>\"tue-12\"</code> are different strings, so a typo hides a clash.</p><div class=\"code-block\">timetable = {\"CSE212\": {\"Sun-10\", \"Tue-12\"}, \"MTH201\": {\"Tue-12\", \"Thu-14\"},\n             \"PHY101\": {\"Sun-10\", \"Mon-08\"}, \"ENG105\": {\"Wed-12\"}}\n\ncodes = sorted(timetable)\nfor i in range(len(codes)):\n    for j in range(i + 1, len(codes)):\n        a = codes[i]\n        b = codes[j]\n        both = timetable[a] &amp; timetable[b]\n        if both:\n            print(a, \"and\", b, \"clash at\", sorted(both))\n\ndays = [\"Sun\", \"Mon\", \"Tue\", \"Wed\", \"Thu\"]\nhours = [\"08\", \"10\", \"12\", \"14\"]\nall_slots = set()\nfor d in days:\n    for h in hours:\n        all_slots.add(d + \"-\" + h)\n\nbusy = set()\nfor code in timetable:\n    busy = busy | timetable[code]\nfree = all_slots - busy\nprint(\"Free:\", sorted(free))</div>"
+        }
+      ]
     }
   ],
   "reference": [
@@ -7369,7 +8348,6 @@
     }
   ]
 }
-
 </script>
 
 <script>
@@ -7430,46 +8408,80 @@ const ITEMS = CONTENT.items.filter(it => it && it.type);
 const DRILL_TYPES = ["cloze","sequence","write"];
 const isDrill = it => DRILL_TYPES.indexOf(it.type) !== -1;
 
+// Every glossary term is also a flashcard, so a course gets a deck for free.
+// They join ITEMS (so the quiz, the due queue and the radar all see them) but
+// are marked _gloss so search does not list each term twice.
+CONTENT.glossary.forEach(g => {
+  if (!g || !g.term || !g.def) return;
+  ITEMS.push({ id: "g:" + String(g.term).toLowerCase().replace(/\s+/g, "-"), type: "flashcard",
+               topic: g.topic, front: escapeHTML(g.term), back: g.def, _gloss: true });
+});
+const ITEM_BY = Object.create(null);
+ITEMS.forEach(it => { if (it.id) ITEM_BY[it.id] = it; });
+
 // Compile `write` token patterns once. A bad regex must report itself, not
 // take the whole page down on first render.
-ITEMS.forEach(it => {
-  if (it.type === "write" && Array.isArray(it.tokens)) {
-    it.tokens.forEach(tok => {
-      // Strip /g and /y. These tokens are only ever used with .test(), and a
-      // sticky or global regex carries lastIndex between calls — so the same
-      // code would pass, pass, then FAIL on a third press of Check. Authors
-      // reasonably write "ig" out of habit; the engine has to be immune to it.
-      const flags = (tok.flags || "i").replace(/[gy]/g, "") || "i";
-      try { tok._rx = new RegExp(tok.pattern, flags); }
-      catch (e) {
-        tok._rx = null;
-        LOAD_ERRORS.push("Item " + it.id + ": bad regex " + JSON.stringify(tok.pattern) + " — " + e.message);
-      }
-    });
-  }
-});
+function compileTokens(it, where){
+  if (!it || it.type !== "write" || !Array.isArray(it.tokens)) return;
+  it.tokens.forEach(tok => {
+    // Strip /g and /y. These tokens are only ever used with .test(), and a
+    // sticky or global regex carries lastIndex between calls — so the same
+    // code would pass, pass, then FAIL on a third press of Check. Authors
+    // reasonably write "ig" out of habit; the engine has to be immune to it.
+    const flags = (tok.flags || "i").replace(/[gy]/g, "") || "i";
+    try { tok._rx = new RegExp(tok.pattern, flags); }
+    catch (e) {
+      tok._rx = null;
+      LOAD_ERRORS.push(where + ": bad regex " + JSON.stringify(tok.pattern) + " — " + e.message);
+    }
+  });
+}
+ITEMS.forEach(it => compileTokens(it, "Item " + it.id));
+// Walkthrough exercises go through the same pipeline. They used to be skipped,
+// which left every token uncompiled — and renderWrite quietly passes a token it
+// cannot test, so any text at all was accepted in Guided Build.
+CONTENT.walkthroughs.forEach(w => (w.steps || []).forEach((st, i) => compileTokens(st.item, "Walkthrough " + w.id + " step " + (i + 1))));
 
-const itemsOfTopic = tid => ITEMS.filter(it => String(it.topic) === String(tid));
+// Topic ids may be numbers in one place and strings in another (hand-written
+// content does this constantly), so every comparison goes through String().
+const sameTopic = (a, b) => String(a) === String(b);
+const itemsOfTopic = tid => ITEMS.filter(it => sameTopic(it.topic, tid));
 const topicName    = tid => (TOPIC_BY[String(tid)] || {}).name  || "Unknown topic";
 const topicShort   = tid => (TOPIC_BY[String(tid)] || {}).short || topicName(tid);
 
 /* ============================================================
    SELF-CHECK — authoring aid. Runs on load, reports and moves on.
-   Catches the mistakes that generated question banks reliably make.
+   validateContent() is pure — content in, messages out, no DOM — so the
+   authoring tool (sg.js check) runs this exact function headlessly before a
+   guide ships. One rulebook, two callers, nothing to drift.
    ============================================================ */
-function runSelfCheck(){
-  const errs = LOAD_ERRORS.slice();
-  const seenIds = Object.create(null);
-  const stems = Object.create(null);
+/* @validate-begin */
+function validateContent(C){
+  const errs = [];
+  const topicIds = Object.create(null);
+  (C.topics || []).forEach(t => { topicIds[String(t.id)] = 1; });
+  const refTabs = (C.reference || []).map(r => r.tab);
+  const seenIds = Object.create(null), stems = Object.create(null);
   let longestCorrect = 0, mcqCount = 0;
 
-  ITEMS.forEach((it, i) => {
-    const where = "Item " + (it.id || "#" + i);
-    if (!it.id) errs.push(where + ": missing id");
-    else if (seenIds[it.id]) errs.push(where + ": duplicate id");
-    else seenIds[it.id] = 1;
+  function compile(tok){
+    const flags = (tok.flags || "i").replace(/[gy]/g, "") || "i";
+    try { return new RegExp(tok.pattern, flags); } catch (e) { return e; }
+  }
 
-    if (!TOPIC_BY[String(it.topic)]) errs.push(where + ': topic "' + it.topic + '" is not declared in topics');
+  // One rulebook for every exercise wherever it lives — the question bank and
+  // the exercises embedded in walkthrough steps alike. (Walkthrough exercises
+  // used to be checked by nothing at all.)
+  function checkItem(it, where, standalone){
+    if (standalone) {
+      if (!it.id) errs.push(where + ": missing id");
+      else if (seenIds[it.id]) errs.push(where + ": duplicate id");
+      else seenIds[it.id] = 1;
+      if (!topicIds[String(it.topic)]) errs.push(where + ': topic "' + it.topic + '" is not declared in topics');
+    }
+    if (["mcq","cloze","sequence","write","flashcard"].indexOf(it.type) === -1) {
+      errs.push(where + ': unknown type "' + it.type + '"'); return;
+    }
 
     if (it.type === "mcq") {
       mcqCount++;
@@ -7484,9 +8496,9 @@ function runSelfCheck(){
         if (/\b(always|never)\b/.test(o)) errs.push(where + ': absolute term in an option ("always"/"never") is a giveaway');
       });
       const key = String(it.stem || "").trim().toLowerCase();
-      if (key) { if (stems[key]) errs.push(where + ": duplicate stem, same as " + stems[key]); else stems[key] = it.id; }
+      if (key) { if (stems[key]) errs.push(where + ": duplicate stem, same as " + stems[key]); else stems[key] = it.id || where; }
       // The classic generated-MCQ tell: the right answer is the long one.
-      if (typeof it.answer === "number" && opts[it.answer]) {
+      if (typeof it.answer === "number" && opts[it.answer] != null) {
         const lens = opts.map(o => String(o).length);
         if (lens[it.answer] === Math.max.apply(null, lens) && lens[it.answer] > Math.min.apply(null, lens) * 1.6) longestCorrect++;
       }
@@ -7504,33 +8516,15 @@ function runSelfCheck(){
     if (it.type === "sequence") {
       const n = (it.lines || []).length;
       if (n < 2) errs.push(where + ": needs at least 2 lines");
-      (it.dependencies || []).forEach(d => {
-        if (!Array.isArray(d) || d.length !== 2 || d[0] < 0 || d[1] < 0 || d[0] >= n || d[1] >= n)
-          errs.push(where + ": dependency " + JSON.stringify(d) + " is out of range");
-      });
-    }
-
-    if (it.type === "write") {
-      if (!it.tokens || !it.tokens.length) errs.push(where + ": no tokens, so nothing can be checked");
-      if (!it.solution) errs.push(where + ": no reference solution");
-      // A token that cannot match the author's own answer can never be
-      // satisfied by the student either. This catches broken escaping, which
-      // is easy to get wrong because these patterns live in JSON strings.
-      (it.tokens || []).forEach(tok => {
-        if (tok._rx && it.solution && !tok._rx.test(it.solution))
-          errs.push(where + ": token /" + tok.pattern + "/ does not match its own solution");
-      });
-    }
-
-    if (it.type === "sequence") {
-      // Circular dependencies make an item unsolvable, and it looks fine until
-      // someone tries it.
-      const n = (it.lines || []).length;
       const adj = {};
       (it.dependencies || []).forEach(d => {
-        if (Array.isArray(d) && d.length === 2) { (adj[d[0]] = adj[d[0]] || []).push(d[1]); }
-        if (Array.isArray(d) && d[0] === d[1]) errs.push(where + ": dependency " + JSON.stringify(d) + " points at itself");
+        if (!Array.isArray(d) || d.length !== 2 || d[0] < 0 || d[1] < 0 || d[0] >= n || d[1] >= n) {
+          errs.push(where + ": dependency " + JSON.stringify(d) + " is out of range"); return;
+        }
+        if (d[0] === d[1]) { errs.push(where + ": dependency " + JSON.stringify(d) + " points at itself"); return; }
+        (adj[d[0]] = adj[d[0]] || []).push(d[1]);
       });
+      // A cycle makes the item unsolvable, and it looks fine until someone tries it.
       const mark = new Array(n).fill(0);
       const walk = u => {
         mark[u] = 1;
@@ -7547,17 +8541,51 @@ function runSelfCheck(){
       }
     }
 
-    if (it.reference && !CONTENT.reference.some(r => r.tab === it.reference))
+    if (it.type === "write") {
+      if (!it.tokens || !it.tokens.length) errs.push(where + ": no tokens, so nothing can be checked");
+      if (!it.solution) errs.push(where + ": no reference solution");
+      (it.tokens || []).forEach(tok => {
+        const rx = compile(tok);
+        if (rx instanceof Error) { errs.push(where + ": bad regex " + JSON.stringify(tok.pattern) + " — " + rx.message); return; }
+        // A token the author's own answer cannot satisfy, no student can either.
+        // This is what catches broken escaping in JSON-string patterns.
+        if (it.solution && !rx.test(it.solution))
+          errs.push(where + ": token /" + tok.pattern + "/ does not match its own solution");
+      });
+    }
+
+    if (it.type === "flashcard" && (!it.front || !it.back))
+      errs.push(where + ": a flashcard needs both front and back");
+
+    if (it.reference && refTabs.indexOf(it.reference) === -1)
       errs.push(where + ': reference "' + it.reference + '" is not one of the reference tabs');
+  }
+
+  (C.items || []).forEach((it, i) => checkItem(it, "Item " + (it.id || "#" + i), true));
+
+  (C.walkthroughs || []).forEach((w, wi) => {
+    const wn = "Walkthrough " + (w.id || "#" + wi);
+    if (!w.id) errs.push(wn + ": missing id");
+    if (!topicIds[String(w.topic)]) errs.push(wn + ': topic "' + w.topic + '" is not declared');
+    (w.steps || []).forEach((st, si) => { if (st.item) checkItem(st.item, wn + " step " + (si + 1), false); });
   });
 
   if (mcqCount >= 8 && longestCorrect / mcqCount > 0.5)
     errs.push("Across " + mcqCount + " MCQs the correct option is the longest " + longestCorrect + " times — that pattern is guessable.");
 
-  Object.keys(CONTENT.tutorials).forEach(tid => {
-    if (!TOPIC_BY[String(tid)]) errs.push('Tutorial for topic "' + tid + '" but no such topic is declared');
+  Object.keys(C.tutorials || {}).forEach(tid => {
+    if (!topicIds[String(tid)]) errs.push('Tutorial for topic "' + tid + '" but no such topic is declared');
   });
+  (C.glossary || []).forEach(g => {
+    if (!g.term || !g.def) errs.push('Glossary entry "' + (g.term || "?") + '" needs both term and def');
+    if (g.topic != null && !topicIds[String(g.topic)]) errs.push('Glossary "' + g.term + '": topic "' + g.topic + '" is not declared');
+  });
+  return errs;
+}
+/* @validate-end */
 
+function runSelfCheck(){
+  const errs = LOAD_ERRORS.concat(validateContent(CONTENT));
   // A literal end-script tag inside the content block truncates the whole
   // document. Note the escaping below: the HTML parser scans the raw bytes of
   // a script element for that sequence and does not care that it is inside a
@@ -7565,7 +8593,6 @@ function runSelfCheck(){
   const raw = (document.getElementById("course-content") || {}).textContent || "";
   if (raw.indexOf("<\/scr" + "ipt") !== -1)
     errs.push("Content contains a literal <\/script> tag — write it as <\\\/script>");
-
   return errs;
 }
 
@@ -7637,6 +8664,8 @@ function goHome(){
   showView("setup", "#setupH");
   refreshAllProgress();
   updatePoolNote();
+  renderHomeInsights();
+  updateResumeButton();
 }
 
 /* ============================================================
@@ -7663,6 +8692,10 @@ const progress = loadJSON(K("progress"), { tut:{}, drills:{}, build:{} });
 progress.tut    = progress.tut    || {};
 progress.drills = progress.drills || {};
 progress.build  = progress.build  || {};
+// Per-item history: { n: attempts, ok: right, box, due, why }. Lives inside
+// `progress` so export/import carries it without any extra code.
+progress.stats  = progress.stats  || {};
+progress.streak = progress.streak || { last: 0, count: 0, best: 0, xp: 0 };
 
 /* Mistakes are { itemId: streak }. An item leaves the pool after TWO correct
    answers, not one — answering right once measures today, not next week. */
@@ -7672,6 +8705,18 @@ let mistakes = loadJSON(K("mistakes"), {});
 function saveProgress(){ saveJSON(K("progress"), progress); }
 function saveMistakes(){ saveJSON(K("mistakes"), mistakes); }
 
+// The local calendar day as an integer, so "due tomorrow" turns over at the
+// student's midnight rather than UTC's.
+const today = () => { const d = new Date(); return Math.floor((d.getTime() - d.getTimezoneOffset() * 60000) / 864e5); };
+
+/* Leitner boxes. Right moves an item up a box and pushes its next review out;
+   wrong drops it to the bottom, due again tomorrow.
+   ponytail: fixed intervals, no per-item ease — SM-2 if the queue ever feels off. */
+const SRS_DAYS = [1, 3, 7, 14, 30];
+
+/* Called once per item per attempt — the FIRST answer. Re-checking after a miss
+   repaints the exercise but must not count again, or two clicks on Check turns
+   one wrong answer into a "correct" mistake-clearing streak. */
 function recordResult(itemId, correct){
   if (!itemId) return;
   if (correct) {
@@ -7682,10 +8727,73 @@ function recordResult(itemId, correct){
   } else {
     mistakes[itemId] = 0;
   }
+  const s = progress.stats[itemId] || (progress.stats[itemId] = { n: 0, ok: 0, box: 0, due: 0 });
+  s.n++;
+  if (correct) { s.ok++; s.due = today() + SRS_DAYS[s.box]; s.box = Math.min(s.box + 1, SRS_DAYS.length - 1); }
+  else { s.box = 0; s.due = today() + 1; }
+  gainXP(correct ? 10 : 2);
+  saveProgress();
   saveMistakes();
   updateMistakesButton();
 }
 const mistakeIds = () => Object.keys(mistakes);
+
+/* Streak and XP are read-only encouragement: nothing unlocks, nothing is
+   compared with anyone. A day counts once anything is answered or read. */
+function gainXP(n){
+  const st = progress.streak, d = today();
+  if (st.last !== d) {
+    st.count = st.last === d - 1 ? st.count + 1 : 1;
+    st.last = d;
+    st.best = Math.max(st.best || 0, st.count);
+  }
+  st.xp += n;
+  paintStreak();
+}
+function paintStreak(){
+  const st = progress.streak, pill = $("#streakPill");
+  const alive = st.last >= today() - 1 ? st.count : 0;
+  pill.classList.toggle("hide", !st.xp);
+  pill.textContent = "🔥 " + alive + " · " + st.xp + " XP";
+  pill.title = alive + "-day streak (best " + (st.best || 0) + ") · " + st.xp + " XP. Answer anything today to keep it going.";
+}
+
+/* "Why did you miss it?" — asked once, after a wrong first attempt. The answer
+   is what separates a knowledge gap (reread the tutorial) from a reading slip
+   (slow down), which a bare score cannot tell apart. */
+const REASONS = [["gap", "Didn't know it"], ["misread", "Misread it"], ["slip", "Careless slip"]];
+const REASON_LABEL = { gap: "didn't know", misread: "misread", slip: "careless" };
+function reasonRow(itemId){
+  const row = document.createElement("div");
+  row.className = "why-row";
+  row.setAttribute("role", "group");
+  row.setAttribute("aria-label", "Why did you miss it?");
+  const cur = (progress.stats[itemId] || {}).why;
+  row.innerHTML = '<span class="why-q">Why the miss?</span>' + REASONS.map(r =>
+    '<button type="button" class="why-btn" data-why="' + r[0] + '" aria-pressed="' + (cur === r[0]) + '">' + r[1] + '</button>').join("");
+  row.querySelectorAll(".why-btn").forEach(b => b.addEventListener("click", () => {
+    const s = progress.stats[itemId];
+    if (!s) return;
+    s.why = b.getAttribute("data-why");
+    saveProgress();
+    row.querySelectorAll(".why-btn").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    announce("Noted: " + b.textContent);
+  }));
+  return row;
+}
+
+/* A hint is one string or a list that gets more specific with each press. */
+const hintList = it => (it && it.hint != null && it.hint !== "") ? [].concat(it.hint) : [];
+function showHints(box, btn, hints, shown){
+  box.innerHTML = hints.slice(0, shown).map((h, i) =>
+    '<div class="hint-step"><b>Hint' + (hints.length > 1 ? " " + (i + 1) + "/" + hints.length : "") + ':</b> ' + h + '</div>').join("");
+  box.classList.toggle("show", shown > 0);
+  btn.style.display = hints.length ? "" : "none";
+  btn.disabled = shown >= hints.length;
+  const more = shown > 0 && shown < hints.length;
+  btn.title = more ? "Another hint" : "Show hint";
+  btn.setAttribute("aria-label", btn.title);
+}
 
 function updateMistakesButton(){
   const btn = $("#practiceMistakesBtn");
@@ -7697,7 +8805,7 @@ function updateMistakesButton(){
 function markTutStep(tid, idx){
   const key = String(tid);
   progress.tut[key] = progress.tut[key] || [];
-  if (progress.tut[key].indexOf(idx) === -1) progress.tut[key].push(idx);
+  if (progress.tut[key].indexOf(idx) === -1) { progress.tut[key].push(idx); gainXP(2); }
   saveProgress(); refreshAllProgress();
 }
 function markDrillDone(tid, itemId){
@@ -7708,7 +8816,7 @@ function markDrillDone(tid, itemId){
 }
 function markBuildStep(wid, idx){
   progress.build[wid] = progress.build[wid] || [];
-  if (progress.build[wid].indexOf(idx) === -1) progress.build[wid].push(idx);
+  if (progress.build[wid].indexOf(idx) === -1) { progress.build[wid].push(idx); gainXP(5); }
   saveProgress(); refreshAllProgress();
 }
 
@@ -7768,6 +8876,10 @@ const MODES = [
   { id:"build", icon:"🧪", title:"Guided Build", accent:"#2c6e6e", accentDeep:"#0f3838",
     desc:"Write a whole working program, one step at a time",
     has:() => CONTENT.walkthroughs.length > 0, totals: buildTotals, go:() => openBuildPicker() },
+  { id:"cards", icon:"🃏", title:"Flashcards", accent:"#8a5a14", accentDeep:"#5c3b0a",
+    desc:"Recall first, then flip — due and new cards come up first",
+    has:() => ITEMS.some(it => it.type === "flashcard"), totals:null,
+    go:() => startQuiz(pickCards(ITEMS.filter(it => it.type === "flashcard"), 20)) },
   { id:"glossary", icon:"📖", title:"Glossary", accent:"#7a42b8", accentDeep:"#3f1b63",
     desc:"Every term in the course, searchable",
     has:() => CONTENT.glossary.length > 0, totals:null, go:() => openGlossary() }
@@ -7782,6 +8894,7 @@ function renderModes(){
     card.id = "modeCard_" + m.id;
     card.setAttribute("role","button");
     card.setAttribute("tabindex","0");
+    if (m.id === "quiz") { card.setAttribute("aria-expanded", "false"); card.setAttribute("aria-controls", "quizSetupSection"); }
     card.style.setProperty("--m", m.accent);
     card.style.setProperty("--m-deep", m.accentDeep);
     let html = '<div class="mc-icon" aria-hidden="true">' + m.icon + '</div>' +
@@ -7853,17 +8966,33 @@ const quizState = {
   shuffle: true,
   confidence: false,
   sourceOnly: null,
-  questions: [], responses: [], hintShown: [], confidences: [], idx: 0
+  timed: false, minutes: 30,
+  questions: [], responses: [], hintShown: [], confidences: [], idx: 0,
+  pending: null,     // an MCQ pick waiting on its confidence rating — not an answer yet
+  deadline: 0        // epoch ms when a timed run ends; 0 = untimed
 };
 
 function availableTypes(){
   const present = [];
-  ["mcq","cloze","sequence","write"].forEach(t => {
+  ["mcq","cloze","sequence","write","flashcard"].forEach(t => {
     if (ITEMS.some(it => it.type === t)) present.push(t);
   });
   return present;
 }
-const TYPE_LABEL = { mcq:"Multiple choice", cloze:"Fill the blanks", sequence:"Put in order", write:"Write it" };
+const TYPE_LABEL = { mcq:"Multiple choice", cloze:"Fill the blanks", sequence:"Put in order", write:"Write it", flashcard:"Flashcards" };
+
+/* Order a pool for review: due cards first (oldest due first), then ones never
+   seen, then the rest by how soon they fall due. */
+function pickCards(pool, n){
+  const d = today();
+  const rank = it => {
+    const s = progress.stats[it.id];
+    if (!s) return 1e6;                        // unseen: after anything due
+    return s.due <= d ? s.due : 2e6 + s.due;   // due: first; not yet due: last
+  };
+  return shuffle(pool.slice()).sort((a, b) => rank(a) - rank(b)).slice(0, n);
+}
+const dueItems = () => { const d = today(); return ITEMS.filter(it => { const s = progress.stats[it.id]; return s && s.due && s.due <= d; }); };
 
 function renderTypeChips(){
   const wrap = $("#typeOpts");
@@ -7930,7 +9059,7 @@ function renderTopicChips(){
 
 function buildPool(){
   return ITEMS.filter(it =>
-    quizState.topics.indexOf(it.topic) !== -1 &&
+    quizState.topics.some(t => sameTopic(t, it.topic)) &&
     quizState.types.indexOf(it.type) !== -1 &&
     (!quizState.sourceOnly || quizState.sourceOnly.indexOf(it.source) !== -1)
   );
@@ -7975,14 +9104,33 @@ function applyCustomCount(n){
 $("#customCountInput").addEventListener("input", e => { if (e.target.value) applyCustomCount(parseInt(e.target.value, 10)); });
 $("#customCountSlider").addEventListener("input", e => applyCustomCount(parseInt(e.target.value, 10)));
 $("#practiceToggle").addEventListener("change", e => { quizState.practice = e.target.checked; });
+/* The exam simulator is the untimed exam mode plus a clock: answers stay hidden
+   until the end, and at zero the paper is collected. Practice mode cannot be on
+   at the same time, so the switch is held off while the timer is. */
+$("#timedToggle").addEventListener("change", e => {
+  quizState.timed = e.target.checked;
+  const p = $("#practiceToggle");
+  p.disabled = quizState.timed;
+  p.checked = quizState.practice = !quizState.timed;
+  $("#timedMinutes").disabled = !quizState.timed;
+});
+$("#timedMinutes").addEventListener("input", e => {
+  const m = parseInt(e.target.value, 10);
+  if (m > 0) quizState.minutes = Math.min(m, 300);
+});
 $("#shuffleToggle").addEventListener("change", e => { quizState.shuffle = e.target.checked; });
 $("#confidenceToggle").addEventListener("change", e => { quizState.confidence = e.target.checked; });
 
-let quizSetupOpen = true;
+/* The setup opens under the Practice Quiz card, as in the older guides. The
+   stylesheet animates .show-setup; this used to set style.display instead,
+   which the collapsed max-height:0 rule overrode — so the panel never opened. */
+let quizSetupOpen = false;
 function toggleQuizSetup(){
   quizSetupOpen = !quizSetupOpen;
-  $("#quizSetupSection").style.display = quizSetupOpen ? "" : "none";
-  if (quizSetupOpen) $("#topicOpts").scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "nearest" });
+  $("#quizSetupSection").classList.toggle("show-setup", quizSetupOpen);
+  const card = $("#modeCard_quiz");
+  if (card) card.setAttribute("aria-expanded", String(quizSetupOpen));
+  if (quizSetupOpen) setTimeout(() => $("#topicOpts").scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "nearest" }), 60);
 }
 
 
@@ -8001,6 +9149,7 @@ const LANG_PACKS = {};
 
 LANG_PACKS.generic = {
   id: "generic",
+  caseSensitive: false,     // prose answers: "Paris" and "paris" are the same fact
   symbols: {},
   keywords: [],
   lineComment: "#",
@@ -8014,121 +9163,164 @@ LANG_PACKS.generic = {
    syntax. The C path called normalizeCode(), which strips ALL whitespace —
    doing that here would throw away the thing most likely to be wrong.
    --------------------------------------------------------------------------- */
-const PY_BLOCK_HEADER = /^\s*(if|elif|else|for|while|def|class|try|except|finally|with|match|case)\b/;
-const PY_NEEDS_COLON  = /^\s*(if|elif|else|for|while|def|class|try|except|finally|with)\b/;
+const PY_BLOCK_HEADER = /^(if|elif|else|for|while|def|class|try|except|finally|with|match|case)\b/;
+const PY_NEEDS_COLON  = /^(if|elif|else|for|while|def|class|try|except|finally|with)\b/;
+
+/* One pass over the source, tracking strings (including triple-quoted ones that
+   span lines) and comments. Everything else reads its output:
+     stripped[] — comments removed, strings kept: what drill tokens match against
+     masked[]   — comments removed, string BODIES blanked to spaces: what the
+                  structural checks read, so the ")" in print("1) Add") is text,
+                  not a bracket, and the "=" in if s == "a=b" is not assignment
+     inString[] — true for a line that begins inside a triple-quoted string, whose
+                  indentation is string content and must not be linted as code
+     unclosed[] — strings still open at end of line (or at end of file for """)
+   The previous lint worked line by line on raw text and got all four wrong. */
+function pyScan(code){
+  const src = String(code || "");
+  const stripped = [], masked = [], inString = [false], unclosed = [];
+  let s = "", m = "", line = 1, st = null;          // st: { q, triple, start }
+  const endLine = () => {
+    stripped.push(s.replace(/\s+$/, "")); masked.push(m.replace(/\s+$/, ""));
+    s = ""; m = ""; line++;
+    inString.push(!!st);
+  };
+  for (let i = 0; i < src.length; i++) {
+    const ch = src[i];
+    if (ch === "\n") {
+      if (st && !st.triple) { unclosed.push({ line, quote: st.q }); st = null; }
+      endLine(); continue;
+    }
+    if (st) {
+      if (ch === "\\" && i + 1 < src.length && src[i + 1] !== "\n") { s += ch + src[i + 1]; m += "  "; i++; continue; }
+      const n = st.triple ? 3 : 1;
+      if (src.substr(i, n) === st.q.repeat(n)) { s += src.substr(i, n); m += src.substr(i, n); i += n - 1; st = null; continue; }
+      s += ch; m += " ";
+      continue;
+    }
+    if (ch === "#") { while (i + 1 < src.length && src[i + 1] !== "\n") i++; continue; }
+    if (ch === '"' || ch === "'") {
+      const triple = src.substr(i, 3) === ch + ch + ch, n = triple ? 3 : 1;
+      st = { q: ch, triple, start: line };
+      s += src.substr(i, n); m += src.substr(i, n); i += n - 1;
+      continue;
+    }
+    s += ch; m += ch;
+  }
+  if (st) unclosed.push({ line: st.triple ? st.start : line, quote: st.triple ? st.q.repeat(3) : st.q });
+  stripped.push(s.replace(/\s+$/, "")); masked.push(m.replace(/\s+$/, ""));
+  return { stripped, masked, inString, unclosed };
+}
+
+const indentWidth = raw => ((raw.match(/^[ \t]*/) || [""])[0]).replace(/\t/g, "    ").length;
 
 LANG_PACKS.python = {
   id: "python",
+  caseSensitive: true,
   symbols: {},
   lineComment: "#",
   keywords: ["def","return","if","elif","else","for","while","try","except","finally",
              "import","from","lambda","print","input","range","len","int","float","str",
              "bool","list","dict","tuple","set","in","not","and","or","is","None","True","False"],
 
-  /* Strip comments and trailing space; keep indentation intact. */
-  preprocess(code){
-    return String(code || "")
-      .split("\n")
-      .map(line => {
-        let out = "", inS = false, q = "";
-        for (let i = 0; i < line.length; i++) {
-          const ch = line[i];
-          if (inS) {
-            out += ch;
-            if (ch === q && line[i-1] !== "\\") inS = false;
-          } else if (ch === '"' || ch === "'") {
-            inS = true; q = ch; out += ch;
-          } else if (ch === "#") {
-            break;                       // rest of the line is a comment
-          } else out += ch;
-        }
-        return out.replace(/\s+$/, "");
-      })
-      .join("\n");
-  },
+  /* Comments removed, strings and indentation kept. */
+  preprocess(code){ return pyScan(code).stripped.join("\n"); },
 
   lint(code){
     const errors = {};
-    const raw = String(code || "");
-    const lines = raw.split("\n");
-    const clean = this.preprocess(raw).split("\n");
+    const put = (n, msg) => { if (!errors[n]) errors[n] = msg; };
+    const raw = String(code || "").split("\n");
+    const { masked, inString, unclosed } = pyScan(code);
 
-    let sawTab = false, sawSpaceIndent = false;
-    let openBrackets = 0;
-    const bracketOpenLine = [];
+    unclosed.forEach(u => put(u.line, "Unclosed " + u.quote + " string."));
 
-    for (let i = 0; i < lines.length; i++) {
-      const rawLine = lines[i];
-      const line = clean[i] || "";
-      const n = i + 1;
-      const trimmed = line.trim();
-      const indent = (rawLine.match(/^[ \t]*/) || [""])[0];
+    // Indentation: tabs and spaces. Lines that start inside a """string""" are
+    // text, not code, so their leading whitespace is nobody's business.
+    let sawTab = 0, sawSpace = 0;
+    raw.forEach((r, i) => {
+      if (inString[i] || !masked[i] || !masked[i].trim()) return;
+      const ind = (r.match(/^[ \t]*/) || [""])[0];
+      if (ind.indexOf("\t") !== -1 && ind.indexOf(" ") !== -1) put(i + 1, "Tabs and spaces mixed in the same indent — Python treats these as different.");
+      if (/^\t/.test(ind)) sawTab = sawTab || i + 1;
+      if (/^ /.test(ind))  sawSpace = sawSpace || i + 1;
+    });
+    if (sawTab && sawSpace) put(sawTab, "This file mixes tab-indented and space-indented lines.");
 
-      if (indent.indexOf("\t") !== -1) sawTab = true;
-      if (/^ +/.test(indent))          sawSpaceIndent = true;
-      if (indent.indexOf("\t") !== -1 && indent.indexOf(" ") !== -1)
-        errors[n] = "Tabs and spaces mixed in the same indent — Python treats these as different.";
-
-      if (!trimmed) continue;
-
-      // unterminated string
-      let inS = false, q = "";
-      for (let c = 0; c < line.length; c++) {
-        const ch = line[c];
-        if (inS) { if (ch === q && line[c-1] !== "\\") inS = false; }
-        else if (ch === '"' || ch === "'") { inS = true; q = ch; }
+    // Brackets, on masked text so string contents never count. A stack rather
+    // than a counter, so "(]" is reported as the mismatch it is.
+    const PAIR = { ")": "(", "]": "[", "}": "{" };
+    const stack = [];
+    const depthAtEnd = [];
+    masked.forEach((ln, i) => {
+      for (let c = 0; c < ln.length; c++) {
+        const ch = ln[c];
+        if (ch === "(" || ch === "[" || ch === "{") stack.push({ ch, line: i + 1 });
+        else if (PAIR[ch]) {
+          const top = stack.pop();
+          if (!top) put(i + 1, "Closing " + ch + " with nothing open.");
+          else if (top.ch !== PAIR[ch]) put(i + 1, "Mismatched bracket: " + top.ch + " opened on line " + top.line + " but closed with " + ch + ".");
+        }
       }
-      if (inS && !errors[n]) errors[n] = "Unclosed " + q + " string.";
+      depthAtEnd[i] = stack.length;
+    });
+    if (stack.length) put(stack[0].line, "Bracket opened here is never closed.");
 
-      // bracket balance across the whole snippet
-      for (let c = 0; c < line.length; c++) {
-        const ch = line[c];
-        if (ch === "(" || ch === "[" || ch === "{") { openBrackets++; bracketOpenLine.push(n); }
-        else if (ch === ")" || ch === "]" || ch === "}") {
-          openBrackets--; bracketOpenLine.pop();
-          if (openBrackets < 0 && !errors[n]) { errors[n] = "Closing bracket with nothing open."; openBrackets = 0; }
+    // Logical lines: a statement continues while a bracket is open or the line
+    // ends in a backslash. Header checks run on the whole statement, so
+    //   if (a and
+    //       b):
+    // is one header with one colon, not a header missing its colon.
+    const logical = [];
+    for (let i = 0; i < masked.length; i++) {
+      if (inString[i] || !masked[i].trim()) continue;
+      let j = i, text = masked[i].trim();
+      while (j + 1 < masked.length && (depthAtEnd[j] > 0 || /\\$/.test(masked[j]))) { j++; text += " " + masked[j].trim(); }
+      logical.push({ start: i, end: j, text: text.replace(/\\$/, "") });
+      i = j;
+    }
+
+    // characters of `text` that sit at bracket depth zero
+    const topLevel = text => {
+      let d = 0, out = "";
+      for (const ch of text) {
+        if ("([{".indexOf(ch) !== -1) { d++; out += " "; continue; }
+        if (")]}".indexOf(ch) !== -1) { d = Math.max(0, d - 1); out += " "; continue; }
+        out += d ? " " : ch;
+      }
+      return out;
+    };
+
+    logical.forEach((L, k) => {
+      const head = L.text.match(PY_NEEDS_COLON);
+      const top = topLevel(L.text);
+
+      if (head && top.indexOf(":") === -1)
+        put(L.end + 1, "Missing ':' at the end of the " + head[1] + " line.");
+
+      // `=` where `==` was meant. Only at depth zero (so keyword arguments like
+      // sorted(x, reverse=True) are fine), and never as part of == != <= >= :=
+      const cond = L.text.match(/^(if|elif|while)\b/);
+      if (cond) {
+        const body = top.slice(cond[0].length).split(":")[0];
+        for (let c = 0; c < body.length; c++) {
+          if (body[c] !== "=") continue;
+          const prev = body[c - 1], next = body[c + 1];
+          if (next === "=") { c++; continue; }
+          if ("=!<>:".indexOf(prev) !== -1) continue;
+          put(L.start + 1, "Single '=' inside a condition assigns; comparison needs '=='.");
+          break;
         }
       }
 
-      // block headers need a colon
-      if (PY_NEEDS_COLON.test(trimmed) && !/:\s*$/.test(trimmed) && !/:\s*\S/.test(trimmed)) {
-        const kw = (trimmed.match(PY_NEEDS_COLON) || [])[1];
-        if (!errors[n]) errors[n] = "Missing ':' at the end of the " + kw + " line.";
+      // A header ending in ':' must open an indented block.
+      if (PY_BLOCK_HEADER.test(L.text) && /:\s*$/.test(top)) {
+        const next = logical[k + 1];
+        if (!next) put(L.start + 1, "This block header has no indented body under it.");
+        else if (indentWidth(raw[next.start]) <= indentWidth(raw[L.start]))
+          put(L.start + 1, "The line after this needs to be indented — nothing is inside the block.");
       }
+    });
 
-      // `=` where `==` was meant, inside a condition
-      const condMatch = trimmed.match(/^(if|elif|while)\b(.*)$/);
-      if (condMatch) {
-        const cond = condMatch[2].replace(/:\s*$/, "");
-        const probe = cond.replace(/[=!<>+\-*/%&|^]=/g, "  ");
-        if (probe.indexOf("=") !== -1 && !errors[n])
-          errors[n] = "Single '=' inside a condition assigns; comparison needs '=='.";
-      }
-
-      // a block header must actually open a block
-      if (PY_BLOCK_HEADER.test(trimmed) && /:\s*$/.test(trimmed)) {
-        let j = i + 1;
-        while (j < clean.length && !clean[j].trim()) j++;
-        const myIndent = indent.replace(/\t/g, "    ").length;
-        if (j >= clean.length) {
-          if (!errors[n]) errors[n] = "This block header has no indented body under it.";
-        } else {
-          const nextIndent = ((lines[j].match(/^[ \t]*/) || [""])[0]).replace(/\t/g, "    ").length;
-          if (nextIndent <= myIndent && !errors[n])
-            errors[n] = "The line after this needs to be indented — nothing is inside the block.";
-        }
-      }
-    }
-
-    if (sawTab && sawSpaceIndent) {
-      const firstTab = lines.findIndex(l => /^\t/.test(l));
-      const key = (firstTab >= 0 ? firstTab + 1 : 1);
-      if (!errors[key]) errors[key] = "This file mixes tab-indented and space-indented lines.";
-    }
-    if (openBrackets > 0) {
-      const key = bracketOpenLine[0] || lines.length;
-      if (!errors[key]) errors[key] = "Bracket opened here is never closed.";
-    }
     return errors;
   }
 };
@@ -8142,6 +9334,13 @@ function tryEvalConstExpr(raw){
   if (raw == null) return undefined;
   let s = String(raw).trim().replace(/\s+/g, "");
   if (!s) return undefined;
+  // Number literals FIRST. The identifier pass below would otherwise read the
+  // "x20" of 0x20 (or the "b101" of 0b101) as a name and reject the whole thing
+  // — which is exactly what the ported version did, while its comment claimed
+  // hex worked.
+  s = s.replace(/\b0[xX]([0-9a-fA-F]+)\b/g, (_, h) => String(parseInt(h, 16)))
+       .replace(/\b0[bB]([01]+)\b/g,        (_, b) => String(parseInt(b, 2)))
+       .replace(/\b0[oO]([0-7]+)\b/g,       (_, o) => String(parseInt(o, 8)));
   let bad = false;
   s = s.replace(/[A-Za-z_][A-Za-z0-9_]*/g, m => {
     const up = m.toUpperCase();
@@ -8149,8 +9348,7 @@ function tryEvalConstExpr(raw){
     bad = true; return m;
   });
   if (bad) return undefined;
-  s = s.replace(/0[bB]([01]+)/g, (_, b) => parseInt(b, 2).toString());
-  if (!/^[0-9xXa-fA-F|&^()<>+\-*/~.]+$/.test(s)) return undefined;
+  if (!/^[0-9|&^()<>+\-*/~.%]+$/.test(s)) return undefined;
   try {
     const r = Function('"use strict"; return (' + s + ');')();
     if (typeof r === "number" && isFinite(r)) return r;
@@ -8158,7 +9356,14 @@ function tryEvalConstExpr(raw){
   return undefined;
 }
 
-function normaliseAnswer(s){ return String(s).replace(/\s+/g, "").toLowerCase(); }
+/* Spacing around punctuation is irrelevant ("x=5" is "x = 5"), but spacing
+   between two words is not: "is not" must not match "isnot". And case only
+   folds when the language itself ignores it — in Python `true` is a NameError,
+   so accepting it as `True` would teach the bug. */
+function normaliseAnswer(s){
+  let out = String(s).trim().replace(/\s+/g, " ").replace(/ ?([^\w ]) ?/g, "$1");
+  return LANG.caseSensitive ? out : out.toLowerCase();
+}
 
 function answersEquivalent(userVal, accepted){
   if (normaliseAnswer(userVal) === normaliseAnswer(accepted)) return true;
@@ -8201,9 +9406,12 @@ function renderCloze(container, item){
   return {
     reset(){
       container.querySelectorAll(".fill-blank").forEach(inp => {
-        inp.value = ""; inp.classList.remove("right","wrong","revealed"); inp.disabled = false;
-      });
+        inp.value = ""; inp.classList.remove("right","wrong","revealed");
+        inp.disabled = false;
+        inp.readOnly = false;          // reveal() sets this; forgetting to undo it left
+      });                              // the blanks empty AND untypeable after Hide
     },
+    lock(){ container.querySelectorAll(".fill-blank").forEach(inp => { inp.readOnly = true; }); },
     /* Fills the answers straight into the blanks rather than printing them
        somewhere else to be copied across by eye. */
     reveal(){
@@ -8224,7 +9432,10 @@ function renderCloze(container, item){
       });
       return '<ul class="sp-list">' + rows.join("") + '</ul>';
     },
-    check(){
+    /* silent: grade without painting anything — exam rehearsal must not tell
+       you which blanks are wrong and then let you keep editing until green. */
+    check(opts){
+      const silent = !!(opts && opts.silent);
       const inputs = Array.prototype.slice.call(container.querySelectorAll(".fill-blank"));
       const vals = inputs.map(i => i.value.trim());
       const correct = new Array(inputs.length).fill(false);
@@ -8273,8 +9484,10 @@ function renderCloze(container, item){
 
       const wrongList = [];
       inputs.forEach((inp, i) => {
-        inp.classList.remove("right","wrong");
-        inp.classList.add(correct[i] ? "right" : "wrong");
+        if (!silent) {
+          inp.classList.remove("right","wrong");
+          inp.classList.add(correct[i] ? "right" : "wrong");
+        }
         if (!correct[i]) wrongList.push(i + 1);
       });
       return { ok: wrongList.length === 0, wrongList };
@@ -8289,7 +9502,18 @@ function renderCloze(container, item){
    unusable by keyboard and unreliable on touch. Dragging still works.
    -------------------------------------------------------------------------- */
 function renderSequence(container, item){
-  const order = shuffle(item.lines.map((t, i) => ({ text: t, orig: i })));
+  const order = item.lines.map((t, i) => ({ text: t, orig: i }));
+  // A two- or three-line item shuffles straight back into a valid order often
+  // enough to notice. Re-deal until at least one dependency is broken.
+  function shuffleUnsolved(){
+    for (let tries = 0; tries < 20; tries++) {
+      shuffle(order);
+      const pos = {};
+      order.forEach((e, i) => { pos[e.orig] = i; });
+      if ((item.dependencies || []).some(d => pos[d[0]] > pos[d[1]])) return;
+    }
+  }
+  shuffleUnsolved();
 
   function paint(){
     container.innerHTML =
@@ -8346,7 +9570,13 @@ function renderSequence(container, item){
   paint();
 
   return {
-    reset(){ shuffle(order); paint(); },
+    reset(){ shuffleUnsolved(); paint(); },
+    lock(){
+      container.querySelectorAll(".builder-line").forEach(r => {
+        r.draggable = false;
+        r.querySelectorAll(".sq-move").forEach(b => { b.disabled = true; });
+      });
+    },
     /* Reorders the lines into a correct sequence in place, then locks them. */
     reveal(){
       order.sort((a, b) => a.orig - b.orig);
@@ -8361,13 +9591,14 @@ function renderSequence(container, item){
       return '<ul class="sp-list">' + item.lines.map((ln, i) =>
         '<li><b>' + (i + 1) + '.</b> <code>' + escapeHTML(ln) + '</code></li>').join("") + '</ul>';
     },
-    check(){
+    check(opts){
       const posOf = {};
       order.forEach((e, i) => { posOf[e.orig] = i; });
       const broken = [];
       (item.dependencies || []).forEach(d => {
         if (posOf[d[0]] > posOf[d[1]]) broken.push(d);
       });
+      if (opts && opts.silent) return { ok: broken.length === 0, broken: broken.length };
       container.querySelectorAll(".builder-line").forEach(r => r.classList.remove("right","wrong"));
       if (broken.length) {
         const flag = {};
@@ -8462,7 +9693,9 @@ function renderWrite(container, item){
       ta.readOnly = false;
       container.querySelector("#wChecklist").classList.remove("show");
       paintGutter();
+      hideGutterTip();
     },
+    lock(){ ta.readOnly = true; },
     /* Free text cannot be "filled in" without destroying the attempt, so the
        reference goes in the panel and the editor is frozen instead. */
     reveal(){
@@ -8472,42 +9705,41 @@ function renderWrite(container, item){
         ? '<pre class="solution-code">' + escapeHTML(sol) + '</pre>'
         : '<div class="sp-explanation">No reference solution recorded for this one — work from the checklist above.</div>';
     },
-    check(){
+    check(opts){
+      const silent = !!(opts && opts.silent);
       const rawCode = ta.value;
+      // Tokens match the comment-stripped source ONLY. The ported version also
+      // tried the raw text, which added exactly one thing: matches inside
+      // comments — so "# for i in range(10):" satisfied "write a for loop".
       const code = LANG.preprocess(rawCode);
       const list = container.querySelector("#wChecklist");
-      list.innerHTML = "";
-      let ok = true;
+      if (!silent) list.innerHTML = "";
+      let ok = rawCode.trim().length > 0;
+      const add = html => { if (silent) return; const row = document.createElement("div"); row.className = "wc-item"; row.innerHTML = html; list.appendChild(row); };
+
+      if (!ok) add('<span class="wc-icon wc-fail">✗</span><span>Nothing written yet.</span>');
 
       const errorLines = LANG.lint(rawCode);
       const lintKeys = Object.keys(errorLines);
       if (lintKeys.length) {
         ok = false;
-        lintKeys.sort((a, b) => a - b).forEach(k => {
-          const row = document.createElement("div");
-          row.className = "wc-item";
-          row.innerHTML = '<span class="wc-icon wc-fail">✗</span><span>Line ' + k + ': ' + escapeHTML(errorLines[k]) + '</span>';
-          list.appendChild(row);
-        });
+        lintKeys.sort((a, b) => a - b).forEach(k =>
+          add('<span class="wc-icon wc-fail">✗</span><span>Line ' + k + ': ' + escapeHTML(errorLines[k]) + '</span>'));
       }
 
       (item.tokens || []).forEach(tok => {
-        if (!tok._rx) return;                       // reported by the self-check
-        const pass = tok._rx.test(code) || tok._rx.test(rawCode);
+        if (!tok._rx) { ok = false; return; }       // an untestable token can't pass — reported by the self-check
+        const pass = tok._rx.test(code);
         if (!pass) {
           ok = false;
           const ln = guessLine(tok);
           if (ln) errorLines[ln] = errorLines[ln] ? errorLines[ln] + " & " + tok.hint : tok.hint;
         }
-        const row = document.createElement("div");
-        row.className = "wc-item";
-        row.innerHTML = '<span class="wc-icon ' + (pass ? "wc-pass" : "wc-fail") + '">' + (pass ? "✓" : "✗") + '</span>' +
-                        '<span>' + (pass ? "" : "Missing: ") + escapeHTML(tok.hint) + '</span>';
-        list.appendChild(row);
+        add('<span class="wc-icon ' + (pass ? "wc-pass" : "wc-fail") + '">' + (pass ? "✓" : "✗") + '</span>' +
+            '<span>' + (pass ? "" : "Missing: ") + escapeHTML(tok.hint) + '</span>');
       });
 
-      paintGutter(errorLines);
-      list.classList.add("show");
+      if (!silent) { paintGutter(errorLines); list.classList.add("show"); }
       return { ok };
     }
   };
@@ -8522,6 +9754,7 @@ function renderItem(container, item){
 }
 
 function solutionHTML(item){
+  if (item.type === "flashcard") return String(item.back || "").replace(/<[^>]+>/g, "");
   if (item.type === "write")    return item.solution || "";
   if (item.type === "sequence") return (item.lines || []).join("\n");
   if (item.type === "cloze") {
@@ -8585,8 +9818,13 @@ function typewriterRender(target, html, container){
   const clone = src.cloneNode(true);
   while (clone.firstChild) target.appendChild(clone.firstChild);
 
+  // Whatever ends the animation, the finished content has to be wired up: a
+  // quick-check or code block inside a collapsed section was otherwise inert,
+  // because the step-level wiring ran while this body was still empty.
+  const settle = () => initContentInteractions(target);
+
   // prefers-reduced-motion completes it instantly rather than hiding the text.
-  if (prefersReducedMotion()) { target.innerHTML = html; return; }
+  if (prefersReducedMotion()) { target.innerHTML = html; settle(); return; }
 
   const srcTexts = collectTextNodes(src);
   const tgtTexts = collectTextNodes(target);
@@ -8611,17 +9849,20 @@ function typewriterRender(target, html, container){
     if (raf) cancelAnimationFrame(raf);
     target.innerHTML = html;
     if (skipBtn.parentNode) skipBtn.remove();
+    settle();
   };
   skipBtn.addEventListener("click", e => { e.stopPropagation(); finish(); });
 
   function frame(){
     if (aborted) return;
+    if (!target.isConnected) return;         // step changed mid-animation: stop typing into a detached node
     if (pause > 0) { pause--; raf = requestAnimationFrame(frame); return; }
     let last = null;
     for (let n = 0; n < CHARS_PER_FRAME; n++) {
       if (i >= srcTexts.length) {
         cursor.remove();
         if (skipBtn.parentNode) skipBtn.remove();
+        settle();
         return;
       }
       const full = srcTexts[i].nodeValue;
@@ -8764,8 +10005,10 @@ function initContentInteractions(scope){
    QUIZ RUNNER — handles every item type, which is what let Blitz mode go away
    ============================================================================ */
 let activeItemAPI = null;   // the renderItem handle for a non-MCQ question
+let timerTick = null;
 
 function startQuiz(pool){
+  const fromSetup = !pool;
   if (!pool) {
     pool = buildPool().slice();
     if (quizState.shuffle) shuffle(pool);
@@ -8774,14 +10017,81 @@ function startQuiz(pool){
   if (!pool.length) return;
   quizState.questions   = pool;
   quizState.responses   = new Array(pool.length).fill(null);
-  quizState.hintShown   = new Array(pool.length).fill(false);
+  quizState.hintShown   = new Array(pool.length).fill(0);
   quizState.confidences = new Array(pool.length).fill(null);
   quizState.idx = 0;
+  // Only a paper set up on the home screen is timed; a review launched from
+  // the due queue, the radar or search is not an exam.
+  quizState.deadline = (fromSetup && quizState.timed) ? Date.now() + quizState.minutes * 60000 : 0;
+  enterQuiz();
+}
+
+function enterQuiz(){
+  quizState.pending = null;
   $("#scorepill").classList.toggle("hide", !quizState.practice);
   $("#wrongpill").classList.toggle("hide", !quizState.practice);
   showView("quiz", "#qtext");
+  startTimer();
   renderQ();
 }
+
+/* ---- exam clock ---- */
+function startTimer(){
+  clearInterval(timerTick);
+  const pill = $("#timerPill");
+  pill.classList.toggle("hide", !quizState.deadline);
+  if (!quizState.deadline) return;
+  let warned = 0;
+  const tick = () => {
+    if ($("#quiz").classList.contains("hide")) { stopTimer(); return; }   // left the quiz; resume restarts it
+    const left = Math.max(0, Math.round((quizState.deadline - Date.now()) / 1000));
+    pill.textContent = Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0");
+    pill.classList.toggle("low", left <= 60);
+    if (left <= 60 && warned < 2) { warned = 2; if (left) announce("One minute left"); }
+    else if (left <= 300 && warned < 1) { warned = 1; announce("Five minutes left"); }
+    if (!left) { announce("Time is up — paper collected"); finishQuiz(); }
+  };
+  tick();
+  timerTick = setInterval(tick, 1000);
+}
+function stopTimer(){ clearInterval(timerTick); timerTick = null; }
+
+/* ---- session resume: a closed tab should not cost a half-done paper ---- */
+function saveSession(){
+  saveJSON(K("session"), {
+    ids: quizState.questions.map(q => q.id), responses: quizState.responses,
+    confidences: quizState.confidences, hintShown: quizState.hintShown,
+    idx: quizState.idx, practice: quizState.practice, deadline: quizState.deadline
+  });
+}
+function clearSession(){ safeStorage.removeItem(K("session")); updateResumeButton(); }
+function loadSession(){
+  const s = loadJSON(K("session"), null);
+  if (!s || !Array.isArray(s.ids) || !Array.isArray(s.responses)) return null;
+  const qs = s.ids.map(id => ITEM_BY[id]);
+  if (!qs.length || qs.some(q => !q)) return null;          // the content changed underneath it
+  const left = s.responses.filter(r => r === null).length;
+  return left ? Object.assign(s, { qs, left }) : null;
+}
+function updateResumeButton(){
+  const s = loadSession(), b = $("#resumeBtn");
+  b.classList.toggle("hide", !s);
+  if (s) b.textContent = "Resume quiz · " + (s.qs.length - s.left) + " of " + s.qs.length + " answered";
+}
+$("#resumeBtn").addEventListener("click", () => {
+  const s = loadSession();
+  if (!s) return;
+  const n = s.qs.length;
+  quizState.questions   = s.qs;
+  quizState.responses   = s.responses;
+  quizState.confidences = s.confidences || new Array(n).fill(null);
+  quizState.hintShown   = s.hintShown || new Array(n).fill(0);
+  quizState.idx         = Math.min(s.idx || 0, n - 1);
+  quizState.deadline    = s.deadline || 0;
+  quizState.practice    = s.practice !== false;
+  $("#practiceToggle").checked = quizState.practice;
+  enterQuiz();
+});
 
 function scoreSoFar(){
   let right = 0, wrong = 0;
@@ -8800,12 +10110,14 @@ function isResponseCorrect(q, r){
 function renderQ(){
   const q = quizState.questions[quizState.idx];
   const n = quizState.questions.length;
+  const exam = !quizState.practice;
   activeItemAPI = null;
+  quizState.pending = null;
 
   $("#bar").style.width = ((quizState.idx) / n * 100) + "%";
   $("#counter").textContent = (quizState.idx + 1) + " / " + n;
   $("#qtype").textContent = (q.type === "mcq" ? "Q" : TYPE_LABEL[q.type] + " · Q") + (quizState.idx + 1);
-  $("#qtopic").textContent = topicShort(q.topic);
+  $("#qtopic").textContent = TOPIC_BY[String(q.topic)] ? topicShort(q.topic) : "General";
 
   const s = scoreSoFar();
   $("#scorepill").textContent = s.right + " ✓";
@@ -8816,11 +10128,8 @@ function renderQ(){
   else ctx.classList.add("hide");
   renderReferenceBadge(q, ctx);
 
-  $("#qtext").innerHTML = q.stem || q.title || q.prompt || "";
-  $("#hintBox").classList.remove("show");
-  $("#hintBox").innerHTML = "";
-  $("#hintBtn").style.display = q.hint ? "" : "none";
-  $("#hintBtn").disabled = false;
+  $("#qtext").innerHTML = q.type === "flashcard" ? q.front : (q.stem || q.title || q.prompt || "");
+  showHints($("#hintBox"), $("#hintBtn"), hintList(q), quizState.hintShown[quizState.idx] || 0);
   $("#feedback").style.display = "none";
   $("#feedback").className = "feedback";
   $("#confidenceRow").classList.remove("show");
@@ -8839,7 +10148,10 @@ function renderQ(){
       btn.addEventListener("click", () => pickAnswer(i));
       answers.appendChild(btn);
     });
-    if (answered) lockMCQ();
+    if (answered) { lockMCQ(); revealFeedback(); }
+  } else if (q.type === "flashcard") {
+    renderFlashcard(answers, q, answered);
+    if (answered) revealFeedback();
   } else {
     if (q.prompt && q.prompt !== $("#qtext").innerHTML) {
       const p = document.createElement("div");
@@ -8856,25 +10168,94 @@ function renderQ(){
     bar.style.marginTop = "14px";
     const checkBtn = document.createElement("button");
     checkBtn.className = "btn small";
-    checkBtn.textContent = "Check ▸";
+    // Exam mode grades silently and freezes the answer: painting the wrong
+    // blanks and then letting you edit until they turn green is not an exam.
+    checkBtn.textContent = exam ? "Submit answer" : "Check ▸";
     checkBtn.addEventListener("click", () => {
+      if (quizState.responses[quizState.idx] === null) {
+        const res = activeItemAPI.check({ silent: exam });
+        if (exam) { activeItemAPI.lock(); checkBtn.disabled = true; }
+        submitResponse(res.ok);
+        return;
+      }
+      // Already scored. Re-checking still repaints so a miss can be fixed,
+      // but the first attempt is the one that counts.
       const res = activeItemAPI.check();
-      submitResponse(res.ok);
+      if (isResponseCorrect(q, quizState.responses[quizState.idx])) return;
+      const fb = $("#feedback");
+      let note = fb.querySelector(".retry-note");
+      if (!note) { note = document.createElement("div"); note.className = "retry-note"; fb.appendChild(note); }
+      note.innerHTML = res.ok ? "<b>Fixed.</b> The first attempt is what counts, so this one comes back tomorrow."
+                              : "<b>Still not right.</b> Adjust it and check again.";
+      announce(res.ok ? "Fixed" : "Still not right");
     });
     bar.appendChild(checkBtn);
     answers.appendChild(bar);
-    if (answered) revealFeedback();
+    if (answered) {
+      checkBtn.disabled = true;
+      if (exam) activeItemAPI.lock();
+      else if (activeItemAPI.reveal) {
+        const panel = document.createElement("div");
+        panel.className = "solution-panel";
+        panel.innerHTML = '<div class="sp-header">🔓 Solution</div>' + activeItemAPI.reveal();
+        answers.appendChild(panel);
+      }
+      revealFeedback();
+    }
   }
 
   $("#prevBtn").disabled = quizState.idx === 0;
   $("#nextBtn").textContent = (quizState.idx === n - 1) ? "Finish ▸" : "Next ›";
+  saveSession();
+  updateResumeButton();
+}
+
+/* Recall first, reveal second, then grade yourself. The grade is the answer. */
+function renderFlashcard(host, q, answered){
+  const back = document.createElement("div");
+  back.className = "fc-back";
+  back.innerHTML = q.back;
+  back.hidden = !answered;
+  if (answered) back.classList.add("show");
+  const acts = document.createElement("div");
+  acts.className = "fc-actions";
+  host.appendChild(back);
+  host.appendChild(acts);
+  const grade = () => {
+    const r = quizState.responses[quizState.idx];
+    acts.innerHTML = '<button type="button" class="btn ghost" data-ok="0">✗ Didn’t know</button>' +
+                     '<button type="button" class="btn" data-ok="1">✓ Knew it</button>';
+    acts.querySelectorAll("button").forEach(b => {
+      const val = b.getAttribute("data-ok") === "1";
+      if (r !== null) { b.disabled = true; b.setAttribute("aria-pressed", String(r === val)); }
+      b.addEventListener("click", () => { submitResponse(val); grade(); });
+    });
+  };
+  if (answered) { grade(); return; }
+  const show = document.createElement("button");
+  show.type = "button";
+  show.className = "btn";
+  show.textContent = "Show answer";
+  show.addEventListener("click", () => {
+    back.hidden = false;
+    void back.offsetWidth;                  // commit the hidden state so the fade-in runs
+    back.classList.add("show");
+    grade();
+    const first = acts.querySelector("button");
+    if (first) first.focus();
+    announce(String(q.back).replace(/<[^>]+>/g, " "));
+  });
+  acts.appendChild(show);
 }
 
 function pickAnswer(i){
   if (quizState.responses[quizState.idx] !== null) return;
   $$("#answers .ans").forEach((b, bi) => b.classList.toggle("sel", bi === i));
-  if (quizState.confidence && quizState.confidences[quizState.idx] === null) {
-    quizState.responses[quizState.idx] = i;
+  if (quizState.confidence) {
+    // Held, not answered: a pick becomes an answer once it is rated, or when
+    // you move on (commitPending). It used to be written straight into
+    // responses, so leaving without rating kept the answer but never scored it.
+    quizState.pending = i;
     $("#confidenceRow").classList.add("show");
     const first = $("#confidenceRow .cf-btn");
     if (first) first.focus();
@@ -8882,21 +10263,32 @@ function pickAnswer(i){
   }
   submitResponse(i);
 }
+function commitPending(){
+  if (quizState.pending === null) return;
+  const i = quizState.pending;
+  quizState.pending = null;
+  $("#confidenceRow").classList.remove("show");
+  submitResponse(i);
+}
 
 function submitResponse(value){
-  quizState.responses[quizState.idx] = value;
-  const q = quizState.questions[quizState.idx];
-  recordResult(q.id, isResponseCorrect(q, value));
-  if (isDrill(q) && isResponseCorrect(q, value)) markDrillDone(q.topic, q.id);
+  const idx = quizState.idx;
+  if (quizState.responses[idx] !== null) return;       // the first answer is the answer
+  quizState.responses[idx] = value;
+  const q = quizState.questions[idx];
+  const ok = isResponseCorrect(q, value);
+  recordResult(q.id, ok);
+  if (isDrill(q) && ok) markDrillDone(q.topic, q.id);
   if (q.type === "mcq") lockMCQ();
   revealFeedback();
+  saveSession();
 }
 
 $$("#confidenceRow .cf-btn").forEach(btn => {
   btn.addEventListener("click", () => {
+    if (quizState.pending === null) return;
     quizState.confidences[quizState.idx] = btn.getAttribute("data-conf");
-    $("#confidenceRow").classList.remove("show");
-    submitResponse(quizState.responses[quizState.idx]);
+    commitPending();
   });
 });
 
@@ -8917,14 +10309,15 @@ function revealFeedback(){
   const r = quizState.responses[quizState.idx];
   const ok = isResponseCorrect(q, r);
   const fb = $("#feedback");
+  const s = scoreSoFar();
+  $("#scorepill").textContent = s.right + " ✓";
+  $("#wrongpill").textContent = s.wrong + " ✗";
 
   if (!quizState.practice) {
     announce("Answer recorded. Question " + (quizState.idx + 1) + " of " + quizState.questions.length);
-    const s = scoreSoFar();
-    $("#scorepill").textContent = s.right + " ✓";
-    $("#wrongpill").textContent = s.wrong + " ✗";
     return;
   }
+  if (q.type === "flashcard") { announce(ok ? "Marked as known" : "It comes back tomorrow"); return; }
 
   const confident = quizState.confidences[quizState.idx] === "high";
   fb.className = "feedback " + (ok ? "ok" : "no") + ((!ok && confident) ? " hypercorrect" : "");
@@ -8934,27 +10327,26 @@ function revealFeedback(){
   if (q.type === "mcq" && !ok) html += "The answer is <b>" + letter(q.answer) + "</b>. ";
   if (q.explanation) html += "<br>" + q.explanation;
   fb.innerHTML = html;
+  if (!ok) fb.appendChild(reasonRow(q.id));
   fb.style.display = "block";
-
-  const s = scoreSoFar();
-  $("#scorepill").textContent = s.right + " ✓";
-  $("#wrongpill").textContent = s.wrong + " ✗";
   announce((ok ? "Correct. " : "Incorrect. ") + (q.explanation ? String(q.explanation).replace(/<[^>]+>/g, " ") : ""));
 }
 
 $("#hintBtn").addEventListener("click", () => {
   const q = quizState.questions[quizState.idx];
-  if (!q.hint) return;
-  $("#hintBox").innerHTML = "<b>Hint:</b> " + q.hint;
-  $("#hintBox").classList.add("show");
-  quizState.hintShown[quizState.idx] = true;
-  $("#hintBtn").disabled = true;
-  announce("Hint: " + String(q.hint).replace(/<[^>]+>/g, " "));
+  const hints = hintList(q);
+  if (!hints.length) return;
+  const n = Math.min((quizState.hintShown[quizState.idx] || 0) + 1, hints.length);
+  quizState.hintShown[quizState.idx] = n;
+  showHints($("#hintBox"), $("#hintBtn"), hints, n);
+  announce("Hint: " + String(hints[n - 1]).replace(/<[^>]+>/g, " "));
 });
 $("#prevBtn").addEventListener("click", () => {
+  commitPending();
   if (quizState.idx > 0) { quizState.idx--; renderQ(); $("#qtext").focus(); }
 });
 $("#nextBtn").addEventListener("click", () => {
+  commitPending();
   if (quizState.idx < quizState.questions.length - 1) { quizState.idx++; renderQ(); $("#qtext").focus(); }
   else finishQuiz();
 });
@@ -8971,6 +10363,9 @@ $("#practiceMistakesBtn").addEventListener("click", () => {
    RESULTS
    ============================================================ */
 function finishQuiz(){
+  commitPending();
+  stopTimer();
+  clearSession();
   const n = quizState.questions.length;
   const s = scoreSoFar();
   const skipped = n - s.right - s.wrong;
@@ -8988,10 +10383,72 @@ function finishQuiz(){
     pct >= 50 ? "Halfway. The review below is the useful part." :
                 "Early days — work the explanations, then run it again.";
   $("#reviewWrap").classList.add("hide");
+  $("#reviewBtn").textContent = "Review answers";
   buildReview();
+  renderTopicBreakdown();
   showView("results", "#resultsH");
   announce("Finished. " + s.right + " of " + n + " correct.");
 }
+
+/* One bar row, shared by the home radar and the results breakdown. A single
+   series, so no legend: the heading names it, and every row prints its own
+   number — the bar is never the only way to read the value. */
+function radarRow(tag, name, sub, acc, detail){
+  const pct = Math.round(acc * 100);
+  return '<' + tag + ' class="radar-row"' + (tag === "button" ? ' type="button"' : '') + '>' +
+    '<span class="radar-name">' + escapeHTML(name) + (sub ? '<small>' + escapeHTML(sub) + '</small>' : '') + '</span>' +
+    '<span class="radar-bar" aria-hidden="true"><i style="width:' + pct + '%"></i></span>' +
+    '<span class="radar-val"><b>' + pct + '%</b> · ' + escapeHTML(detail) + '</span></' + tag + '>';
+}
+const topicLabel = k => TOPIC_BY[String(k)] ? topicShort(k) : "General";
+
+function renderTopicBreakdown(){
+  const by = {};
+  quizState.questions.forEach((q, i) => {
+    const t = by[String(q.topic)] || (by[String(q.topic)] = { right: 0, n: 0 });
+    t.n++;
+    if (isResponseCorrect(q, quizState.responses[i])) t.right++;
+  });
+  const keys = Object.keys(by);
+  $("#rTopics").classList.toggle("hide", keys.length < 2);
+  $("#rTopicList").innerHTML = keys
+    .sort((a, b) => by[a].right / by[a].n - by[b].right / by[b].n)
+    .map(k => radarRow("div", topicLabel(k), "", by[k].right / by[k].n, by[k].right + "/" + by[k].n))
+    .join("");
+}
+
+/* ---- home: the due queue and the weak-topic radar ---- */
+const RADAR_MIN = 4;   // fewer answers than this is noise, not a weak spot
+function renderHomeInsights(){
+  const due = dueItems().length;
+  $("#dueCard").classList.toggle("hide", !due);
+  $("#dueCount").textContent = due + " due today";
+
+  const by = {};
+  ITEMS.forEach(it => {
+    const s = progress.stats[it.id];
+    if (!s || !s.n || !TOPIC_BY[String(it.topic)]) return;
+    const t = by[String(it.topic)] || (by[String(it.topic)] = { n: 0, ok: 0, why: {} });
+    t.n += s.n; t.ok += s.ok;
+    if (s.why) t.why[s.why] = (t.why[s.why] || 0) + 1;
+  });
+  const rows = Object.keys(by).filter(k => by[k].n >= RADAR_MIN && by[k].ok < by[k].n)
+    .sort((a, b) => by[a].ok / by[a].n - by[b].ok / by[b].n).slice(0, 5);
+  $("#radar").classList.toggle("hide", !rows.length);
+  const list = $("#radarList");
+  list.innerHTML = rows.map(k => {
+    const t = by[k];
+    const top = Object.keys(t.why).sort((a, b) => t.why[b] - t.why[a])[0];
+    return radarRow("button", topicLabel(k), top ? "mostly " + REASON_LABEL[top] : "", t.ok / t.n, t.ok + "/" + t.n + " right");
+  }).join("");
+  list.querySelectorAll(".radar-row").forEach((b, i) => b.addEventListener("click", () => practiseTopic(rows[i])));
+}
+// Missed items first, then unseen ones, then the ones you get right.
+function practiseTopic(tid){
+  const acc = it => { const s = progress.stats[it.id]; return s && s.n ? s.ok / s.n : 0.5; };
+  startQuiz(shuffle(itemsOfTopic(tid).slice()).sort((a, b) => acc(a) - acc(b)).slice(0, 10));
+}
+$("#dueBtn").addEventListener("click", () => startQuiz(pickCards(dueItems(), 30)));
 
 function buildReview(){
   const list = $("#reviewList");
@@ -9001,11 +10458,13 @@ function buildReview(){
     const ok = isResponseCorrect(q, r);
     const div = document.createElement("div");
     div.className = "rev " + (ok ? "ok" : (r === null ? "skip" : "no"));
-    let html = '<div class="rev-q">' + (i + 1) + ". " + (q.stem || q.title || q.prompt || "") + "</div>";
+    let html = '<div class="rev-q">' + (i + 1) + ". " + (q.type === "flashcard" ? q.front : (q.stem || q.title || q.prompt || "")) + "</div>";
     if (q.type === "mcq") {
       html += '<div class="rev-a">Correct: <b>' + letter(q.answer) + "</b> — " + (q.options || [])[q.answer] + "</div>";
       if (r !== null && r !== q.answer) html += '<div class="rev-y">You chose: ' + letter(r) + " — " + (q.options || [])[r] + "</div>";
       if (r === null) html += '<div class="rev-y">Skipped</div>';
+    } else if (q.type === "flashcard") {
+      html += '<div class="rev-a">' + (ok ? "Knew it" : (r === null ? "Skipped" : "Didn’t know")) + '</div><div class="rev-e">' + q.back + "</div>";
     } else {
       html += '<div class="rev-a">' + (ok ? "Solved" : (r === null ? "Skipped" : "Not solved")) + "</div>";
       const sol = solutionHTML(q);
@@ -9013,6 +10472,8 @@ function buildReview(){
     }
     if (q.explanation) html += '<div class="rev-e">' + q.explanation + "</div>";
     div.innerHTML = html;
+    // Exam mode hides feedback, so this is the first chance to say why.
+    if (r !== null && !ok && q.type !== "flashcard") div.appendChild(reasonRow(q.id));
     list.appendChild(div);
   });
   $("#reviewHeading").textContent = "Review · " + quizState.questions.length + " questions";
@@ -9070,7 +10531,11 @@ function fallbackCopy(text, done){
 /* ============================================================
    TUTORIAL
    ============================================================ */
-const tutState = { topic: null, idx: 0, steps: [] };
+/* One view, two modes. "tutorial" steps count as read when shown; "build"
+   steps belong to a walkthrough and count only when their exercise is solved
+   (or, for a prose-only step, when shown). Keeping the mode explicit is what
+   stops a build step from being filed under the topic's tutorial progress. */
+const tutState = { mode: "tutorial", topic: null, idx: 0, steps: [], walk: null };
 
 function openTutPicker(){
   const list = $("#tutPickList");
@@ -9152,10 +10617,13 @@ function renderSourceFilter(){
   });
 }
 
-function openTutorial(tid){
+// `at` lets search open straight on a step without first marking step 1 read.
+function openTutorial(tid, at){
+  tutState.mode = "tutorial";
+  tutState.walk = null;
   tutState.topic = tid;
   tutState.steps = CONTENT.tutorials[String(tid)] || [];
-  tutState.idx = 0;
+  tutState.idx = Math.min(at || 0, Math.max(0, tutState.steps.length - 1));
   showView("tutView", "#tutViewH");
   renderTutStep();
 }
@@ -9164,26 +10632,33 @@ function renderTutStep(){
   const s = tutState.steps[tutState.idx];
   if (!s) return;
   const n = tutState.steps.length;
+  const build = tutState.mode === "build";
   $("#tutBar").style.width = ((tutState.idx + 1) / n * 100) + "%";
   $("#tutCounter").textContent = (tutState.idx + 1) + " / " + n;
-  $("#tutViewH").textContent = s.title || "Tutorial";
+  $("#tutViewH").textContent = s.title || (build ? "Guided Build" : "Tutorial");
 
+  const tag = build
+    ? tutState.walk.title + " · " + (s._fromTopic ? "practice" : "step " + (tutState.idx + 1))
+    : (s.tag || topicShort(tutState.topic));
   const host = $("#tutContent");
   host.innerHTML =
-    '<div class="step-tag">' + escapeHTML(s.tag || topicShort(tutState.topic)) + '</div>' +
+    '<div class="step-tag">' + escapeHTML(tag) + '</div>' +
     '<div class="step-title">' + escapeHTML(s.title || "") + '</div>' +
     '<div class="step-body">' + (s.html || "") + '</div>';
 
   // Quick-checks, collapsibles, annotated grids and copy buttons, in one call.
   initContentInteractions(host);
-  markTutStep(tutState.topic, tutState.idx);
+  if (!build) markTutStep(tutState.topic, tutState.idx);
+  else if (s.item) renderBuildItem(host, s);
+  else markBuildStep(tutState.walk.id, tutState.idx);   // a prose-only step is done once read
   $("#tutPrev").disabled = tutState.idx === 0;
   $("#tutNext").textContent = (tutState.idx === n - 1) ? "Done ▸" : "Continue ›";
 }
 
-$("#tutPrev").addEventListener("click", () => { if (tutState.idx > 0) { tutState.idx--; renderTutStep(); } });
+$("#tutPrev").addEventListener("click", () => { if (tutState.idx > 0) { tutState.idx--; renderTutStep(); $("#tutViewH").focus(); } });
 $("#tutNext").addEventListener("click", () => {
   if (tutState.idx < tutState.steps.length - 1) { tutState.idx++; renderTutStep(); $("#tutViewH").focus(); }
+  else if (tutState.mode === "build") openBuildPicker();
   else openTutPicker();
 });
 
@@ -9210,7 +10685,7 @@ function addCopyButtons(scope){
 /* ============================================================
    DRILLS
    ============================================================ */
-const drillState = { topic: null, idx: 0, items: [], api: null };
+const drillState = { topic: null, idx: 0, items: [], api: null, recorded: false, missed: false, hints: 0 };
 
 function openDrillPicker(){
   const list = $("#drillPickList");
@@ -9278,10 +10753,9 @@ function renderDrill(){
   $("#codeTopic").textContent = topicShort(item.topic);
   $("#drillTitle").textContent = item.title || "";
   $("#codePrompt").innerHTML = item.prompt || "";
-  $("#codeHintBox").classList.remove("show");
-  $("#codeHintBox").innerHTML = "";
-  $("#codeHintBtn").style.display = item.hint ? "" : "none";
-  $("#codeHintBtn").disabled = false;
+  drillState.recorded = drillState.missed = false;
+  drillState.hints = 0;
+  showHints($("#codeHintBox"), $("#codeHintBtn"), hintList(item), 0);
   $("#codeFeedback").style.display = "none";
   $("#codeResetBtn").classList.remove("hide");
   $("#codeClearBtn").classList.remove("hide");
@@ -9326,9 +10800,15 @@ $("#codeCheckBtn").addEventListener("click", () => {
     : "<b>Not yet.</b> " + (res.wrongList && res.wrongList.length
         ? "Check blank" + (res.wrongList.length > 1 ? "s " : " ") + res.wrongList.join(", ") + "."
         : "See the notes above.");
+  // Only the first Check is scored; later ones just repaint so the miss can be fixed.
+  if (!drillState.recorded) {
+    drillState.recorded = true;
+    drillState.missed = !res.ok;
+    recordResult(item.id, res.ok);
+  }
+  if (drillState.missed) fb.appendChild(reasonRow(item.id));
   fb.style.display = "block";
   announce(res.ok ? "Correct" : "Not yet — see the checklist");
-  recordResult(item.id, res.ok);
   if (res.ok) markDrillDone(item.topic, item.id);
 });
 $("#codeResetBtn").addEventListener("click", () => {
@@ -9347,11 +10827,11 @@ $("#codeClearBtn").addEventListener("click", () => {
   announce("Cleared");
 });
 $("#codeHintBtn").addEventListener("click", () => {
-  const item = drillState.items[drillState.idx];
-  if (!item.hint) return;
-  $("#codeHintBox").innerHTML = "<b>Hint:</b> " + item.hint;
-  $("#codeHintBox").classList.add("show");
-  $("#codeHintBtn").disabled = true;
+  const hints = hintList(drillState.items[drillState.idx]);
+  if (!hints.length) return;
+  drillState.hints = Math.min(drillState.hints + 1, hints.length);
+  showHints($("#codeHintBox"), $("#codeHintBtn"), hints, drillState.hints);
+  announce("Hint: " + String(hints[drillState.hints - 1]).replace(/<[^>]+>/g, " "));
 });
 /* Revealing the solution puts the answers INTO the exercise — blanks filled,
    lines reordered — and then locks Check, because grading a solution you were
@@ -9372,6 +10852,9 @@ $("#codeSolutionBtn").addEventListener("click", () => {
     return;
   }
   const item = drillState.items[drillState.idx];
+  // Asking for the answer before trying is an honest "didn't know": it counts
+  // as the first attempt, so a later Check cannot bank it as a clean solve.
+  if (!drillState.recorded) { drillState.recorded = drillState.missed = true; recordResult(item.id, false); }
   const detail = (drillState.api && drillState.api.reveal) ? drillState.api.reveal() : "";
   panel.innerHTML = '<div class="sp-header">🔓 Solution</div>' + detail +
                     (item.explanation ? '<div class="sp-explanation">' + item.explanation + '</div>' : '');
@@ -9438,61 +10921,82 @@ function walkthroughSteps(w){
 }
 
 function openWalkthrough(w){
-  // Steps render through the tutorial view: prose plus an embedded exercise.
+  tutState.mode = "build";
+  tutState.walk = w;
   tutState.topic = w.topic;
   tutState.idx = 0;
-  const steps = walkthroughSteps(w);
-  tutState._walkSteps = steps;
-  tutState.steps = steps.map((st, i) => ({
-    tag: w.title + " · " + (st._fromTopic ? "practice" : "step " + (i + 1)),
-    title: st.title,
-    html: (st.html || "") + (st.item ? '<div class="build-slot" data-step="' + i + '"></div>' : "")
-  }));
-  tutState._walk = w;
+  tutState.steps = walkthroughSteps(w);
   showView("tutView", "#tutViewH");
-  renderBuildStep();
+  renderTutStep();
 }
 
-function renderBuildStep(){
-  renderTutStep();
-  const w = tutState._walk;
-  if (!w) return;
-  const st = (tutState._walkSteps || [])[tutState.idx];
-  const slot = $("#tutContent .build-slot");
-  if (!st || !st.item || !slot) return;
+const HINT_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5.5 5.5 0 0 0 7 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><line x1="9" y1="18" x2="15" y2="18"></line><line x1="10" y1="22" x2="14" y2="22"></line></svg>';
+const KEY_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"></circle><line x1="10.85" y1="12.15" x2="19" y2="4"></line><line x1="18" y1="5" x2="20" y2="7"></line><line x1="15" y1="8" x2="17" y2="10"></line></svg>';
 
-  const item = Object.assign({ id: w.id + ":" + tutState.idx, topic: w.topic }, st.item);
-  const host = document.createElement("div");
-  slot.appendChild(host);
-  const api = renderItem(host, item);
+/* The exercise inside a build step, with the same Hint / Solution / Check trio
+   the drills have. Solution follows the drill rule: shown means Check is off. */
+function renderBuildItem(host, st){
+  const w = tutState.walk, stepIdx = tutState.idx;
+  const item = Object.assign({ id: w.id + ":" + stepIdx, topic: w.topic }, st.item);
+  const slot = document.createElement("div");
+  slot.className = "build-slot";
+  host.appendChild(slot);
+  const zone = document.createElement("div");
+  slot.appendChild(zone);
+  const api = renderItem(zone, item);
+  const hints = hintList(item);
+  slot.insertAdjacentHTML("beforeend",
+    '<div class="qactions">' +
+      '<button type="button" class="icon-action-btn" data-act="hint">' + HINT_SVG + '</button>' +
+      '<button type="button" class="pill-action-btn" data-act="solution" style="margin-inline-start:auto;height:38px">' + KEY_SVG + ' <span>Solution</span></button>' +
+      '<button type="button" class="btn small" data-act="check">Check ▸</button>' +
+    '</div><div class="hint-box"></div><div class="feedback"></div><div class="solution-panel hide"></div>');
+  const hintBtn = slot.querySelector('[data-act="hint"]'), solBtn = slot.querySelector('[data-act="solution"]');
+  const check = slot.querySelector('[data-act="check"]');
+  const hintBox = slot.querySelector(".hint-box"), fb = slot.querySelector(".feedback"), panel = slot.querySelector(".solution-panel");
+  let shown = 0, recorded = false;
+  showHints(hintBox, hintBtn, hints, 0);
 
-  const bar = document.createElement("div");
-  bar.className = "qactions";
-  bar.style.marginTop = "12px";
-  const check = document.createElement("button");
-  check.className = "btn small";
-  check.textContent = "Check ▸";
-  const fb = document.createElement("div");
-  fb.className = "feedback";
+  hintBtn.addEventListener("click", () => {
+    shown = Math.min(shown + 1, hints.length);
+    showHints(hintBox, hintBtn, hints, shown);
+    announce("Hint: " + String(hints[shown - 1]).replace(/<[^>]+>/g, " "));
+  });
   check.addEventListener("click", () => {
     const res = api.check();
     fb.className = "feedback " + (res.ok ? "ok" : "no");
     fb.innerHTML = res.ok
       ? "<b>That's it.</b>" + (item.explanation ? "<br>" + item.explanation : "")
-      : "<b>Not yet.</b> See the notes above.";
+      : "<b>Not yet.</b> " + (res.wrongList && res.wrongList.length
+          ? "Check blank" + (res.wrongList.length > 1 ? "s " : " ") + res.wrongList.join(", ") + "."
+          : "See the notes above.");
     fb.style.display = "block";
-    if (res.ok) markBuildStep(w.id, tutState.idx);
+    if (res.ok) markBuildStep(w.id, stepIdx);
+    // A drill pulled in from the topic is a real bank item: score its first try.
+    if (st._fromTopic) {
+      if (!recorded) { recorded = true; recordResult(st.item.id, res.ok); }
+      if (res.ok) markDrillDone(st.item.topic, st.item.id);
+    }
     announce(res.ok ? "Correct" : "Not yet");
   });
-  bar.appendChild(check);
-  slot.appendChild(bar);
-  slot.appendChild(fb);
+  solBtn.addEventListener("click", () => {
+    if (!panel.classList.contains("hide")) {
+      panel.classList.add("hide"); panel.innerHTML = "";
+      check.disabled = false;
+      solBtn.querySelector("span").textContent = "Solution";
+      api.reset();
+      return;
+    }
+    if (st._fromTopic && !recorded) { recorded = true; recordResult(st.item.id, false); }
+    panel.innerHTML = '<div class="sp-header">🔓 Solution</div>' + (api.reveal ? api.reveal() : "") +
+                      (item.explanation ? '<div class="sp-explanation">' + item.explanation + '</div>' : '');
+    panel.classList.remove("hide");
+    addCopyButtons(panel);
+    check.disabled = true;
+    solBtn.querySelector("span").textContent = "Hide";
+    announce("Solution revealed. Check is disabled until you hide it.");
+  });
 }
-
-// The tutorial nav must drive build steps when a walkthrough is open.
-const _origTutNext = $("#tutNext").onclick;
-$("#tutNext").addEventListener("click", () => { if (tutState._walk) renderBuildStep(); }, true);
-$("#tutPrev").addEventListener("click", () => { if (tutState._walk) setTimeout(renderBuildStep, 0); });
 
 /* ============================================================
    GLOSSARY
@@ -9579,15 +11083,16 @@ function buildSearchIndex(){
   const strip = h => String(h || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   Object.keys(CONTENT.tutorials).forEach(tid => {
     (CONTENT.tutorials[tid] || []).forEach((s, i) => {
-      idx.push({ kind:"Tutorial", topic: topicShort(tid), title: s.title || "", text: strip(s.html), go: () => { openTutorial(tid); tutState.idx = i; renderTutStep(); } });
+      idx.push({ kind:"Tutorial", topic: topicShort(tid), title: s.title || "", text: strip(s.html), go: () => openTutorial(tid, i) });
     });
   });
   ITEMS.forEach(it => {
+    if (it._gloss) return;                     // already listed as a Term below
     idx.push({
       kind: it.type === "mcq" ? "Question" : (TYPE_LABEL[it.type] || it.type),
       topic: topicShort(it.topic),
-      title: strip(it.stem || it.title || it.prompt),
-      text: strip((it.options || []).join(" · ") + " " + (it.explanation || "") + " " + (it.hint || "")),
+      title: strip(it.type === "flashcard" ? it.front : (it.stem || it.title || it.prompt)),
+      text: strip((it.options || []).join(" · ") + " " + (it.explanation || "") + " " + hintList(it).join(" ") + " " + (it.back || "")),
       go: () => { startQuiz([it]); }
     });
   });
@@ -9680,6 +11185,28 @@ $("#exportBtn").addEventListener("click", () => {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   announce("Progress exported");
 });
+/* ---- print: the reference tabs and the glossary on paper ---------------
+   Built on demand into #printSheet and emptied afterwards; the print stylesheet
+   hides everything else while body.printing-sheet is set. */
+function printCheatSheet(){
+  const strip = s => String(s || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const sheet = $("#printSheet");
+  sheet.innerHTML = '<h1>' + escapeHTML(strip(CONTENT.title) || "Study guide") + ' — cheat sheet</h1>' +
+    CONTENT.reference.map(c => '<section><h2>' + escapeHTML(c.tab) + (c.title ? ' · ' + escapeHTML(c.title) : '') + '</h2>' +
+      (c.html || '') + '</section>').join("") +
+    (CONTENT.glossary.length ? '<section><h2>Glossary</h2><dl>' + CONTENT.glossary.map(g =>
+      '<dt>' + escapeHTML(g.term) + '</dt><dd>' + g.def + '</dd>').join("") + '</dl></section>' : '');
+  sheet.querySelectorAll("details").forEach(d => { d.open = true; });   // collapsed notes print open
+  document.body.classList.add("printing-sheet");
+  window.print();
+}
+window.addEventListener("afterprint", () => {
+  if (!document.body.classList.contains("printing-sheet")) return;
+  document.body.classList.remove("printing-sheet");
+  $("#printSheet").innerHTML = "";
+});
+$("#printBtn").addEventListener("click", printCheatSheet);
+
 $("#importBtn").addEventListener("click", () => $("#importFile").click());
 $("#importFile").addEventListener("change", e => {
   const f = e.target.files && e.target.files[0];
@@ -9693,7 +11220,11 @@ $("#importFile").addEventListener("change", e => {
       }
       if (data.progress) { Object.assign(progress, data.progress); saveProgress(); }
       if (data.mistakes) { mistakes = data.mistakes; saveMistakes(); }
+      progress.stats  = progress.stats  || {};
+      progress.streak = progress.streak || { last: 0, count: 0, best: 0, xp: 0 };
       refreshAllProgress();
+      renderHomeInsights();
+      paintStreak();
       announce("Progress imported");
       alert("Progress restored.");
     } catch (err) { alert("That file could not be read: " + err.message); }
@@ -9709,22 +11240,24 @@ document.addEventListener("keydown", e => {
   const inField = /^(INPUT|TEXTAREA|SELECT)$/.test((e.target.tagName || "")) || e.target.isContentEditable;
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); openSearch(); return; }
   if (!$("#searchModal").classList.contains("hide")) return;
-  if (e.key === "Escape") {
-    if ($("#formulaModal").classList.contains("show")) { closeReference(); return; }
-    if (!$("#setup").classList.contains("hide")) return;
-    goHome(); return;
+  // Escape closes what is on top and nothing more. It used to fall through to
+  // goHome(), and the code editor tells you to press Escape then Tab to leave
+  // it — so following the editor's own advice threw the attempt away.
+  if (e.key === "Escape") { if ($("#formulaModal").classList.contains("show")) closeReference(); return; }
+  if (inField || e.ctrlKey || e.metaKey || e.altKey) return;
+  if ($("#quiz").classList.contains("hide")) return;
+  // Keys on an exercise's own controls (sequence move buttons, flashcard
+  // grades, "why" buttons) belong to that control, not to quiz navigation.
+  if (e.target.closest && e.target.closest("#answers, #feedback") && !e.target.classList.contains("ans")) return;
+  const q = quizState.questions[quizState.idx];
+  if (q && q.type === "mcq" && /^[1-9]$/.test(e.key)) {
+    const btns = $$("#answers .ans");
+    const b = btns[parseInt(e.key, 10) - 1];
+    if (b) { e.preventDefault(); b.click(); }
   }
-  if (inField) return;
-  if (!$("#quiz").classList.contains("hide")) {
-    const q = quizState.questions[quizState.idx];
-    if (q && q.type === "mcq" && /^[1-9]$/.test(e.key)) {
-      const i = parseInt(e.key, 10) - 1;
-      const btns = $$("#answers .ans");
-      if (btns[i]) { e.preventDefault(); btns[i].click(); }
-    }
-  }
-  if (e.key === "ArrowRight") { const b = $("#nextBtn"); if (b && !$("#quiz").classList.contains("hide")) b.click(); }
-  if (e.key === "ArrowLeft")  { const b = $("#prevBtn"); if (b && !$("#quiz").classList.contains("hide") && !b.disabled) b.click(); }
+  // ArrowRight stops at the last question: finishing is a deliberate click.
+  if (e.key === "ArrowRight" && quizState.idx < quizState.questions.length - 1) $("#nextBtn").click();
+  if (e.key === "ArrowLeft" && !$("#prevBtn").disabled) $("#prevBtn").click();
 });
 
 $("#homeBtn").addEventListener("click", goHome);
@@ -9782,6 +11315,10 @@ $("#refHintDismiss").addEventListener("click", () => {
   updateFullscreenIcon();
   updatePoolNote();
   refreshAllProgress();
+  renderHomeInsights();
+  updateResumeButton();
+  paintStreak();
+  $("#printBtn").classList.toggle("hide", !CONTENT.reference.length && !CONTENT.glossary.length);
   showSelfCheck(runSelfCheck());
 })();
 

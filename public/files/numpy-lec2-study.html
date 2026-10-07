@@ -3204,175 +3204,2367 @@
 
 <script type="application/json" id="course-content">
 {
-  "_readme": [
-    "==================================================================",
-    "HOW TO MAKE A STUDY GUIDE FOR A NEW COURSE",
-    "==================================================================",
-    "Everything the guide knows lives in THIS block. The code below it never",
-    "changes. Edit this JSON in place, save, reload. No build step.",
-    "",
-    "STEP 1 - change instanceId to something unique for the course.",
-    "  It becomes the localStorage prefix, so two guides on the same site",
-    "  can never overwrite each other's progress. Get this wrong and they will.",
-    "",
-    "STEP 2 - set language to one of: python, generic.",
-    "  This chooses the syntax checker used by 'write' drills. 'generic' does",
-    "  no syntax checking, which is what you want for a non-coding course.",
-    "",
-    "STEP 3 - list your topics, then fill items/tutorials/reference/glossary.",
-    "  Modes appear ONLY if there is content for them. Delete the walkthroughs",
-    "  array and the Guided Build card disappears by itself - never edit HTML",
-    "  to hide a mode.",
-    "",
-    "ITEM TYPES (the 'type' field):",
-    "  mcq       stem, options[], answer (0-based index), hint?, explanation?",
-    "  cloze     template with ___ per blank, blanks[] with answers[]",
-    "              blanks sharing a swapGroup may be filled in either order",
-    "  sequence  lines[], dependencies[[a,b]] meaning 'line a must precede b'",
-    "              use pairwise deps, not one fixed order, so genuinely",
-    "              interchangeable lines both pass",
-    "  write     tokens[] of {pattern, flags, hint} - regex the answer must",
-    "              match - plus a solution string",
-    "",
-    "OPTIONAL FIELDS ON ANY ITEM:",
-    "  source     e.g. \"lab sheet\" - as soon as ANY item has one, a filter",
-    "               switch appears so you can drill only those.",
-    "  reference  the name of a reference tab this item needs. Shows a badge",
-    "               that opens the sheet at that tab.",
-    "  difficulty 1-5, for your own sorting. Not used by the engine yet.",
-    "",
-    "MARKUP YOU CAN USE INSIDE ANY html FIELD:",
-    "  <div class=\"key-box\">   the thing to remember",
-    "  <div class=\"warn-box\">  the trap",
-    "  <div class=\"why-box\">   the reason behind a rule",
-    "  <div class=\"code-block\">  monospace block, gets a Copy button",
-    "  <table class=\"data-table\">",
-    "  <div class=\"visual-flow\"><div class=\"flow-box\">..</div></div>  simple diagram",
-    "  <div class=\"try-box\">   inline quick-check (see the example below)",
-    "  <div class=\"more-details\"><button class=\"md-toggle\" data-label=\"the detail\">",
-    "    </button><div class=\"md-body\">..</div></div>",
-    "               a collapsible that types itself out when opened",
-    "  <div class=\"register-visual\"><div class=\"reg-title\">..</div>",
-    "    <div class=\"reg-grid\"><div class=\"reg-bit\" data-desc=\"NAME - what it does\">",
-    "    label<span class=\"bit-no\">pos</span></div>..</div>",
-    "    <div class=\"reg-desc-box\"></div></div>",
-    "               a grid of labelled cells; hover or focus one to explain it.",
-    "               Good for bitfields, format specs, matrices, layered diagrams.",
-    "",
-    "REFERENCE TABS take an optional \"notice\" - a caution line above the tab.",
-    "WALKTHROUGHS append every drill in their topic after the declared steps;",
-    "  set \"includeDrills\": false to stop that.",
-    "HINTS may be one string or a list; each press of Hint shows the next one.",
-    "FLASHCARDS: every glossary term is a card automatically. Extra cards are",
-    "  items with \"type\": \"flashcard\", \"front\" and \"back\" (markup allowed).",
-    "",
-    "TWO RULES THAT WILL BITE YOU:",
-    "  1. Never write a literal end-script tag in this block. It ends the",
-    "     block early and the whole page goes blank. Write <\\/script>.",
-    "  2. Regex patterns are JSON strings: a regex \\s is written here with TWO",
-    "     backslashes then s, exactly as in the t2d01 example. Four is a mistake;",
-    "     the self-check flags any token that fails its own solution.",
-    "",
-    "The guide checks itself on load. If anything is wrong - an answer index",
-    "out of range, a duplicate option, a topic that does not exist, a broken",
-    "regex - a red banner appears at the top listing the problems. Open the",
-    "console for the full list. A clean load means no banner.",
-    "=================================================================="
-  ],
-
-  "instanceId": "CHANGE-ME",
-  "language": "generic",
-  "title": "Course Title<br>Study Guide",
-  "eyebrow": "COURSE CODE · TERM",
-  "subtitle": "One line describing what this covers",
-  "welcome": "<p>Replace this with a short introduction to the course.</p><ul><li><strong>📖 Tutorial:</strong> read a topic end to end.</li><li><strong>⚡ Practice Quiz:</strong> exam-style questions.</li><li><strong>🔧 Drills:</strong> fill blanks, order lines, write answers.</li></ul>",
-
+  "instanceId": "numpy-lec2",
+  "language": "python",
+  "title": "NumPy<br>Lecture 2 · Study Guide",
+  "eyebrow": "DATA SCIENCE · LECTURE 2",
+  "subtitle": "The whole notebook — arrays, indexing, 2D arrays, axes, random numbers, linear algebra — with every practice question built step by step",
+  "welcome": "<p>A lesson for the whole <strong>Lecture 2 NumPy notebook</strong> (2.1–2.7), with the Python and maths it assumes you already know.</p><div class=\"key-box\"><b>If your mind is blank, go in this order:</b><br>1. <b>📖 Tutorial → Prerequisites: Python</b> and <b>Prerequisites: maths</b>. Short; skip any step you already know.<br>2. The notebook's sections, one topic each: <b>Arrays (2.1–2.2) → Indexing 1 (2.3) → 2D arrays (2.4) → Indexing 2 (2.5) → Advanced (2.6) → Comprehensive (2.7)</b>.<br>3. After each section, its practice question in <b>🧪 Guided Build</b>. You write every piece, with hints, a check at each step, and the expected output at the end.<br><b>Only need 2-2 right now?</b> Do Python steps 1–3, maths step 1, then Guided Build → <i>Practice Question 2-2</i>.</div><p>📋 <b>Reference</b> has a January 2010 calendar with every day's index, plus the slicing, axis, random and linear-algebra tables. Keep it open beside a question.</p><ul><li><strong>⚡ Practice Quiz / 🃏 Flashcards:</strong> quick recall; misses come back tomorrow.</li><li><strong>🔧 Drills:</strong> fill the blanks and write the code. The checker reads your code; it does not run it — run it in Colab to see the numbers.</li></ul>",
   "strings": {
-    "bismillah": "",
-    "dua": "",
-    "credits": "Built by <span class=\"author-name\">Your Name</span>",
-    "meta": "",
-    "referenceLabel": "📋 Reference"
+    "bismillah": "قبل ما تبدا سمي الله و صلي عالنبي",
+    "dua": "لا تَنْسَوْنَا مِنْ صَالِحِ دُعَائِكُمْ",
+    "credits": "Built by <span class=\"author-name\">Khairy Islam Shaheen</span>",
+    "meta": "Lecture 2 · NumPy · sections 2.1–2.7",
+    "referenceLabel": "📋 Reference",
+    "referenceHint": "The January calendar with indexes, slicing and axis rules, and every function the notebook uses."
   },
-
   "links": [
-    { "label": "Reference", "url": "https://example.com", "text": "An external resource for this subject" }
+    {
+      "label": "NumPy docs",
+      "url": "https://numpy.org/doc/stable/",
+      "text": "The official documentation"
+    },
+    {
+      "label": "Indexing",
+      "url": "https://numpy.org/doc/stable/user/basics.indexing.html",
+      "text": "Indexing and slicing on arrays"
+    },
+    {
+      "label": "Broadcasting",
+      "url": "https://numpy.org/doc/stable/user/basics.broadcasting.html",
+      "text": "When shapes can be combined"
+    },
+    {
+      "label": "Google Colab",
+      "url": "https://colab.research.google.com/",
+      "text": "Run the notebook"
+    }
   ],
-
   "topics": [
-    { "id": "t1", "name": "First Topic (Lecture 1)", "short": "First", "icon": "1️⃣",
-      "desc": "A short description shown on the topic card" },
-    { "id": "t2", "name": "Second Topic (Lecture 2)", "short": "Second", "icon": "2️⃣",
-      "desc": "Another short description" }
+    {
+      "id": "pre",
+      "name": "Prerequisites: Python",
+      "short": "Python prereqs",
+      "icon": "🧰",
+      "desc": "Indexing from 0, slicing with a step, dates to indexes, imports and functions, lists of lists"
+    },
+    {
+      "id": "math",
+      "name": "Prerequisites: maths",
+      "short": "Maths prereqs",
+      "icon": "📏",
+      "desc": "Mean, standard deviation, z-scores, vector length, dot product, angles, matrix shapes"
+    },
+    {
+      "id": "np1",
+      "name": "Arrays & element-wise maths (2.1–2.2)",
+      "short": "Arrays",
+      "icon": "🔢",
+      "desc": "np.array, element-wise maths, broadcasting, mean / std / sum / max, lists vs arrays"
+    },
+    {
+      "id": "np2",
+      "name": "Indexing 1 — 1D arrays (2.3)",
+      "short": "Indexing 1",
+      "icon": "🎯",
+      "desc": "One element, a slice, a list of positions, a True/False filter"
+    },
+    {
+      "id": "np3",
+      "name": "2D arrays & axes (2.4)",
+      "short": "2D arrays",
+      "icon": "🧮",
+      "desc": "Rows and columns, reshape, element-wise maths in 2D, axis=0 vs axis=1"
+    },
+    {
+      "id": "np4",
+      "name": "Indexing 2 — 2D arrays (2.5)",
+      "short": "Indexing 2",
+      "icon": "🗂️",
+      "desc": "[row, col], picking rows and columns, submatrices with np.ix_, 2D slicing and masks"
+    },
+    {
+      "id": "np5",
+      "name": "NumPy advanced (2.6)",
+      "short": "Advanced",
+      "icon": "🎲",
+      "desc": "Constants and inf, random arrays and seeds, transpose, matrix multiplication, linalg"
+    },
+    {
+      "id": "np6",
+      "name": "Comprehensive question (2.7)",
+      "short": "Comprehensive",
+      "icon": "🧭",
+      "desc": "Grouping similar vectors with a random rotation — the LSH idea from the Reformer paper"
+    }
   ],
-
   "tutorials": {
-    "t1": [
-      { "tag": "Introduction", "title": "The first step",
-        "html": "<p>Prose goes here. You can use the styled boxes:</p><div class=\"key-box\"><b>key-box</b> for the thing to remember.</div><div class=\"warn-box\"><b>warn-box</b> for the trap.</div><div class=\"why-box\"><b>why-box</b> for the reason behind a rule.</div><p>Code:</p><div class=\"code-block\">example = 1  <span class=\"cmt\"># comment</span></div><p>Tables:</p><table class=\"data-table\"><tr><th>A</th><th>B</th></tr><tr><td>1</td><td>2</td></tr></table><p>And a quick check, so reading stays active:</p><div class=\"try-box\"><div class=\"try-q\">The question goes here.</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">The right answer</div><div class=\"try-opt\" data-ok=\"false\">A wrong answer</div><div class=\"try-opt\" data-ok=\"false\">Another wrong answer</div></div><div class=\"try-fb\">The explanation shown after they pick.</div></div>" }
+    "pre": [
+      {
+        "tag": "Python 1",
+        "title": "Positions start at 0",
+        "html": "<p>A list or array numbers its slots from <b>0</b>, not 1. Negative numbers count from the end.</p><div class=\"code-block\">temps = [12, 15, 9, 20]\ntemps[0]    # 12  - the first item\ntemps[3]    # 20  - the fourth item\ntemps[-1]   # 20  - the last item\ntemps[4]    # IndexError - there is no fifth slot</div><div class=\"key-box\">Item number <b>n</b>, counting like a human from 1, lives at index <b>n − 1</b>.</div><div class=\"try-box\"><div class=\"try-q\"><code>x = [5, 10, 15, 20, 25]</code>. What is <code>x[2]</code>?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"false\">10</div><div class=\"try-opt\" data-ok=\"true\">15</div><div class=\"try-opt\" data-ok=\"false\">20</div></div><div class=\"try-fb\">Index 2 is the <b>third</b> item: 5 is index 0, 10 is index 1, 15 is index 2.</div></div>"
+      },
+      {
+        "tag": "Python 2",
+        "title": "Slicing: start : stop : step",
+        "html": "<p>A slice takes a run of items. All three parts are optional.</p><table class=\"data-table\"><tr><th>Part</th><th>Meaning</th><th>If you leave it out</th></tr><tr><td><code>start</code></td><td>first index taken</td><td>0</td></tr><tr><td><code>stop</code></td><td>index to stop <b>before</b>; never included</td><td>run to the end</td></tr><tr><td><code>step</code></td><td>jump size: 7 takes every 7th item</td><td>1</td></tr></table><div class=\"code-block\">a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\na[2:5]      # [2, 3, 4]        stop 5 is not included\na[:3]       # [0, 1, 2]        from the start\na[-2:]      # [8, 9]           the last two\na[::3]      # [0, 3, 6, 9]     every 3rd item\na[1::3]     # [1, 4, 7]        start at 1, then every 3rd</div><div class=\"why-box\"><b>Why this matters:</b> \"every Monday\" is \"start at the first Monday, then every 7th day\". That's one slice: <code>[first_monday::7]</code>. And \"three days either side of day d\" is one slice too (Practice 2-4).</div><div class=\"try-box\"><div class=\"try-q\"><code>a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code>. What is <code>a[2::4]</code>?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">[2, 6]</div><div class=\"try-opt\" data-ok=\"false\">[2, 6, 10]</div><div class=\"try-opt\" data-ok=\"false\">[2, 3, 4, 5]</div></div><div class=\"try-fb\">Start at index 2, jump 4 to index 6, then jump 4 to index 10, which doesn't exist, so the slice stops. Slices don't raise IndexError.</div></div>"
+      },
+      {
+        "tag": "Python 3",
+        "title": "Turning a date into an index",
+        "html": "<p>The notebook stores January 2010 one day per row: <b>1 January is index 0</b>, so <b>day d is index d − 1</b>. The notebook also tells you 1 January 2010 was a <b>Friday</b>.</p><p>Count forward from Friday: Fri 1 (index 0), Sat 2 (1), Sun 3 (2), <b>Mon 4 (index 3)</b>. Weekdays repeat every 7 days, so the Mondays are 4, 11, 18 and 25 January: indexes 3, 10, 17 and 24.</p><table class=\"data-table\"><tr><th>Fri</th><th>Sat</th><th>Sun</th><th><b>Mon ★</b></th><th>Tue</th><th>Wed</th><th>Thu</th></tr><tr><td>Jan 1<br><small>index 0</small></td><td>Jan 2<br><small>index 1</small></td><td>Jan 3<br><small>index 2</small></td><td><b>Jan 4<br><small>index 3</small></b></td><td>Jan 5<br><small>index 4</small></td><td>Jan 6<br><small>index 5</small></td><td>Jan 7<br><small>index 6</small></td></tr><tr><td>Jan 8<br><small>index 7</small></td><td>Jan 9<br><small>index 8</small></td><td>Jan 10<br><small>index 9</small></td><td><b>Jan 11<br><small>index 10</small></b></td><td>Jan 12<br><small>index 11</small></td><td>Jan 13<br><small>index 12</small></td><td>Jan 14<br><small>index 13</small></td></tr><tr><td>Jan 15<br><small>index 14</small></td><td>Jan 16<br><small>index 15</small></td><td>Jan 17<br><small>index 16</small></td><td><b>Jan 18<br><small>index 17</small></b></td><td>Jan 19<br><small>index 18</small></td><td>Jan 20<br><small>index 19</small></td><td>Jan 21<br><small>index 20</small></td></tr><tr><td>Jan 22<br><small>index 21</small></td><td>Jan 23<br><small>index 22</small></td><td>Jan 24<br><small>index 23</small></td><td><b>Jan 25<br><small>index 24</small></b></td><td>Jan 26<br><small>index 25</small></td><td>Jan 27<br><small>index 26</small></td><td>Jan 28<br><small>index 27</small></td></tr><tr><td>Jan 29<br><small>index 28</small></td><td>Jan 30<br><small>index 29</small></td><td>Jan 31<br><small>index 30</small></td><td></td><td></td><td></td><td></td></tr></table><div class=\"warn-box\">The classic slip: \"Monday is the 4th, so index 4.\" No. The 4th day lives at index <b>3</b>.</div><div class=\"try-box\"><div class=\"try-q\">With 1 January at index 0 and a Friday, which index is the first <b>Wednesday</b>?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">5</div><div class=\"try-opt\" data-ok=\"false\">6</div><div class=\"try-opt\" data-ok=\"false\">2</div></div><div class=\"try-fb\">Wednesday is 6 January (Fri 1, Sat 2, Sun 3, Mon 4, Tue 5, Wed 6), and day 6 is index 5.</div></div>"
+      },
+      {
+        "tag": "Python 4",
+        "title": "Imports, aliases and functions",
+        "html": "<p>Two ways to load a library, both used in the notebook:</p><div class=\"code-block\">import numpy as np            # the whole library, called np\nfrom numpy import random      # just the random module: random.rand()\nfrom numpy import linalg as LA  # just linalg, called LA: LA.norm()</div><p>A function takes inputs and <b>returns</b> a result. Without <code>return</code> it hands back <code>None</code>, a silent bug in the practice questions that ask you to \"return\" an array.</p><div class=\"code-block\">def double(x):\n    return x * 2      # double(3) -&gt; 6\n\ndef broken(x):\n    x * 2             # computed, then thrown away: broken(3) -&gt; None</div><div class=\"try-box\"><div class=\"try-q\">After <code>from numpy import linalg as LA</code>, how do you call the norm function?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">LA.norm(x)</div><div class=\"try-opt\" data-ok=\"false\">np.LA.norm(x)</div><div class=\"try-opt\" data-ok=\"false\">linalg.norm(x)</div></div><div class=\"try-fb\">The alias replaces the name: <code>LA</code> <i>is</i> numpy's linalg module now. (<code>np.linalg.norm(x)</code> also works.)</div></div>"
+      },
+      {
+        "tag": "Python 5",
+        "title": "Lists of lists: rows and columns",
+        "html": "<p>A table is a list of rows, and each row is a list. The first index picks the row; the second picks the item inside that row.</p><div class=\"code-block\">table = [[1, 2],\n         [3, 4],\n         [5, 6]]\ntable[0]       # [1, 2]   - row 0\ntable[2][0]    # 5        - row 2, then item 0 of that row\nlen(table)     # 3        - how many rows</div><p>A NumPy 2D array is the same idea with a nicer syntax: <code>X[2, 0]</code> instead of <code>table[2][0]</code>. That's sections 2.4 and 2.5.</p><div class=\"try-box\"><div class=\"try-q\">Using <code>table</code> above, what is <code>table[1][1]</code>?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">4</div><div class=\"try-opt\" data-ok=\"false\">2</div><div class=\"try-opt\" data-ok=\"false\">3</div></div><div class=\"try-fb\">Row 1 is [3, 4]; item 1 of that is 4.</div></div>"
+      }
+    ],
+    "math": [
+      {
+        "tag": "Maths 1",
+        "title": "Mean and standard deviation",
+        "html": "<p>The <b>mean</b> μ is the average: add everything up and divide by how many there are (N).</p><p>The <b>standard deviation</b> σ measures how spread out the values are around that mean:</p><div class=\"formula-box\"><div class=\"math-eq\">σ = √( Σ (x − μ)² ÷ N )</div></div><p>Read it inside out: take each value's distance from the mean, square it, average those squares, then take the square root.</p><div class=\"code-block\">data = (-5, 0, 5)\nmean           = (-5 + 0 + 5) / 3     = 0\nsquared gaps   = 25, 0, 25\ntheir average  = 50 / 3               = 16.67\nstd            = sqrt(16.67)          = 4.08</div><div class=\"key-box\">Same mean, wider spread, bigger σ. (-100, 0, 100) also has mean 0, but σ = 81.6. If every value is the same, σ = 0.</div><div class=\"try-box\"><div class=\"try-q\">Which has the larger standard deviation?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"false\">(4, 5, 6)</div><div class=\"try-opt\" data-ok=\"true\">(0, 5, 10)</div><div class=\"try-opt\" data-ok=\"false\">They are equal — both have mean 5</div></div><div class=\"try-fb\">Both have mean 5, but (0, 5, 10) sits further from it: σ ≈ 4.08 against σ ≈ 0.82.</div></div>"
+      },
+      {
+        "tag": "Maths 2",
+        "title": "Z-scores: standardising",
+        "html": "<p>A <b>z-score</b> says how many standard deviations a value is from the mean:</p><div class=\"formula-box\"><div class=\"math-eq\">z = (x − μ) ÷ σ</div></div><p>Standardising every value this way gives data with mean 0 and standard deviation 1. That puts TMAX in °C and PRCP in mm on the same scale. Practice 2-3 and 2-4 are both this formula.</p><div class=\"code-block\">mean 4, std 2:\nx = 10  -&gt;  z = (10 - 4) / 2 = 3     three std above the mean\nx = 4   -&gt;  z = 0                    exactly average\nx = 1   -&gt;  z = -1.5                 one and a half std below</div><div class=\"warn-box\">If every value in a group is the same, σ = 0 and z = 0 ÷ 0, which NumPy prints as <code>nan</code> (not a number). You'll see this in Practice 2-4 for a week with no rain.</div><div class=\"try-box\"><div class=\"try-q\">Mean 50, standard deviation 10. What is the z-score of 35?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">-1.5</div><div class=\"try-opt\" data-ok=\"false\">1.5</div><div class=\"try-opt\" data-ok=\"false\">-15</div></div><div class=\"try-fb\">(35 − 50) ÷ 10 = −1.5: one and a half standard deviations below the mean.</div></div>"
+      },
+      {
+        "tag": "Maths 3",
+        "title": "Vectors: length, dot product, angle",
+        "html": "<p>A vector is a list of numbers, like (3, 4). Three numbers you'll need in 2.6 and 2.7:</p><table class=\"data-table\"><tr><th>Name</th><th>Formula</th><th>(3, 4) and (1, 0)</th></tr><tr><td><b>L2 norm</b> (length)</td><td>‖a‖ = √(a₁² + a₂² + …)</td><td>‖(3, 4)‖ = √(9 + 16) = 5</td></tr><tr><td><b>dot product</b></td><td>a·b = a₁b₁ + a₂b₂ + …</td><td>3·1 + 4·0 = 3</td></tr><tr><td><b>angle</b></td><td>cos θ = a·b ÷ (‖a‖ ‖b‖)</td><td>3 ÷ (5 × 1) = 0.6</td></tr></table><p>cos θ = 1 means the vectors point the same way, 0 means they're at right angles, and −1 means they point in opposite directions. <b>Normalising</b> means dividing a vector by its length so its length becomes 1. For two length-1 vectors, the dot product <i>is</i> cos θ.</p><div class=\"try-box\"><div class=\"try-q\">Two vectors have length 1 and dot product 0. What is the angle between them?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"false\">0°</div><div class=\"try-opt\" data-ok=\"true\">90°</div><div class=\"try-opt\" data-ok=\"false\">180°</div></div><div class=\"try-fb\">cos θ = 0 ÷ (1 × 1) = 0, so θ = 90°: at right angles.</div></div>"
+      },
+      {
+        "tag": "Maths 4",
+        "title": "Matrices: shapes, multiplication, transpose",
+        "html": "<p>A matrix of shape (n, m) has n rows and m columns. <b>Matrix multiplication</b> A @ B needs the <i>inner</i> sizes to match, and the outer sizes give the result:</p><div class=\"formula-box\"><div class=\"math-eq\">(n × k) @ (k × m) → (n × m)</div></div><p>Each result entry is a dot product: row i of A with column j of B. Order matters: A @ B is usually different from B @ A.</p><p>The <b>transpose</b> Aᵀ swaps rows and columns, so shape (n, m) becomes (m, n).</p><p>A <b>rotation matrix</b> R turns vectors without changing their length or the angles between them. That's what makes 2.7 work.</p><div class=\"code-block\">(100 x 3) @ (3 x 3)  -&gt;  (100 x 3)     100 vectors, each rotated\n(3 x 2)   @ (3 x 2)  -&gt;  error         inner sizes 2 and 3 differ\n(3 x 2).T             -&gt;  (2 x 3)</div><div class=\"try-box\"><div class=\"try-q\">What shape is (31 × 3) @ (3 × 3)?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">(31, 3)</div><div class=\"try-opt\" data-ok=\"false\">(3, 3)</div><div class=\"try-opt\" data-ok=\"false\">(31, 31)</div></div><div class=\"try-fb\">The inner 3s match and cancel; the outer sizes give 31 × 3.</div></div>"
+      }
+    ],
+    "np1": [
+      {
+        "tag": "2.1–2.2",
+        "title": "Arrays, not lists",
+        "html": "<p>Load the library once, under its usual short name:</p><div class=\"code-block\">import numpy as np</div><p><code>np.array(...)</code> turns a list into an <b>array</b>; <code>.tolist()</code> turns it back. Every element of an array has the same type, and arrays are built for fast maths (NumPy runs in C).</p><div class=\"code-block\">a = np.array([1, 2, 3])\ntype(a)        # &lt;class 'numpy.ndarray'&gt;\na.tolist()     # [1, 2, 3]  - a plain list again</div><div class=\"warn-box\">The same <code>+</code> does different things. On <b>lists</b> it joins them end to end; on <b>arrays</b> it adds position by position. To join arrays, use <code>np.concatenate((a, b))</code>.</div><div class=\"code-block\">[1, 2] + [10, 20]                     # [1, 2, 10, 20]\nnp.array([1, 2]) + np.array([10, 20]) # [11 22]\nnp.concatenate((np.array([1, 2]), np.array([10, 20])))   # [ 1  2 10 20]</div><div class=\"try-box\"><div class=\"try-q\">What does <code>np.array([1, 2, 3]) * 2</code> give?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">[2 4 6]</div><div class=\"try-opt\" data-ok=\"false\">[1 2 3 1 2 3]</div><div class=\"try-opt\" data-ok=\"false\">12</div></div><div class=\"try-fb\">Arrays do maths element by element. A <b>list</b> times 2 would repeat it: [1, 2, 3, 1, 2, 3].</div></div>"
+      },
+      {
+        "tag": "2.2.1",
+        "title": "Loading the weather data",
+        "html": "<p>The notebook reads a NOAA weather CSV straight from the web:</p><div class=\"code-block\">raw = np.loadtxt(URL, delimiter=\",\", usecols=[6, 7, 8], skiprows=1)</div><table class=\"data-table\"><tr><th>Argument</th><th>Means</th></tr><tr><td><code>delimiter=\",\"</code></td><td>columns are separated by commas</td></tr><tr><td><code>usecols=[6, 7, 8]</code></td><td>keep only the 7th–9th columns (indexes start at 0): TMAX, TMIN, PRCP</td></tr><tr><td><code>skiprows=1</code></td><td>skip the header row</td></tr></table><p>The result <code>raw</code> has shape <b>(31, 3)</b>: 31 days of January 2010 by 3 columns. Temperatures are in <b>tenths</b> of °C and rain in tenths of mm, so the notebook divides by 10. A PRCP of <b>999.9</b> (after dividing) means <b>missing</b>; two days, indexes 4 and 5, have it.</p>"
+      },
+      {
+        "tag": "2.2.1",
+        "title": "Element-wise maths and broadcasting",
+        "html": "<p>Every operator works <b>per element</b> (the notebook calls this <i>universal</i>). With a single number, NumPy stretches the number to match the array. That's <b>broadcasting</b>.</p><div class=\"code-block\">tmax = np.array([-178, -244, -194])\ntmax / 10          # [-17.8 -24.4 -19.4]  every element divided\ntmax_c - tmin_c    # day-by-day temperature range\nnp.log1p(prcp)     # log(1 + x) of every element; np.expm1 undoes it</div><p>Broadcasting only stretches a length of <b>1</b>. Two arrays of different lengths, like 5 and 2, raise <code>ValueError: operands could not be broadcast</code>.</p><div class=\"why-box\">Division by zero doesn't crash an array: <code>np.array([1, 2]) / 0</code> gives <code>[inf inf]</code> with a warning, where plain Python <code>2 / 0</code> raises an error. Later libraries (scikit-learn) do choke on <code>inf</code>, so watch for it.</div>"
+      },
+      {
+        "tag": "2.2.1",
+        "title": "Functions that summarise: mean, std, sum, max",
+        "html": "<p>These take a whole array and return <b>one number</b>:</p><table class=\"data-table\"><tr><th>Call</th><th>Gives</th></tr><tr><td><code>np.mean(a)</code></td><td>the average</td></tr><tr><td><code>np.std(a)</code></td><td>the standard deviation (divides by N, exactly the maths formula)</td></tr><tr><td><code>np.sum(a)</code></td><td>the total</td></tr><tr><td><code>np.max(a)</code>, <code>np.min(a)</code></td><td>largest, smallest</td></tr><tr><td><code>np.sqrt(a)</code></td><td>the square root of <b>each</b> element (not a summary)</td></tr></table><div class=\"code-block\">week = np.array([-17.8, -24.4, -19.4, -16.7])\nnp.mean(week)   # -19.575\nnp.max(week)    # -16.7   (the warmest: closest to zero)\nlen(week)       # 4\nweek.shape      # (4,)</div><div class=\"try-box\"><div class=\"try-q\">Which line gives the standard deviation of <code>week</code>?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">np.std(week)</div><div class=\"try-opt\" data-ok=\"false\">np.mean(week) ** 2</div><div class=\"try-opt\" data-ok=\"false\">np.sqrt(week)</div></div><div class=\"try-fb\"><code>np.std</code> does the whole formula. <code>np.sqrt(week)</code> takes the root of each element separately.</div></div>"
+      },
+      {
+        "tag": "2.2.1",
+        "title": "Comparisons give True/False arrays",
+        "html": "<p>Comparing an array gives an array of <code>True</code>/<code>False</code>, one per element, not a single answer.</p><div class=\"code-block\">prcp = np.array([0, 1.5, 0, 0, 3.0])\nprcp == 0          # [ True False  True  True False]\nnp.sum(prcp == 0)  # 3  - True counts as 1, so this counts the dry days</div><p>These True/False arrays are what the indexing topics use as filters.</p>"
+      }
+    ],
+    "np2": [
+      {
+        "tag": "2.3.1",
+        "title": "One element, or several at once",
+        "html": "<div class=\"code-block\">a = np.array([5, 6, 7, 8, 9])\na[0]           # 5\na[-1]          # 9\na[[0, 2, 4]]   # [5 7 9]  - a LIST of positions picks several (arrays only)</div><div class=\"key-box\">Passing a list of indexes only works on arrays; a plain list raises <code>TypeError</code>. It's also a second way to answer 2-2: <code>jan_tmax[[3, 10, 17, 24]]</code>.</div>"
+      },
+      {
+        "tag": "2.3.2",
+        "title": "Slicing with a step",
+        "html": "<p>This works exactly like lists: <code>start:stop:step</code>, with stop not included. The result is a smaller array, so you can pass it straight to <code>np.mean</code>.</p><div class=\"code-block\">jan_tmax[0:7]    # the first week (indexes 0-6)\njan_prcp[::7]    # every Friday: indexes 0, 7, 14, 21, 28\nnp.mean(jan_tmax[0:7])</div><div class=\"try-box\"><div class=\"try-q\"><code>jan_tmax</code> has 31 values (indexes 0–30). How many values does <code>jan_tmax[::7]</code> have?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"false\">4</div><div class=\"try-opt\" data-ok=\"true\">5</div><div class=\"try-opt\" data-ok=\"false\">7</div></div><div class=\"try-fb\">Indexes 0, 7, 14, 21, 28. The next one, 35, is past the end. That's five Fridays in January 2010.</div></div>"
+      },
+      {
+        "tag": "2.3.3",
+        "title": "Filtering with a True/False mask",
+        "html": "<p>Put a True/False array inside the brackets and you get only the elements where it's <code>True</code>. That's <b>boolean indexing</b>.</p><div class=\"code-block\">dry = jan_prcp == 0\njan_tmax[dry]                       # TMAX on dry days only\njan_prcp[jan_prcp &lt; 999.9]          # drop the 999.9 \"missing\" marker</div><p>Combine conditions with <code>&amp;</code> (and), <code>|</code> (or) and <code>~</code> (not), and <b>put each condition in brackets</b>:</p><div class=\"code-block\">cold_dry = (jan_tmax &lt; -10) &amp; (jan_prcp == 0)\nnp.sum(cold_dry)                    # how many days were both</div><div class=\"warn-box\"><code>&amp;</code> binds tighter than <code>&lt;</code>. Without brackets, <code>jan_tmax &lt; -10 &amp; jan_prcp == 0</code> is read as <code>jan_tmax &lt; (-10 &amp; jan_prcp) == 0</code> and fails. Python's <code>and</code>/<code>or</code> don't work on arrays at all.</div>"
+      }
+    ],
+    "np3": [
+      {
+        "tag": "2.4.1",
+        "title": "Creating 2D arrays and reshaping",
+        "html": "<p>In data science, a 2D array is a table: <b>rows are records</b> (days, customers) and <b>columns are attributes</b> (TMAX, TMIN, PRCP). Shape (n, m) means n rows by m columns.</p><div class=\"code-block\">a = np.array([[1, 2],\n              [3, 4],\n              [5, 6]])\na.shape                                   # (3, 2)\n\nnp.array([1, 2, 3, 4, 5, 6]).reshape(3, 2)    # the same 3 x 2 array\nnp.array([1, 2, 3, 4, 5, 6]).reshape(3, -1)   # -1 = \"work it out\": (3, 2)</div><div class=\"warn-box\"><code>reshape</code> can't change the number of elements. Six elements can't become 3 × 1, and <code>reshape(4, -1)</code> fails because 6 isn't divisible by 4. Both raise <code>ValueError</code>.</div><div class=\"try-box\"><div class=\"try-q\">What is <code>np.arange(12).reshape(3, -1).shape</code>?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">(3, 4)</div><div class=\"try-opt\" data-ok=\"false\">(4, 3)</div><div class=\"try-opt\" data-ok=\"false\">(3, 12)</div></div><div class=\"try-fb\">12 elements in 3 rows: −1 becomes 12 ÷ 3 = 4 columns.</div></div>"
+      },
+      {
+        "tag": "2.4.2",
+        "title": "Maths on 2D arrays is still element-wise",
+        "html": "<p>Everything from 2.2 carries over. <code>+ - * /</code> work element by element, and broadcasting still applies.</p><div class=\"code-block\">a = np.array([[1, 2, 3],\n              [4, 5, 6]])\nb = np.array([[1, 1, 2],\n              [3, 5, 8]])\na + b    # [[ 2  3  5]\n         #  [ 7 10 14]]\na * b    # [[ 1  2  6]\n         #  [12 25 48]]   element-wise (\"Hadamard\") product\n\nX = raw / 10      # every TMAX, TMIN and PRCP divided by 10 at once\nnp.exp(a)         # e to the power of each element</div><div class=\"warn-box\"><code>a * b</code> is <b>not</b> matrix multiplication; that's <code>@</code> (2.6). The notebook prints these two results laid out as 3 rows × 2; they're really 2 × 3, the same shape as <code>a</code>.</div>"
+      },
+      {
+        "tag": "2.4.3",
+        "title": "Axis: which direction a summary runs",
+        "html": "<p>On a 2D array, <code>np.min(X)</code> looks at every element and returns one number. Usually you want one result <b>per column</b> or <b>per row</b>, and <code>axis</code> says which:</p><table class=\"data-table\"><tr><th></th><th>runs</th><th>you get</th><th>X is (31, 3) → result</th></tr><tr><td><code>axis=0</code></td><td>down the rows</td><td>one value <b>per column</b></td><td>shape (3,)</td></tr><tr><td><code>axis=1</code></td><td>across the columns</td><td>one value <b>per row</b></td><td>shape (31,)</td></tr><tr><td>no axis</td><td>everything</td><td>one value</td><td>a single number</td></tr></table><div class=\"code-block\">np.min(X)              # -32.8                    coldest anything\nnp.min(X, axis=0)      # [-24.4 -32.8   0. ]      lowest TMAX, TMIN, PRCP\nnp.min(X, axis=1)      # 31 values, one per day\nnp.mean(X, axis=0)     # the average of each column: Practice 2-3</div><div class=\"key-box\">Memory trick: <b>the axis you name is the one that disappears</b>. X is (31, 3); axis=0 removes the 31 and leaves (3,).</div><div class=\"try-box\"><div class=\"try-q\">X has shape (31, 3). What shape is <code>np.std(X, axis=0)</code>?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">(3,)</div><div class=\"try-opt\" data-ok=\"false\">(31,)</div><div class=\"try-opt\" data-ok=\"false\">(31, 3)</div></div><div class=\"try-fb\">axis=0 collapses the 31 rows, leaving one standard deviation per column.</div></div>"
+      }
+    ],
+    "np4": [
+      {
+        "tag": "2.5.1",
+        "title": "[row, column] in one bracket",
+        "html": "<p>A list of lists needs <code>X_list[0][1]</code>. An array takes both indexes in one bracket: <code>X[0, 1]</code>. That's row 0, column 1: the TMIN of 1 January.</p><div class=\"code-block\">X[0]            # row 0: [TMAX, TMIN, PRCP] of 1 January\nX[0, 1]         # one number: row 0, column 1\nX[[0, 2]]       # rows 0 AND 2   (not the same as X[0, 2]!)\nX[:, [0, 2]]    # every row, columns 0 and 2: TMAX and PRCP</div><p><code>:</code> on its own means \"all of this axis\". So <code>X[:, 2]</code> is the whole PRCP column, shape (31,).</p><div class=\"try-box\"><div class=\"try-q\">Which gives every day's TMIN?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">X[:, 1]</div><div class=\"try-opt\" data-ok=\"false\">X[1]</div><div class=\"try-opt\" data-ok=\"false\">X[1, :]</div></div><div class=\"try-fb\">Column 1 for all rows. <code>X[1]</code> and <code>X[1, :]</code> are both row 1: everything about 2 January.</div></div>"
+      },
+      {
+        "tag": "2.5.2",
+        "title": "Picking several rows AND columns",
+        "html": "<p>The notebook's examples use this array:</p><div class=\"code-block\">a = np.array([[1, 2, 3, 4],\n              [5, 6, 7, 8],\n              [9, 1, 2, 3]])</div><p>When you pass <b>two lists</b>, NumPy pairs them up element by element. It does <i>not</i> make a grid:</p><div class=\"code-block\">a[[0, 2], 1]        # [2 1]      rows 0 and 2, column 1        shape (2,)\na[2, [1, 3]]        # [1 3]      row 2, columns 1 and 3        shape (2,)\na[[0, 2], [1, 3]]   # [2 3]      the PAIRS (0,1) and (2,3)     - not a submatrix!</div><p>For the <b>submatrix</b> of rows 0, 2 and columns 1, 3, the row list must point down and the column list across. <code>np.ix_</code> builds that for you:</p><div class=\"code-block\">a[np.ix_([0, 2], [1, 3])]      # [[2 4]\n                               #  [1 3]]\na[[[0], [2]], [[1, 3]]]        # the same, written by hand</div><div class=\"warn-box\">The notebook's comment on <code>a[[[0], [2]], 1]</code> says it returns shape (1, 2). It actually returns <b>(2, 1)</b>: <code>[[2] [1]]</code>. The row list <code>[[0], [2]]</code> points down, so the result does too.</div><div class=\"try-box\"><div class=\"try-q\">What is <code>a[[0, 1], [0, 1]]</code>?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">[1 6]</div><div class=\"try-opt\" data-ok=\"false\">[[1 2] [5 6]]</div><div class=\"try-opt\" data-ok=\"false\">[1 2]</div></div><div class=\"try-fb\">Paired: (0, 0) → 1 and (1, 1) → 6. For the 2 × 2 block you'd need <code>np.ix_</code>.</div></div>"
+      },
+      {
+        "tag": "2.5.2",
+        "title": "Slicing each axis",
+        "html": "<p>Each axis takes its own <code>start:stop:step</code>, separated by a comma.</p><div class=\"code-block\">X[:5]          # the first 5 rows, all columns          (5, 3)\nX[::3, :2]     # every 3rd day, TMAX and TMIN            (11, 2)\nX[:, -2:]      # every day, the last two columns         (31, 2)\nX[1:8]         # rows 1-7: 2 to 8 January                (7, 3)</div><div class=\"why-box\"><code>X[1:8]</code> is exactly the 7-day window Practice 2-4 needs for 5 January: three days before (2, 3, 4) and three after (6, 7, 8).</div>"
+      },
+      {
+        "tag": "2.5.3",
+        "title": "Masks on 2D arrays",
+        "html": "<p>A True/False array of the <b>same shape</b> as X picks out matching elements. The result is flattened to 1D, because the matches don't form a rectangle.</p><div class=\"code-block\">X == 999.9            # (31, 3) True/False: where the missing markers are\nX[X == 999.9]         # [999.9 999.9]  - just the matches, 1D</div><p>Far more useful: a condition on <b>one column</b> to choose <b>rows</b>, then a column to read:</p><div class=\"code-block\">dry = X[:, 2] == 0           # (31,) - one True/False per day\nX[dry]                       # every column, dry days only\nX[dry, 0]                    # TMAX on dry days     &lt;- Practice 2-4 (2)\nX[:5, [True, False, True]]   # first 5 rows, TMAX and PRCP</div><div class=\"try-box\"><div class=\"try-q\">Which gives the average TMAX on days with rain, leaving out the missing 999.9 days?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">np.mean(X[(X[:, 2] > 0) & (X[:, 2] < 999.9), 0])</div><div class=\"try-opt\" data-ok=\"false\">np.mean(X[X[:, 2] > 0, 0])</div><div class=\"try-opt\" data-ok=\"false\">np.mean(X[:, 0] > 0)</div></div><div class=\"try-fb\">Rain means PRCP above 0 but not the 999.9 marker. Without the second condition, the two missing days count as \"rain\".</div></div>"
+      }
+    ],
+    "np5": [
+      {
+        "tag": "2.6.1",
+        "title": "Constants and infinity",
+        "html": "<div class=\"code-block\">np.pi       # 3.141592653589793\nnp.e        # 2.718281828459045\nnp.inf      # infinity\n\n1 + np.inf      # inf\n1 - np.inf      # -inf\n2 * np.inf      # inf\n2 / np.inf      # 0.0\n10000000 &lt; np.inf     # True - every number is below inf</div>"
+      },
+      {
+        "tag": "2.6.2",
+        "title": "Random arrays and seeds",
+        "html": "<p>After <code>from numpy import random</code>:</p><table class=\"data-table\"><tr><th>Call</th><th>Gives</th></tr><tr><td><code>random.rand(5, 5)</code></td><td>uniform numbers in [0, 1), shape (5, 5)</td></tr><tr><td><code>random.randn(5)</code></td><td>standard normal: mean 0, std 1</td></tr><tr><td><code>random.normal(100, 10, (5, 5))</code></td><td>normal with mean 100 and std 10, shape (5, 5)</td></tr><tr><td><code>random.randint(4)</code></td><td>an integer from 0 to <b>3</b></td></tr><tr><td><code>random.randint(2, 10, (3, 3))</code></td><td>integers from 2 to <b>9</b>; the high end is excluded, like a slice's stop</td></tr><tr><td><code>random.seed(seed=32)</code></td><td>fixes the sequence: the same numbers on every run</td></tr></table><div class=\"key-box\">A seed doesn't make one number repeat. After <code>seed(32)</code>, the first <code>rand(5)</code> and the second <code>rand(5)</code> still differ, but re-running the whole cell gives exactly the same two arrays again. That's what \"reproducible\" means.</div><div class=\"try-box\"><div class=\"try-q\">Which values can <code>random.randint(1, 7)</code> return?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">1 to 6</div><div class=\"try-opt\" data-ok=\"false\">1 to 7</div><div class=\"try-opt\" data-ok=\"false\">0 to 7</div></div><div class=\"try-fb\">The upper bound is excluded, so this is a fair die.</div></div>"
+      },
+      {
+        "tag": "2.6.3",
+        "title": "Transpose and matrix multiplication",
+        "html": "<div class=\"code-block\">x = np.arange(1, 4)                  # [1 2 3]\ny = np.arange(6, 9)                  # [6 7 8]\nA = np.arange(1, 10).reshape(3, 3)   # [[1 2 3] [4 5 6] [7 8 9]]\n\nA.T                 # transpose: rows become columns (same as np.transpose(A))\nx @ y               # 44 = 1*6 + 2*7 + 3*8   dot product\nA @ B               # matrix product (same as np.matmul(A, B) and np.dot(A, B))\nA @ x               # [14 32 50]   x treated as a column vector\nx @ A               # [30 36 42]   x treated as a row vector</div><p>Order matters: <code>A @ B</code> and <code>B @ A</code> are generally different.</p><div class=\"warn-box\">A 1D array has no rows or columns, so <code>.T</code> does nothing to it. To get a real row vector, <code>a.reshape(1, -1)</code> gives shape (1, 5). Its <code>.T</code> is then a column, shape (5, 1).</div><div class=\"try-box\"><div class=\"try-q\"><code>a = np.array([1, 0, 1, 0, 1])</code>. What is <code>a.T.shape</code>?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">(5,)</div><div class=\"try-opt\" data-ok=\"false\">(1, 5)</div><div class=\"try-opt\" data-ok=\"false\">(5, 1)</div></div><div class=\"try-fb\">Transposing a 1D array changes nothing. Reshape it to (1, 5) first if you need a row vector.</div></div>"
+      },
+      {
+        "tag": "2.6.3",
+        "title": "linalg: determinant, inverse, norm",
+        "html": "<p>After <code>from numpy import linalg as LA</code>:</p><div class=\"code-block\">LA.det(A)                 # determinant; for A = 1..9 it is 0 (prints ~6.7e-16 or 0)\nLA.inv(M)                 # inverse matrix - LinAlgError if det(M) is 0 (\"singular\")\nLA.norm(x)                # 3.7417  L2 norm: sqrt(1 + 4 + 9)\nLA.norm(x, ord=1)         # 6.0     L1: sum of absolute values\nLA.norm(y, ord=np.inf)    # 8.0     L-infinity: the largest absolute value\nLA.norm(A, axis=1)                  # one norm per ROW, shape (3,)\nLA.norm(A, axis=1, keepdims=True)   # the same, kept as a column: shape (3, 1)</div><div class=\"why-box\"><b>keepdims=True</b> is the trick for normalising rows: dividing a (100, 3) array by a (100, 1) column of norms broadcasts across each row. Dividing by a (100,) array would fail. This is step (2) of the comprehensive question.</div><div class=\"warn-box\">The notebook's comment says <code>LA.inv(B)</code> fails because <b>B</b> is singular. B is random and usually invertible. It's <b>A</b> = 1…9 that is singular (determinant 0); try <code>LA.inv(A)</code> to see the error.</div>"
+      }
+    ],
+    "np6": [
+      {
+        "tag": "2.7",
+        "title": "The problem: group similar vectors, fast",
+        "html": "<p>You have 100 vectors. You want to give \"similar\" vectors (a small angle between them) the same number, and dissimilar ones different numbers. Comparing every pair is n(n−1)/2 comparisons, which gets slow for large n.</p><p>The Reformer paper's trick (<b>cross-polytope LSH</b>, locality-sensitive hashing):</p><ol><li>Rotate <b>all</b> vectors by the same random rotation. Angles between them don't change.</li><li>For each vector, find which of 6 directions it points most towards: +x, +y, +z, −x, −y, −z.</li><li>That direction's number (0–5) is the vector's group. Close vectors usually land in the same group; far-apart ones usually don't.</li></ol><p>Each vector is handled once, with no pairwise comparisons.</p>"
+      },
+      {
+        "tag": "2.7",
+        "title": "The five tools it needs",
+        "html": "<table class=\"data-table\"><tr><th>Step</th><th>Tool</th><th>Shape</th></tr><tr><td>(1) rotate the 100 row vectors</td><td><code>A @ R.T</code></td><td>(100, 3)</td></tr><tr><td>(2) make each row length 1</td><td><code>U = rot / LA.norm(rot, axis=1, keepdims=True)</code></td><td>(100, 3)</td></tr><tr><td>(3) the vectors and their negatives side by side</td><td><code>np.concatenate([U, -U], axis=1)</code></td><td>(100, 6)</td></tr><tr><td>(4) the biggest of the six in each row</td><td><code>np.argmax(..., axis=1).reshape(-1, 1)</code></td><td>(100, 1)</td></tr><tr><td>(5) cosine between every pair</td><td><code>U @ U.T</code></td><td>(100, 100)</td></tr></table><div class=\"why-box\"><b>Why <code>A @ R.T</code>?</b> R rotates a <i>column</i> vector v as <code>R @ v</code>. Your vectors are <i>rows</i> of A, and transposing both sides gives <code>A @ R.T</code>. <code>A @ R</code> applies the reverse rotation, which is still a random rotation, so the method works either way.</div>"
+      },
+      {
+        "tag": "2.7",
+        "title": "Why argmax of [U, −U] finds the direction",
+        "html": "<p>The hint says you can avoid computing inner products. Here's why. For a length-1 vector v = (v₀, v₁, v₂):</p><div class=\"code-block\">v · (+x) =  v0        v · (-x) = -v0\nv · (+y) =  v1        v · (-y) = -v1\nv · (+z) =  v2        v · (-z) = -v2</div><p>So the six columns of <code>[U, −U]</code> <b>are</b> the six inner products already. The direction v is most similar to is the one with the biggest inner product. That's <code>np.argmax(both, axis=1)</code>: column 0 = +x, 1 = +y, 2 = +z, 3 = −x, 4 = −y, 5 = −z.</p><div class=\"try-box\"><div class=\"try-q\">A unit vector is (0.1, −0.9, 0.42). Which column of [U, −U] is the largest?</div><div class=\"try-opts\"><div class=\"try-opt\" data-ok=\"true\">4 (−y)</div><div class=\"try-opt\" data-ok=\"false\">1 (+y)</div><div class=\"try-opt\" data-ok=\"false\">2 (+z)</div></div><div class=\"try-fb\">The six values are 0.1, −0.9, 0.42, −0.1, 0.9, −0.42. The largest is 0.9 at column 4, which is −y.</div></div>"
+      }
     ]
   },
-
   "items": [
-    { "id": "t1q01", "topic": "t1", "type": "mcq",
-      "stem": "The question. Markup like <code>code</code> works here.",
-      "options": ["First option", "The correct one", "Third option", "Fourth option"],
+    {
+      "id": "pre-q01",
+      "topic": "pre",
+      "type": "mcq",
+      "stem": "<code>x = [10, 20, 30, 40]</code>. What is <code>x[-1]</code>?",
+      "options": [
+        "40",
+        "10",
+        "30",
+        "IndexError"
+      ],
+      "answer": 0,
+      "explanation": "Negative indexes count from the end; -1 is the last item."
+    },
+    {
+      "id": "pre-q02",
+      "topic": "pre",
+      "type": "mcq",
+      "stem": "<code>a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code>. What is <code>a[2:8:2]</code>?",
+      "options": [
+        "[2, 4, 6, 8]",
+        "[2, 4, 6]",
+        "[3, 5, 7]",
+        "[2, 3, 4, 5, 6, 7]"
+      ],
       "answer": 1,
-      "hint": ["A nudge, shown only if they ask for it.", "A stronger nudge on the second press."],
-      "explanation": "Why the answer is right, and why the tempting wrong one is wrong." },
-
-    { "id": "t1d01", "topic": "t1", "type": "cloze",
-      "title": "Short title for the drill",
-      "prompt": "What they have to do.",
-      "template": "result = ___(value) + ___",
+      "explanation": "Start at 2, step 2, and stop <b>before</b> 8: indexes 2, 4, 6."
+    },
+    {
+      "id": "pre-q03",
+      "topic": "pre",
+      "type": "mcq",
+      "stem": "What is <code>list(range(31))[3::7]</code>?",
+      "options": [
+        "[3, 10, 17, 24, 31]",
+        "[4, 11, 18, 25]",
+        "[3, 10, 17, 24]",
+        "[3, 7, 11, 15]"
+      ],
+      "answer": 2,
+      "explanation": "Start at 3 and add 7 each time: 3, 10, 17, 24. The next, 31, is past the last index (30), so it isn't included.",
+      "hint": "The step is added to the start each time; the start itself is included."
+    },
+    {
+      "id": "pre-q04",
+      "topic": "pre",
+      "type": "mcq",
+      "stem": "1 January is a Friday and is stored at index 0. Which index holds the first <b>Sunday</b>?",
+      "options": [
+        "3",
+        "1",
+        "6",
+        "2"
+      ],
+      "answer": 3,
+      "explanation": "Sunday is 3 January, and day 3 is index 2."
+    },
+    {
+      "id": "pre-q05",
+      "topic": "pre",
+      "type": "mcq",
+      "stem": "1 January is a Friday at index 0. Which slice picks out every Monday in January?",
+      "options": [
+        "jan[4::7]",
+        "jan[3::7]",
+        "jan[::7]",
+        "jan[3:7]"
+      ],
+      "answer": 1,
+      "explanation": "The first Monday is 4 January, which is index 3, then every 7th day. <code>jan[4::7]</code> is the off-by-one slip; that gives Tuesdays.",
+      "hint": [
+        "Find the first Monday's date, then convert the date to an index.",
+        "Date d is index d − 1."
+      ]
+    },
+    {
+      "id": "pre-q06",
+      "topic": "pre",
+      "type": "mcq",
+      "stem": "After <code>from numpy import linalg as LA</code>, which call works?",
+      "options": [
+        "linalg.norm(x)",
+        "LA.norm(x)",
+        "np.LA.norm(x)",
+        "numpy.LA.norm(x)"
+      ],
+      "answer": 1,
+      "explanation": "The alias <code>LA</code> is the name you imported it under."
+    },
+    {
+      "id": "pre-q07",
+      "topic": "pre",
+      "type": "mcq",
+      "stem": "<code>def f(x): x * 2</code> (no return). What does <code>f(3)</code> give?",
+      "options": [
+        "6",
+        "3",
+        "None",
+        "an error"
+      ],
+      "answer": 2,
+      "explanation": "Without <code>return</code>, a function hands back <code>None</code>; the product is computed and thrown away."
+    },
+    {
+      "id": "pre-q08",
+      "topic": "pre",
+      "type": "mcq",
+      "stem": "<code>t = [[1, 2], [3, 4], [5, 6]]</code>. What is <code>t[2][0]</code>?",
+      "options": [
+        "2",
+        "5",
+        "3",
+        "6"
+      ],
+      "answer": 1,
+      "explanation": "Row 2 is [5, 6]; item 0 of it is 5."
+    },
+    {
+      "id": "pre-q09",
+      "topic": "pre",
+      "type": "mcq",
+      "stem": "Which slice gives the 7 days from 2 January to 8 January, if day d is at index d − 1?",
+      "options": [
+        "X[2:8]",
+        "X[1:7]",
+        "X[1:8]",
+        "X[2:9]"
+      ],
+      "answer": 2,
+      "explanation": "2 January is index 1 and 8 January is index 7. The stop is excluded, so it's <code>[1:8]</code>."
+    },
+    {
+      "id": "math-q01",
+      "topic": "math",
+      "type": "mcq",
+      "stem": "What is the standard deviation of <code>(2, 2, 2)</code>?",
+      "options": [
+        "2",
+        "0",
+        "1",
+        "6"
+      ],
+      "answer": 1,
+      "explanation": "Every value equals the mean, so every gap is 0: no spread at all."
+    },
+    {
+      "id": "math-q02",
+      "topic": "math",
+      "type": "mcq",
+      "stem": "In σ = √( Σ (x − μ)² ÷ N ), what is μ?",
+      "options": [
+        "the largest value",
+        "the number of values",
+        "the mean of the data",
+        "the middle value after sorting"
+      ],
+      "answer": 2,
+      "explanation": "μ is the mean, and N is the number of values. The middle value after sorting is the median, a different statistic."
+    },
+    {
+      "id": "math-q03",
+      "topic": "math",
+      "type": "mcq",
+      "stem": "Two datasets have the same mean, but the second has a much larger standard deviation. What does that tell you?",
+      "options": [
+        "Its values are more spread out",
+        "Its values are larger on average",
+        "It has more values",
+        "It contains a negative number"
+      ],
+      "answer": 0,
+      "explanation": "Same centre, wider spread. The mean says where the data sits; σ says how far it strays from there."
+    },
+    {
+      "id": "math-q04",
+      "topic": "math",
+      "type": "mcq",
+      "stem": "Mean 4, standard deviation 2. What is the z-score of 10?",
+      "options": [
+        "5",
+        "1.5",
+        "3",
+        "6"
+      ],
+      "answer": 2,
+      "explanation": "(10 − 4) ÷ 2 = 3."
+    },
+    {
+      "id": "math-q05",
+      "topic": "math",
+      "type": "mcq",
+      "stem": "After standardising a column (subtract its mean, divide by its std), what are its new mean and std?",
+      "options": [
+        "mean 1, std 0",
+        "mean 0, std 1",
+        "mean 0, std 0",
+        "the old mean and std"
+      ],
+      "answer": 1,
+      "explanation": "That's the point of standardising: every column ends up on the same scale."
+    },
+    {
+      "id": "math-q06",
+      "topic": "math",
+      "type": "mcq",
+      "stem": "What is the L2 norm (length) of (3, 4)?",
+      "options": [
+        "7",
+        "12",
+        "25",
+        "5"
+      ],
+      "answer": 3,
+      "explanation": "√(3² + 4²) = √25 = 5."
+    },
+    {
+      "id": "math-q07",
+      "topic": "math",
+      "type": "mcq",
+      "stem": "What is the dot product of (1, 2, 3) and (6, 7, 8)?",
+      "options": [
+        "44",
+        "[6 14 24]",
+        "21",
+        "336"
+      ],
+      "answer": 0,
+      "explanation": "1·6 + 2·7 + 3·8 = 6 + 14 + 24 = 44. The element-wise product would be [6 14 24]; the dot product adds those up."
+    },
+    {
+      "id": "math-q08",
+      "topic": "math",
+      "type": "mcq",
+      "stem": "What shape does (100 × 3) @ (3 × 3) give?",
+      "options": [
+        "(3, 3)",
+        "(100, 100)",
+        "(100, 3)",
+        "an error"
+      ],
+      "answer": 2,
+      "explanation": "The inner 3s match; the outer sizes 100 and 3 give the result."
+    },
+    {
+      "id": "math-q09",
+      "topic": "math",
+      "type": "mcq",
+      "stem": "Two length-1 vectors have dot product −1. How are they arranged?",
+      "options": [
+        "Pointing in opposite directions",
+        "At right angles",
+        "Pointing the same way",
+        "One is longer than the other"
+      ],
+      "answer": 0,
+      "explanation": "For unit vectors the dot product is cos θ, and cos θ = −1 means θ = 180°."
+    },
+    {
+      "id": "np1-q01",
+      "topic": "np1",
+      "type": "mcq",
+      "stem": "What does <code>np.array([1, 2, 3]) + np.array([10, 20, 30])</code> give?",
+      "options": [
+        "[1 2 3 10 20 30]",
+        "66",
+        "[11 22 33]",
+        "an error"
+      ],
+      "answer": 2,
+      "explanation": "Arrays add element by element."
+    },
+    {
+      "id": "np1-q02",
+      "topic": "np1",
+      "type": "mcq",
+      "stem": "What does <code>[1, 2, 3] + [10, 20, 30]</code> give, with plain lists?",
+      "options": [
+        "[11, 22, 33]",
+        "[1, 2, 3, 10, 20, 30]",
+        "66",
+        "TypeError"
+      ],
+      "answer": 1,
+      "explanation": "On lists, <code>+</code> joins them. That difference is why the notebook uses <code>np.concatenate</code> to join arrays."
+    },
+    {
+      "id": "np1-q03",
+      "topic": "np1",
+      "type": "mcq",
+      "stem": "What does <code>np.array([1, 2, 3, 4, 5]) + np.array([1, 2])</code> do?",
+      "options": [
+        "[2 4 3 4 5]",
+        "[2 4]",
+        "raises ValueError",
+        "[2 4 4 6 6]"
+      ],
+      "answer": 2,
+      "explanation": "Broadcasting can only stretch a length of 1. Lengths 5 and 2 can't be matched, so NumPy refuses."
+    },
+    {
+      "id": "np1-q04",
+      "topic": "np1",
+      "type": "mcq",
+      "stem": "What is <code>np.mean(np.array([2, 4, 9]))</code>?",
+      "options": [
+        "15",
+        "5.0",
+        "4.0",
+        "3"
+      ],
+      "answer": 1,
+      "explanation": "(2 + 4 + 9) / 3 = 5.0."
+    },
+    {
+      "id": "np1-q05",
+      "topic": "np1",
+      "type": "mcq",
+      "stem": "What does <code>np.array([1, 2]) / 0</code> give?",
+      "options": [
+        "ZeroDivisionError",
+        "[0 0]",
+        "[inf inf] with a warning",
+        "[nan nan]"
+      ],
+      "answer": 2,
+      "explanation": "Plain Python <code>2 / 0</code> raises an error; NumPy returns infinity and warns."
+    },
+    {
+      "id": "np1-q06",
+      "topic": "np1",
+      "type": "mcq",
+      "stem": "<code>a = np.array([3, 8, 1])</code>. What is <code>a > 2</code>?",
+      "options": [
+        "True",
+        "[ True  True False]",
+        "[3 8]",
+        "2"
+      ],
+      "answer": 1,
+      "explanation": "A comparison on an array is checked per element."
+    },
+    {
+      "id": "np1-q07",
+      "topic": "np1",
+      "type": "mcq",
+      "stem": "Which gives the shape of a 1D array <code>a</code> as a tuple like <code>(31,)</code>?",
+      "options": [
+        "a.size()",
+        "a.length",
+        "len(a, 0)",
+        "a.shape"
+      ],
+      "answer": 3,
+      "explanation": "<code>shape</code> is an attribute, so there are no brackets after it."
+    },
+    {
+      "id": "np1-q08",
+      "topic": "np1",
+      "type": "mcq",
+      "stem": "What does <code>np.sum(np.array([0, 1.5, 0, 0]) == 0)</code> give?",
+      "options": [
+        "1.5",
+        "3",
+        "[ True False  True  True]",
+        "0"
+      ],
+      "answer": 1,
+      "explanation": "The comparison gives True/False per element, and summing counts the Trues (True = 1)."
+    },
+    {
+      "id": "np1-q09",
+      "topic": "np1",
+      "type": "mcq",
+      "stem": "In <code>np.loadtxt(URL, delimiter=\",\", usecols=[6, 7, 8], skiprows=1)</code>, what does <code>skiprows=1</code> do?",
+      "options": [
+        "Skips the header row",
+        "Keeps every other row",
+        "Skips the first column",
+        "Drops missing values"
+      ],
+      "answer": 0,
+      "explanation": "The first line of the CSV holds column names, not numbers."
+    },
+    {
+      "id": "np1-q10",
+      "topic": "np1",
+      "type": "mcq",
+      "stem": "The notebook divides <code>raw</code> by 10. Why?",
+      "options": [
+        "To make the numbers smaller for speed",
+        "The file stores tenths of °C and tenths of mm",
+        "To remove the missing values",
+        "Because np.loadtxt doubles the values"
+      ],
+      "answer": 1,
+      "explanation": "−178 in the file means −17.8 °C."
+    },
+    {
+      "id": "np2-q01",
+      "topic": "np2",
+      "type": "mcq",
+      "stem": "<code>a = np.array([5, 6, 7, 8, 9])</code>. What is <code>a[[0, 2, 4]]</code>?",
+      "options": [
+        "[5 6 7]",
+        "[5 7 9]",
+        "5",
+        "TypeError"
+      ],
+      "answer": 1,
+      "explanation": "A list of positions picks those positions. On a plain list this would be a TypeError."
+    },
+    {
+      "id": "np2-q02",
+      "topic": "np2",
+      "type": "mcq",
+      "stem": "Same <code>a</code>. What is <code>a[a > 6]</code>?",
+      "options": [
+        "[7 8 9]",
+        "[False False True True True]",
+        "3",
+        "[2 3 4]"
+      ],
+      "answer": 0,
+      "explanation": "The mask keeps the elements where it's True: 7, 8, 9. The second option is the mask itself, before indexing."
+    },
+    {
+      "id": "np2-q03",
+      "topic": "np2",
+      "type": "mcq",
+      "stem": "Same <code>a</code>. What is <code>np.sum((a > 5) & (a < 8))</code>?",
+      "options": [
+        "3",
+        "[6 7]",
+        "4",
+        "2"
+      ],
+      "answer": 3,
+      "explanation": "Only 6 and 7 satisfy both, so there are two Trues."
+    },
+    {
+      "id": "np2-q04",
+      "topic": "np2",
+      "type": "mcq",
+      "stem": "Why must <code>(a > 5) & (a < 8)</code> keep its brackets?",
+      "options": [
+        "Style only — the result is identical",
+        "& binds tighter than >, so it would group the wrong way",
+        "Brackets turn the arrays into lists",
+        "Because & only works on numbers"
+      ],
+      "answer": 1,
+      "explanation": "Without brackets Python reads <code>a > (5 & a) < 8</code>, which fails."
+    },
+    {
+      "id": "np2-q05",
+      "topic": "np2",
+      "type": "mcq",
+      "stem": "<code>jan_prcp</code> uses 999.9 to mark missing days. Which gives the mean of the real readings only?",
+      "options": [
+        "np.mean(jan_prcp) - 999.9",
+        "np.mean(jan_prcp < 999.9)",
+        "np.mean(jan_prcp[jan_prcp < 999.9])",
+        "jan_prcp.mean(999.9)"
+      ],
+      "answer": 2,
+      "explanation": "Filter first, then average. The second option averages the True/False mask itself, which gives the fraction of non-missing days."
+    },
+    {
+      "id": "np2-q06",
+      "topic": "np2",
+      "type": "mcq",
+      "stem": "<code>jan_tmax</code> has 31 values. How many does <code>jan_tmax[::7]</code> contain?",
+      "options": [
+        "4",
+        "7",
+        "5",
+        "31"
+      ],
+      "answer": 2,
+      "explanation": "Indexes 0, 7, 14, 21, 28."
+    },
+    {
+      "id": "np2-q07",
+      "topic": "np2",
+      "type": "mcq",
+      "stem": "Which of these does <b>not</b> give January's Monday temperatures? (1 Jan = index 0 = Friday)",
+      "options": [
+        "jan_tmax[3::7]",
+        "jan_tmax[[3, 10, 17, 24]]",
+        "jan_tmax[3:25:7]",
+        "jan_tmax[4::7]"
+      ],
+      "answer": 3,
+      "explanation": "<code>[4::7]</code> starts on 5 January, a Tuesday. The other three all pick indexes 3, 10, 17, 24."
+    },
+    {
+      "id": "np3-q01",
+      "topic": "np3",
+      "type": "mcq",
+      "stem": "What is <code>np.array([[1, 2], [3, 4], [5, 6]]).shape</code>?",
+      "options": [
+        "(2, 3)",
+        "(3, 2)",
+        "6",
+        "(3,)"
+      ],
+      "answer": 1,
+      "explanation": "Three rows, two columns."
+    },
+    {
+      "id": "np3-q02",
+      "topic": "np3",
+      "type": "mcq",
+      "stem": "What is <code>np.arange(6).reshape(2, -1).shape</code>?",
+      "options": [
+        "(2, 3)",
+        "(3, 2)",
+        "(2, 6)",
+        "an error"
+      ],
+      "answer": 0,
+      "explanation": "−1 is worked out: 6 ÷ 2 = 3 columns."
+    },
+    {
+      "id": "np3-q03",
+      "topic": "np3",
+      "type": "mcq",
+      "stem": "What happens with <code>np.arange(6).reshape(4, -1)</code>?",
+      "options": [
+        "(4, 2), padded with zeros",
+        "(4, 1), dropping two elements",
+        "ValueError",
+        "(4, 1.5)"
+      ],
+      "answer": 2,
+      "explanation": "6 elements can't be split into 4 equal rows."
+    },
+    {
+      "id": "np3-q04",
+      "topic": "np3",
+      "type": "mcq",
+      "stem": "X has shape (31, 3). What is the shape of <code>np.mean(X, axis=0)</code>?",
+      "options": [
+        "(31,)",
+        "(3,)",
+        "a single number",
+        "(31, 3)"
+      ],
+      "answer": 1,
+      "explanation": "axis=0 runs down the rows and removes them: one mean per column."
+    },
+    {
+      "id": "np3-q05",
+      "topic": "np3",
+      "type": "mcq",
+      "stem": "What does <code>np.min(X, axis=1)</code> give for the weather table X?",
+      "options": [
+        "the smallest value in each row",
+        "the smallest value in each column",
+        "the smallest value overall",
+        "the first row"
+      ],
+      "answer": 0,
+      "explanation": "axis=1 runs across the columns: one result per day."
+    },
+    {
+      "id": "np3-q06",
+      "topic": "np3",
+      "type": "mcq",
+      "stem": "For two 2 × 2 arrays, what is <code>a * b</code>?",
+      "options": [
+        "matrix multiplication",
+        "each element times its partner",
+        "their dot product, one number",
+        "an error"
+      ],
+      "answer": 1,
+      "explanation": "<code>*</code> is element-wise (the Hadamard product). Matrix multiplication is <code>@</code>."
+    },
+    {
+      "id": "np4-q01",
+      "topic": "np4",
+      "type": "mcq",
+      "stem": "With the notebook's <code>a = [[1,2,3,4],[5,6,7,8],[9,1,2,3]]</code> as an array, what is <code>a[1, 2]</code>?",
+      "options": [
+        "2",
+        "6",
+        "7",
+        "5"
+      ],
+      "answer": 2,
+      "explanation": "Row 1 is [5, 6, 7, 8]; column 2 of it is 7."
+    },
+    {
+      "id": "np4-q02",
+      "topic": "np4",
+      "type": "mcq",
+      "stem": "Same <code>a</code>. What does <code>a[[0, 2]]</code> give?",
+      "options": [
+        "rows 0 and 2",
+        "the element at row 0, column 2",
+        "columns 0 and 2",
+        "an error"
+      ],
+      "answer": 0,
+      "explanation": "One list inside one bracket picks rows. <code>a[0, 2]</code>, with a comma and no inner list, is the single element 3."
+    },
+    {
+      "id": "np4-q03",
+      "topic": "np4",
+      "type": "mcq",
+      "stem": "Same <code>a</code>. What is <code>a[[0, 2], [1, 3]]</code>?",
+      "options": [
+        "[[2 4] [1 3]]",
+        "[2 3]",
+        "[1 3]",
+        "an error"
+      ],
+      "answer": 1,
+      "explanation": "The two lists pair up: (0, 1) → 2 and (2, 3) → 3. It isn't a submatrix."
+    },
+    {
+      "id": "np4-q04",
+      "topic": "np4",
+      "type": "mcq",
+      "stem": "Which gives the 2 × 2 block of rows 0, 2 and columns 1, 3?",
+      "options": [
+        "a[[0, 2], [1, 3]]",
+        "a[0:2, 1:3]",
+        "a[[0, 2]][1, 3]",
+        "a[np.ix_([0, 2], [1, 3])]"
+      ],
+      "answer": 3,
+      "explanation": "<code>np.ix_</code> turns the row list into a column and the column list into a row, so they form a grid: [[2 4] [1 3]]."
+    },
+    {
+      "id": "np4-q05",
+      "topic": "np4",
+      "type": "mcq",
+      "stem": "What does <code>X[:, -2:]</code> select from the (31, 3) weather table?",
+      "options": [
+        "the last two rows",
+        "TMIN and PRCP for every day",
+        "TMAX and TMIN for every day",
+        "the last two days of TMAX"
+      ],
+      "answer": 1,
+      "explanation": "<code>:</code> keeps every row; <code>-2:</code> takes the last two columns."
+    },
+    {
+      "id": "np4-q06",
+      "topic": "np4",
+      "type": "mcq",
+      "stem": "What does <code>X[X[:, 2] == 0, 0]</code> give?",
+      "options": [
+        "TMAX on days with no rain",
+        "PRCP on days with no rain",
+        "the number of dry days",
+        "days where TMAX is 0"
+      ],
+      "answer": 0,
+      "explanation": "The condition picks rows by the PRCP column; the 0 after the comma reads the TMAX column."
+    },
+    {
+      "id": "np4-q07",
+      "topic": "np4",
+      "type": "mcq",
+      "stem": "What does <code>X[X == 999.9]</code> return?",
+      "options": [
+        "the rows that contain 999.9",
+        "a (31, 3) array with zeros elsewhere",
+        "a 1D array of just the matching values",
+        "a True/False array"
+      ],
+      "answer": 2,
+      "explanation": "A same-shape mask on a 2D array gives a flat 1D array of matches: here [999.9 999.9]."
+    },
+    {
+      "id": "np5-q01",
+      "topic": "np5",
+      "type": "mcq",
+      "stem": "What is <code>2 / np.inf</code>?",
+      "options": [
+        "inf",
+        "0.0",
+        "nan",
+        "an error"
+      ],
+      "answer": 1,
+      "explanation": "Dividing by infinity gives 0."
+    },
+    {
+      "id": "np5-q02",
+      "topic": "np5",
+      "type": "mcq",
+      "stem": "Which values can <code>random.randint(2, 10)</code> return?",
+      "options": [
+        "integers 2 to 9",
+        "integers 2 to 10",
+        "decimals between 2 and 10",
+        "only 2 or 10"
+      ],
+      "answer": 0,
+      "explanation": "The upper bound is excluded."
+    },
+    {
+      "id": "np5-q03",
+      "topic": "np5",
+      "type": "mcq",
+      "stem": "Why call <code>random.seed(32)</code>?",
+      "options": [
+        "To get the same random numbers on every run",
+        "To make the numbers more random",
+        "To limit numbers to below 32",
+        "To create 32 numbers"
+      ],
+      "answer": 0,
+      "explanation": "Reproducibility: you, your teammate and the grader see the same \"random\" results."
+    },
+    {
+      "id": "np5-q04",
+      "topic": "np5",
+      "type": "mcq",
+      "stem": "<code>x = np.arange(1, 4)</code>, <code>y = np.arange(6, 9)</code>. What is <code>x @ y</code>?",
+      "options": [
+        "[ 6 14 24]",
+        "44",
+        "[7 9 11]",
+        "an error"
+      ],
+      "answer": 1,
+      "explanation": "<code>@</code> on two 1D arrays is the dot product: 6 + 14 + 24."
+    },
+    {
+      "id": "np5-q05",
+      "topic": "np5",
+      "type": "mcq",
+      "stem": "For square matrices A and B, how do <code>A @ B</code> and <code>B @ A</code> compare?",
+      "options": [
+        "Equal for any A and B",
+        "Usually different — order matters",
+        "One is the transpose of the other",
+        "B @ A raises an error"
+      ],
+      "answer": 1,
+      "explanation": "Matrix multiplication isn't commutative."
+    },
+    {
+      "id": "np5-q06",
+      "topic": "np5",
+      "type": "mcq",
+      "stem": "<code>a = np.array([1, 0, 1])</code>. What is <code>a.T.shape</code>?",
+      "options": [
+        "(3,)",
+        "(3, 1)",
+        "(1, 3)",
+        "an error"
+      ],
+      "answer": 0,
+      "explanation": "A 1D array has nothing to swap. <code>a.reshape(1, -1).T</code> gives (3, 1)."
+    },
+    {
+      "id": "np5-q07",
+      "topic": "np5",
+      "type": "mcq",
+      "stem": "What is <code>LA.norm(np.array([1, 2, 3]), ord=1)</code>?",
+      "options": [
+        "3.74",
+        "6.0",
+        "3.0",
+        "14.0"
+      ],
+      "answer": 1,
+      "explanation": "The L1 norm adds the absolute values: 1 + 2 + 3. The default L2 norm would be √14 ≈ 3.74."
+    },
+    {
+      "id": "np5-q08",
+      "topic": "np5",
+      "type": "mcq",
+      "stem": "A is 3 × 3. What shape is <code>LA.norm(A, axis=1, keepdims=True)</code>?",
+      "options": [
+        "(3,)",
+        "(1, 3)",
+        "(3, 1)",
+        "a single number"
+      ],
+      "answer": 2,
+      "explanation": "One norm per row, kept as a column. That's the shape that divides cleanly into A row by row."
+    },
+    {
+      "id": "np5-q09",
+      "topic": "np5",
+      "type": "mcq",
+      "stem": "What does <code>LA.inv(M)</code> do if M's determinant is 0?",
+      "options": [
+        "returns zeros",
+        "returns M unchanged",
+        "raises LinAlgError",
+        "returns inf everywhere"
+      ],
+      "answer": 2,
+      "explanation": "A singular matrix has no inverse."
+    },
+    {
+      "id": "np6-q01",
+      "topic": "np6",
+      "type": "mcq",
+      "stem": "U is (100, 3). Which line makes every row length 1?",
+      "options": [
+        "U / LA.norm(U)",
+        "U / LA.norm(U, axis=1, keepdims=True)",
+        "U / LA.norm(U, axis=0)",
+        "U / np.sum(U, axis=1)"
+      ],
+      "answer": 1,
+      "explanation": "One norm per row, kept as a (100, 1) column so it divides across each row. <code>LA.norm(U)</code> alone is one number for the whole matrix."
+    },
+    {
+      "id": "np6-q02",
+      "topic": "np6",
+      "type": "mcq",
+      "stem": "U is (100, 3). What shape is <code>np.concatenate([U, -U], axis=1)</code>?",
+      "options": [
+        "(200, 3)",
+        "(100, 3)",
+        "(100, 6)",
+        "(6, 100)"
+      ],
+      "answer": 2,
+      "explanation": "axis=1 joins side by side, so the columns add: 3 + 3."
+    },
+    {
+      "id": "np6-q03",
+      "topic": "np6",
+      "type": "mcq",
+      "stem": "Why does <code>np.argmax(np.concatenate([U, -U], axis=1), axis=1)</code> find each vector's closest of ±x, ±y, ±z?",
+      "options": [
+        "Its six columns are the inner products with those directions",
+        "argmax sorts the vectors by angle",
+        "Negative columns cancel the positive ones",
+        "It measures each vector's length"
+      ],
+      "answer": 0,
+      "explanation": "v·(+x) = v₀, v·(−x) = −v₀, and so on. The largest inner product is the most similar direction."
+    },
+    {
+      "id": "np6-q04",
+      "topic": "np6",
+      "type": "mcq",
+      "stem": "U holds 100 unit row vectors. What is <code>U @ U.T</code>?",
+      "options": [
+        "each vector's length",
+        "the cosine between every pair",
+        "U rotated by 90°",
+        "an error"
+      ],
+      "answer": 1,
+      "explanation": "Entry (i, j) is the dot product of vectors i and j, which for unit vectors is cos θ. Its shape is (100, 100)."
+    },
+    {
+      "id": "np6-q05",
+      "topic": "np6",
+      "type": "mcq",
+      "stem": "A stacks 100 row vectors, and R is a 3 × 3 rotation matrix. Which applies R to every vector?",
+      "options": [
+        "R @ A",
+        "A * R",
+        "A + R",
+        "A @ R.T"
+      ],
+      "answer": 3,
+      "explanation": "For a column vector v the rotation is R @ v; for rows, transpose both sides to get A @ R.T. <code>R @ A</code> fails: (3 × 3) @ (100 × 3)."
+    },
+    {
+      "id": "pre-d01",
+      "topic": "pre",
+      "type": "cloze",
+      "title": "Every Monday's date",
+      "prompt": "<code>dates[0]</code> is 1 January, a Friday. Fill the slice so it prints every Monday.",
+      "template": "dates = list(range(1, 32))\nmondays = dates[___::___]\nprint(mondays)   # [4, 11, 18, 25]",
       "blanks": [
-        { "answers": ["int", "float"], "hint": "Any listed answer is accepted." },
-        { "answers": ["1"], "hint": "One blank, one hint." }
+        {
+          "answers": [
+            "3"
+          ],
+          "hint": "The first Monday is the 4th; which index holds it?"
+        },
+        {
+          "answers": [
+            "7"
+          ],
+          "hint": "How many days until the next Monday?"
+        }
       ],
-      "explanation": "Shown after a correct check." },
-
-    { "id": "t1d02", "topic": "t1", "type": "sequence",
-      "title": "Put these in order",
-      "prompt": "Drag, or use the up/down buttons.",
-      "lines": ["first step", "second step", "third step"],
-      "dependencies": [[0,1],[1,2]],
-      "explanation": "Dependencies are index pairs: [0,1] means line 0 must come before line 1." },
-
-    { "id": "t2d01", "topic": "t2", "type": "write",
-      "title": "Write it yourself",
-      "prompt": "The task.",
-      "starter": "",
+      "explanation": "Start at index 3 (4 January), step 7. This is the whole trick of Practice Question 2-2."
+    },
+    {
+      "id": "pre-d02",
+      "topic": "pre",
+      "type": "cloze",
+      "title": "Import the way the notebook does",
+      "prompt": "Load NumPy, its random module and its linalg module under the notebook's names.",
+      "template": "import numpy ___ np\nfrom numpy ___ random\nfrom numpy import linalg as ___",
+      "blanks": [
+        {
+          "answers": [
+            "as"
+          ],
+          "hint": "Gives the library a short alias."
+        },
+        {
+          "answers": [
+            "import"
+          ],
+          "hint": "from … import …"
+        },
+        {
+          "answers": [
+            "LA"
+          ],
+          "hint": "The notebook's short name for linalg."
+        }
+      ],
+      "explanation": "Now <code>np.mean</code>, <code>random.rand</code> and <code>LA.norm</code> all work."
+    },
+    {
+      "id": "math-d01",
+      "topic": "math",
+      "type": "cloze",
+      "title": "Mean by hand",
+      "prompt": "Compute the mean of a list without NumPy.",
+      "template": "data = [-5, 0, 5]\nmu = ___(data) / ___(data)",
+      "blanks": [
+        {
+          "answers": [
+            "sum"
+          ],
+          "hint": "Add everything up."
+        },
+        {
+          "answers": [
+            "len"
+          ],
+          "hint": "How many values?"
+        }
+      ],
+      "explanation": "<code>sum(data) / len(data)</code> is the notebook's own list version of <code>np.mean</code>."
+    },
+    {
+      "id": "np1-d01",
+      "topic": "np1",
+      "type": "cloze",
+      "title": "Convert and check",
+      "prompt": "Turn a list into an array and check its type.",
+      "template": "a = np.___([1, 2, 3])\nprint(___(a))",
+      "blanks": [
+        {
+          "answers": [
+            "array"
+          ],
+          "hint": "The function that converts a list."
+        },
+        {
+          "answers": [
+            "type"
+          ],
+          "hint": "The built-in that reports a type."
+        }
+      ],
+      "explanation": "Prints <code>&lt;class 'numpy.ndarray'&gt;</code>."
+    },
+    {
+      "id": "np1-d02",
+      "topic": "np1",
+      "type": "cloze",
+      "title": "Summaries",
+      "prompt": "Fill in the NumPy function for each comment.",
+      "template": "print(np.___(week))   # the warmest day\nprint(np.___(week))   # the average\nprint(np.___(week))   # the spread",
+      "blanks": [
+        {
+          "answers": [
+            "max"
+          ],
+          "hint": "Largest value."
+        },
+        {
+          "answers": [
+            "mean"
+          ],
+          "hint": "Average."
+        },
+        {
+          "answers": [
+            "std"
+          ],
+          "hint": "Standard deviation."
+        }
+      ],
+      "explanation": "<code>np.max</code>, <code>np.mean</code>, <code>np.std</code>: each turns the array into one number."
+    },
+    {
+      "id": "np1-d03",
+      "topic": "np1",
+      "type": "sequence",
+      "title": "Load, convert, summarise",
+      "prompt": "Put these in a working order.",
+      "lines": [
+        "import numpy as np",
+        "raw = [-178, -244, -194]",
+        "tmax = np.array(raw)",
+        "tmax = tmax / 10",
+        "print(np.mean(tmax))"
+      ],
+      "dependencies": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "explanation": "The import and the list can come in either order; everything after depends on both."
+    },
+    {
+      "id": "np1-d04",
+      "topic": "np1",
+      "type": "write",
+      "title": "Standard deviation, the long way",
+      "prompt": "Without <code>np.std</code>, compute the standard deviation of an array <code>x</code> into <code>sigma</code>. Use <code>np.mean</code>, <code>np.sum</code> and <code>np.sqrt</code>.",
+      "starter": "x = np.array([-5, 0, 5])\n",
       "tokens": [
-        { "pattern": "answer\\s*=", "flags": "i", "hint": "assign to answer" }
+        {
+          "pattern": "np\\.mean\\s*\\(\\s*x\\s*\\)",
+          "flags": "",
+          "hint": "find the mean with np.mean(x)"
+        },
+        {
+          "pattern": "\\(\\s*x\\s*-\\s*\\w+\\s*\\)\\s*\\*\\*\\s*2",
+          "flags": "",
+          "hint": "square each gap: (x - mu) ** 2"
+        },
+        {
+          "pattern": "np\\.sum\\s*\\(",
+          "flags": "",
+          "hint": "add the squared gaps with np.sum"
+        },
+        {
+          "pattern": "/\\s*len\\s*\\(\\s*x\\s*\\)|/\\s*x\\.size",
+          "flags": "",
+          "hint": "divide by N = len(x)"
+        },
+        {
+          "pattern": "np\\.sqrt\\s*\\(",
+          "flags": "",
+          "hint": "take the square root last"
+        }
       ],
-      "solution": "answer = 42",
-      "explanation": "Tokens are regexes the submission must match. Note the doubled backslash." },
-
-    { "id": "t1f01", "topic": "t1", "type": "flashcard",
-      "front": "A prompt to recall from memory",
-      "back": "The answer, shown after they try. <code>Markup</code> works." }
+      "solution": "x = np.array([-5, 0, 5])\nmu = np.mean(x)\nsigma = np.sqrt(np.sum((x - mu) ** 2) / len(x))\nprint(sigma)",
+      "hint": [
+        "Inside out: the mean, then the gaps, then square, average, root.",
+        "mu = np.mean(x), then (x - mu) ** 2 squares every gap at once.",
+        "sigma = np.sqrt(np.sum((x - mu) ** 2) / len(x))"
+      ],
+      "explanation": "Prints 4.08…, the same as <code>np.std(x)</code>. <code>x - mu</code> works because the number <code>mu</code> is broadcast to every element."
+    },
+    {
+      "id": "np2-d01",
+      "topic": "np2",
+      "type": "cloze",
+      "title": "Dry days",
+      "prompt": "Show the maximum temperature on days with no rain.",
+      "template": "dry = jan_prcp ___ 0\nprint(jan_tmax[___])",
+      "blanks": [
+        {
+          "answers": [
+            "=="
+          ],
+          "hint": "Comparison, not assignment."
+        },
+        {
+          "answers": [
+            "dry"
+          ],
+          "hint": "Use the mask as the index."
+        }
+      ],
+      "explanation": "<code>dry</code> is a True/False array; indexing with it keeps only the dry days."
+    },
+    {
+      "id": "np2-d02",
+      "topic": "np2",
+      "type": "cloze",
+      "title": "Cold and dry",
+      "prompt": "Count the days that were below −10 °C <b>and</b> had no rain.",
+      "template": "cold_dry = (jan_tmax < -10) ___ (jan_prcp == 0)\nprint(np.___(cold_dry))",
+      "blanks": [
+        {
+          "answers": [
+            "&"
+          ],
+          "hint": "Element-wise AND."
+        },
+        {
+          "answers": [
+            "sum"
+          ],
+          "hint": "True counts as 1."
+        }
+      ],
+      "explanation": "Use <code>&amp;</code>, not <code>and</code>, and keep the brackets around each condition."
+    },
+    {
+      "id": "np2-d03",
+      "topic": "np2",
+      "type": "write",
+      "title": "Every Friday's rain",
+      "prompt": "1 January (index 0) is a Friday. Store every Friday's precipitation in <code>fri</code> and print it.",
+      "tokens": [
+        {
+          "pattern": "fri\\s*=\\s*jan_prcp\\s*\\[\\s*0?\\s*::\\s*7\\s*\\]",
+          "flags": "",
+          "hint": "slice jan_prcp from index 0 with step 7"
+        },
+        {
+          "pattern": "print\\s*\\(\\s*fri\\s*\\)",
+          "flags": "",
+          "hint": "print fri"
+        }
+      ],
+      "solution": "fri = jan_prcp[::7]\nprint(fri)",
+      "hint": [
+        "Fridays are index 0, 7, 14…",
+        "jan_prcp[::7]"
+      ],
+      "explanation": "<code>[0::7]</code> and <code>[::7]</code> are the same slice."
+    },
+    {
+      "id": "np3-d01",
+      "topic": "np3",
+      "type": "cloze",
+      "title": "Reshape and check",
+      "prompt": "Turn six numbers into three rows and confirm the shape.",
+      "template": "a = np.array([1, 2, 3, 4, 5, 6]).reshape(3, ___)\nprint(a.___)   # (3, 2)",
+      "blanks": [
+        {
+          "answers": [
+            "2",
+            "-1"
+          ],
+          "hint": "Either the number of columns, or let NumPy work it out."
+        },
+        {
+          "answers": [
+            "shape"
+          ],
+          "hint": "The size attribute."
+        }
+      ],
+      "explanation": "<code>reshape(3, 2)</code> and <code>reshape(3, -1)</code> give the same array."
+    },
+    {
+      "id": "np3-d02",
+      "topic": "np3",
+      "type": "cloze",
+      "title": "Per column, per row",
+      "prompt": "X is the (31, 3) weather table.",
+      "template": "lows = np.min(X, axis=___)    # lowest TMAX, TMIN, PRCP\nday_max = np.max(X, axis=___)  # one value per day",
+      "blanks": [
+        {
+          "answers": [
+            "0"
+          ],
+          "hint": "One result per column: collapse the rows."
+        },
+        {
+          "answers": [
+            "1"
+          ],
+          "hint": "One result per row: collapse the columns."
+        }
+      ],
+      "explanation": "The axis you name is the one that disappears: axis=0 gives shape (3,), axis=1 gives (31,)."
+    },
+    {
+      "id": "np4-d01",
+      "topic": "np4",
+      "type": "cloze",
+      "title": "Rows and columns of X",
+      "prompt": "Columns are TMAX (0), TMIN (1), PRCP (2).",
+      "template": "print(X[0, ___])    # TMIN on 1 January\nprint(X[___, 2])    # PRCP for every day",
+      "blanks": [
+        {
+          "answers": [
+            "1"
+          ],
+          "hint": "TMIN's column."
+        },
+        {
+          "answers": [
+            ":"
+          ],
+          "hint": "\"All rows\"."
+        }
+      ],
+      "explanation": "<code>X[0, 1]</code> is one number; <code>X[:, 2]</code> is the whole PRCP column, shape (31,)."
+    },
+    {
+      "id": "np4-d02",
+      "topic": "np4",
+      "type": "write",
+      "title": "Average TMAX on dry days",
+      "prompt": "Using X, print the average TMAX (column 0) over the days whose PRCP (column 2) is exactly 0.",
+      "tokens": [
+        {
+          "pattern": "X\\s*\\[\\s*:\\s*,\\s*2\\s*\\]\\s*==\\s*0",
+          "flags": "",
+          "hint": "condition on the PRCP column: X[:, 2] == 0"
+        },
+        {
+          "pattern": "np\\.mean\\s*\\(",
+          "flags": "",
+          "hint": "average with np.mean"
+        },
+        {
+          "pattern": ",\\s*0\\s*\\]",
+          "flags": "",
+          "hint": "read column 0 (TMAX) for the chosen rows"
+        }
+      ],
+      "solution": "dry = X[:, 2] == 0\nprint(np.mean(X[dry, 0]))",
+      "hint": [
+        "Build a mask from the PRCP column, then use it for the rows.",
+        "X[dry, 0] is TMAX on the dry days."
+      ],
+      "explanation": "With the notebook's data this prints about −9.82 (27 dry days)."
+    },
+    {
+      "id": "np5-d01",
+      "topic": "np5",
+      "type": "cloze",
+      "title": "Reproducible noise",
+      "prompt": "Fix the seed, then draw a 5 × 3 array from a normal distribution with mean 0 and std 1.",
+      "template": "random.___(seed=32)\nnoise = random.normal(0, 1, ___)",
+      "blanks": [
+        {
+          "answers": [
+            "seed"
+          ],
+          "hint": "Fixes the random sequence."
+        },
+        {
+          "answers": [
+            "(5, 3)",
+            "(5,3)"
+          ],
+          "hint": "The shape, as a tuple."
+        }
+      ],
+      "explanation": "<code>random.randn(5, 3)</code> does the same draw without spelling out mean and std."
+    },
+    {
+      "id": "np5-d02",
+      "topic": "np5",
+      "type": "write",
+      "title": "Matrix algebra in three lines",
+      "prompt": "With <code>A = np.arange(1, 10).reshape(3, 3)</code> and <code>x = np.arange(1, 4)</code>: store A's transpose in <code>At</code>, the product A·x in <code>Ax</code>, and x's L2 norm in <code>n</code>.",
+      "starter": "A = np.arange(1, 10).reshape(3, 3)\nx = np.arange(1, 4)\n",
+      "tokens": [
+        {
+          "pattern": "At\\s*=\\s*(A\\.T|np\\.transpose\\s*\\(\\s*A\\s*\\))",
+          "flags": "",
+          "hint": "At = A.T"
+        },
+        {
+          "pattern": "Ax\\s*=\\s*(A\\s*@\\s*x|np\\.(matmul|dot)\\s*\\(\\s*A\\s*,\\s*x\\s*\\))",
+          "flags": "",
+          "hint": "Ax = A @ x"
+        },
+        {
+          "pattern": "n\\s*=\\s*(LA|np\\.linalg)\\.norm\\s*\\(\\s*x\\s*\\)",
+          "flags": "",
+          "hint": "n = LA.norm(x)"
+        }
+      ],
+      "solution": "A = np.arange(1, 10).reshape(3, 3)\nx = np.arange(1, 4)\nAt = A.T\nAx = A @ x\nn = LA.norm(x)\nprint(At, Ax, n)",
+      "hint": [
+        "Transpose is an attribute; the product is an operator; the norm lives in linalg.",
+        "At = A.T, Ax = A @ x, n = LA.norm(x)"
+      ],
+      "explanation": "Ax is [14 32 50] and n is about 3.742."
+    },
+    {
+      "id": "np6-d01",
+      "topic": "np6",
+      "type": "cloze",
+      "title": "Normalise every row",
+      "prompt": "Make each of the 100 rows of <code>rot</code> length 1.",
+      "template": "norms = LA.norm(rot, axis=___, keepdims=___)\nunit = rot ___ norms",
+      "blanks": [
+        {
+          "answers": [
+            "1"
+          ],
+          "hint": "One norm per row."
+        },
+        {
+          "answers": [
+            "True"
+          ],
+          "hint": "Keep it as a (100, 1) column. Capital T."
+        },
+        {
+          "answers": [
+            "/"
+          ],
+          "hint": "Divide."
+        }
+      ],
+      "explanation": "(100, 3) ÷ (100, 1) broadcasts each row's norm across that row."
+    }
   ],
-
   "walkthroughs": [
-    { "id": "wk1", "topic": "t1", "icon": "🧪",
-      "title": "Build something end to end",
-      "desc": "Delete this whole array if the course has nothing to build.",
+    {
+      "id": "wk-21",
+      "topic": "np1",
+      "icon": "📐",
+      "includeDrills": false,
+      "title": "Practice Question 2-1, step by step",
+      "desc": "Two small arrays, element-wise addition, then a normalize() function using only NumPy operations.",
       "steps": [
-        { "title": "First piece", "html": "<p>Explain this step.</p>",
-          "item": { "type": "cloze", "template": "x = ___", "blanks": [ { "answers": ["1"] } ] } }
-      ] }
+        {
+          "title": "(1) Two arrays and their type",
+          "html": "<p>Make one array of three even numbers and one of three odd numbers, then confirm their type.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "evens = np.___([2, 4, 6])\nodds = np.array([1, 3, 5])\nprint(___(evens), type(odds))",
+            "blanks": [
+              {
+                "answers": [
+                  "array"
+                ],
+                "hint": "Converts a list."
+              },
+              {
+                "answers": [
+                  "type"
+                ],
+                "hint": "The built-in that reports a type."
+              }
+            ],
+            "explanation": "Both print <code>&lt;class 'numpy.ndarray'&gt;</code>."
+          }
+        },
+        {
+          "title": "(2) Add them",
+          "html": "<p>With arrays, <code>+</code> adds element by element: [2, 4, 6] + [1, 3, 5] gives [3 7 11]. With lists you'd get six elements instead.</p><div class=\"code-block\">print(evens + odds)   # [ 3  7 11]</div>"
+        },
+        {
+          "title": "(3) normalize(a)",
+          "html": "<p>The L2 norm is √(sum of squares). Normalising divides every element by it, so the result has norm 1.</p><div class=\"formula-box\"><div class=\"math-eq\">‖a‖ = √( a₁² + a₂² + … ),&nbsp;&nbsp; normalized = a ÷ ‖a‖</div></div><p>Check: (1, 1, 1) has norm √3, so it becomes (0.577, 0.577, 0.577). Use only NumPy operations; <code>LA.norm</code> would also work, but the question wants the formula.</p>",
+          "item": {
+            "type": "write",
+            "starter": "def normalize(a):\n    ",
+            "tokens": [
+              {
+                "pattern": "def\\s+normalize\\s*\\(\\s*a\\s*\\)",
+                "flags": "",
+                "hint": "keep the header def normalize(a):"
+              },
+              {
+                "pattern": "a\\s*\\*\\*\\s*2",
+                "flags": "",
+                "hint": "square every element: a ** 2"
+              },
+              {
+                "pattern": "np\\.sum\\s*\\(",
+                "flags": "",
+                "hint": "add the squares with np.sum"
+              },
+              {
+                "pattern": "np\\.sqrt\\s*\\(",
+                "flags": "",
+                "hint": "square root of that sum"
+              },
+              {
+                "pattern": "return\\s+",
+                "flags": "",
+                "hint": "return the result"
+              }
+            ],
+            "solution": "def normalize(a):\n    norm = np.sqrt(np.sum(a ** 2))\n    return a / norm",
+            "hint": [
+              "Compute the norm first, then divide.",
+              "norm = np.sqrt(np.sum(a ** 2))"
+            ],
+            "explanation": "<code>a / norm</code> broadcasts the single number <code>norm</code> over every element. <code>normalize(np.array([1, 1, 1]))</code> gives <code>[0.577 0.577 0.577]</code>."
+          }
+        }
+      ]
+    },
+    {
+      "id": "wk-22",
+      "topic": "np2",
+      "icon": "🗓️",
+      "includeDrills": false,
+      "title": "Practice Question 2-2, step by step",
+      "desc": "Monday temperatures from jan_tmax, then their mean and standard deviation. You write every piece.",
+      "steps": [
+        {
+          "title": "Find the first Monday's index",
+          "html": "<p>The question gives you <code>jan_tmax</code>: 31 daily maximum temperatures, with 1 January at index 0. 1 January 2010 was a Friday. Open 📋 Reference → <b>January 2010</b> if you want the calendar.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "# Fri 1 -> index 0, Sat 2 -> 1, Sun 3 -> 2, Mon 4 -> ?\nfirst_monday = ___",
+            "blanks": [
+              {
+                "answers": [
+                  "3"
+                ],
+                "hint": "4 January is the first Monday; date d is index d − 1."
+              }
+            ],
+            "explanation": "Index 3. Writing 4 here is the most common mistake on this question; it gives you Tuesdays."
+          }
+        },
+        {
+          "title": "Every Monday is one slice",
+          "html": "<p>From the first Monday, every 7th day is a Monday. That's <code>start::step</code> with no stop, so it runs to the end.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "tmax_mon = jan_tmax[___::___]\nprint(tmax_mon)",
+            "blanks": [
+              {
+                "answers": [
+                  "3"
+                ],
+                "hint": "Start at the first Monday."
+              },
+              {
+                "answers": [
+                  "7"
+                ],
+                "hint": "One week later."
+              }
+            ],
+            "explanation": "<code>jan_tmax[3::7]</code> picks indexes 3, 10, 17, 24. <code>jan_tmax[[3, 10, 17, 24]]</code> gives the same array."
+          }
+        },
+        {
+          "title": "Check you have the right number",
+          "html": "<p>Before computing anything, check the size. January 2010 has Mondays on the 4th, 11th, 18th and 25th.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "print(___(tmax_mon))   # should be 4\nprint(tmax_mon.___)   # should be (4,)",
+            "blanks": [
+              {
+                "answers": [
+                  "len"
+                ],
+                "hint": "Built-in length."
+              },
+              {
+                "answers": [
+                  "shape"
+                ],
+                "hint": "The array attribute."
+              }
+            ],
+            "explanation": "If you got 5, your start was 0, 1 or 2: you're picking a weekday that occurs five times."
+          }
+        },
+        {
+          "title": "Part (2): mean and standard deviation",
+          "html": "<p>Now the statistics. NumPy has a function for each, and the question says you may use <code>np.std</code>.</p>",
+          "item": {
+            "type": "write",
+            "tokens": [
+              {
+                "pattern": "np\\.mean\\s*\\(\\s*tmax_mon\\s*\\)",
+                "flags": "",
+                "hint": "mean with np.mean(tmax_mon)"
+              },
+              {
+                "pattern": "np\\.std\\s*\\(\\s*tmax_mon\\s*\\)",
+                "flags": "",
+                "hint": "standard deviation with np.std(tmax_mon)"
+              },
+              {
+                "pattern": "print\\s*\\(",
+                "flags": "",
+                "hint": "print both results"
+              }
+            ],
+            "solution": "mean_mon = np.mean(tmax_mon)\nstd_mon = np.std(tmax_mon)\nprint(\"Average Monday TMAX:\", mean_mon)\nprint(\"Std of Monday TMAX:\", std_mon)",
+            "hint": [
+              "Two NumPy calls, each on tmax_mon.",
+              "np.mean(tmax_mon) and np.std(tmax_mon)"
+            ],
+            "explanation": "Both take the whole array and return one number."
+          }
+        },
+        {
+          "title": "Optional: prove np.std with the formula",
+          "html": "<p>The hint in the notebook gives σ = √( Σ (x − μ)² ÷ N ). Write it with NumPy pieces; it should print the same number as <code>np.std</code>.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "mu = np.mean(tmax_mon)\nsigma = np.___(np.sum((tmax_mon - mu) ___ 2) / len(tmax_mon))\nprint(sigma)",
+            "blanks": [
+              {
+                "answers": [
+                  "sqrt"
+                ],
+                "hint": "The outermost operation in the formula."
+              },
+              {
+                "answers": [
+                  "**"
+                ],
+                "hint": "Python's power operator, not ^."
+              }
+            ],
+            "explanation": "<code>tmax_mon - mu</code> subtracts the mean from every Monday at once (broadcasting), <code>** 2</code> squares each gap, and the rest is the formula read left to right."
+          }
+        },
+        {
+          "title": "Check your answer",
+          "html": "<p>The whole solution:</p><div class=\"code-block\"># (1)\ntmax_mon = jan_tmax[3::7]\nprint(tmax_mon)\n\n# (2)\nprint(\"Average Monday TMAX:\", np.mean(tmax_mon))\nprint(\"Std of Monday TMAX:\", np.std(tmax_mon))</div><p>With the notebook's NOAA data you should see:</p><div class=\"code-block\">[-16.7  -6.7   0.6  -1.1]\nAverage Monday TMAX: -5.975\nStd of Monday TMAX: 6.7555070128007415</div><div class=\"key-box\">If your first value is −13.3 instead of −16.7, you sliced from index 4 (Tuesdays). If you see numbers like −178, you used <code>raw</code> before dividing by 10; <code>jan_tmax</code> is already in °C.</div>"
+        }
+      ]
+    },
+    {
+      "id": "wk-23",
+      "topic": "np3",
+      "icon": "📊",
+      "includeDrills": false,
+      "title": "Practice Question 2-3, step by step",
+      "desc": "Mean and standard deviation of each column, then standardise the whole table in one line.",
+      "steps": [
+        {
+          "title": "(1) One mean and one std per column",
+          "html": "<p>X is (31, 3): TMAX, TMIN, PRCP. You want three means and three standard deviations, one per column, so collapse the rows.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "mu = np.mean(X, axis=___)\nsd = np.___(X, axis=0)\nprint(mu.shape, sd.shape)   # (3,) (3,)",
+            "blanks": [
+              {
+                "answers": [
+                  "0"
+                ],
+                "hint": "Which axis disappears to leave one value per column?"
+              },
+              {
+                "answers": [
+                  "std"
+                ],
+                "hint": "Standard deviation."
+              }
+            ],
+            "explanation": "axis=0 collapses the 31 rows, giving two arrays of length 3."
+          }
+        },
+        {
+          "title": "(2) Standardise every element",
+          "html": "<p>z = (x − μ) ÷ σ, for each column with its own μ and σ. Thanks to broadcasting this is one line: a (31, 3) table minus a (3,) row of means subtracts each column's mean from that column.</p><div class=\"code-block\">X      (31, 3)\nmu         (3,)   -&gt; stretched to (31, 3), the same row repeated\nX - mu (31, 3)</div>",
+          "item": {
+            "type": "write",
+            "tokens": [
+              {
+                "pattern": "X_std\\s*=",
+                "flags": "",
+                "hint": "store the result in X_std"
+              },
+              {
+                "pattern": "\\(\\s*X\\s*-\\s*mu\\s*\\)\\s*/\\s*sd|\\(\\s*X\\s*-\\s*np\\.mean\\s*\\(\\s*X\\s*,\\s*axis\\s*=\\s*0\\s*\\)\\s*\\)\\s*/",
+                "flags": "",
+                "hint": "(X - mu) / sd, brackets included"
+              }
+            ],
+            "starter": "mu = np.mean(X, axis=0)\nsd = np.std(X, axis=0)\n",
+            "solution": "mu = np.mean(X, axis=0)\nsd = np.std(X, axis=0)\nX_std = (X - mu) / sd\nprint(X_std.shape)",
+            "hint": [
+              "Subtract, then divide, and bracket the subtraction.",
+              "X_std = (X - mu) / sd"
+            ],
+            "explanation": "Without the brackets, <code>X - mu / sd</code> divides first and gives nonsense."
+          }
+        },
+        {
+          "title": "Check your answer",
+          "html": "<div class=\"code-block\">mu = np.mean(X, axis=0)\nsd = np.std(X, axis=0)\nX_std = (X - mu) / sd</div><p>You should get:</p><div class=\"code-block\">mu  = [-10.1677 -18.1968  64.6387]\nsd  = [  8.2959   9.6674 245.6122]\nX_std.shape = (31, 3)\nnp.mean(X_std, axis=0) -&gt; [0. 0. 0.]   (tiny rounding like -0. is fine)\nnp.std(X_std, axis=0)  -&gt; [1. 1. 1.]</div><div class=\"warn-box\">Look at PRCP: a mean of 64.6 mm a day in a North Dakota January? That's the two <b>999.9 missing-value markers</b> (rows 4 and 5) dragging it up. The question asks for the plain mean, so this is the expected answer. In real work you'd filter them out first, as in 2.3.3.</div>"
+        }
+      ]
+    },
+    {
+      "id": "wk-24",
+      "topic": "np4",
+      "icon": "🔍",
+      "includeDrills": false,
+      "title": "Practice Question 2-4, step by step",
+      "desc": "A 7-day window around any date, z-scores relative to that window, then rain vs no-rain averages.",
+      "steps": [
+        {
+          "title": "Read the question carefully first",
+          "html": "<p><code>date</code> is a January date from 4 to 28, counted from 1. \"Within 3 days\" means three days before and three after, seven days in all. For 5 January that's 2 to 8 January.</p><div class=\"warn-box\">The question text says <code>get_data_zscore</code>, but the code cell defines <code>get_temp_zscore</code>. Either name works; just be consistent. Also, \"PCRP\" in the question is a typo for PRCP.</div>"
+        },
+        {
+          "title": "Date → the window's rows",
+          "html": "<p>Date d is row d − 1. Three days before is row d − 4, three days after is row d + 2, and a slice's stop is excluded, so the stop is d + 3.</p><p>Check with d = 5: rows 1 to 7, which are 2 to 8 January. ✓</p>",
+          "item": {
+            "type": "cloze",
+            "template": "window = X[date - ___ : date + ___]   # 7 rows, all 3 columns\ntoday = X[date - ___]               # the target day's row",
+            "blanks": [
+              {
+                "answers": [
+                  "4"
+                ],
+                "hint": "Three days before date d: (d − 1) − 3."
+              },
+              {
+                "answers": [
+                  "3"
+                ],
+                "hint": "Three days after is row d + 2; the stop must be one past it."
+              },
+              {
+                "answers": [
+                  "1"
+                ],
+                "hint": "Date d is row d − 1."
+              }
+            ],
+            "explanation": "<code>X[date-4 : date+3]</code> has shape (7, 3). <code>X[date-1]</code> has shape (3,): today's TMAX, TMIN, PRCP."
+          }
+        },
+        {
+          "title": "(1) The function",
+          "html": "<p>z-score the target day against the window, column by column, exactly like 2-3 but with the window's mean and std.</p>",
+          "item": {
+            "type": "write",
+            "starter": "def get_temp_zscore(date):\n    ",
+            "tokens": [
+              {
+                "pattern": "def\\s+get_\\w+_zscore\\s*\\(\\s*date\\s*\\)",
+                "flags": "",
+                "hint": "keep the header (get_temp_zscore or get_data_zscore)"
+              },
+              {
+                "pattern": "X\\s*\\[\\s*date\\s*-\\s*4\\s*:\\s*date\\s*\\+\\s*3\\s*\\]",
+                "flags": "",
+                "hint": "the window X[date - 4 : date + 3]"
+              },
+              {
+                "pattern": "X\\s*\\[\\s*date\\s*-\\s*1\\s*\\]",
+                "flags": "",
+                "hint": "the target row X[date - 1]"
+              },
+              {
+                "pattern": "axis\\s*=\\s*0",
+                "flags": "",
+                "hint": "mean and std per column: axis=0"
+              },
+              {
+                "pattern": "return\\s+",
+                "flags": "",
+                "hint": "return the result"
+              }
+            ],
+            "solution": "def get_temp_zscore(date):\n    window = X[date - 4 : date + 3]\n    today = X[date - 1]\n    answer = (today - np.mean(window, axis=0)) / np.std(window, axis=0)\n    return answer",
+            "hint": [
+              "Window, target row, then the z-score formula.",
+              "(today - np.mean(window, axis=0)) / np.std(window, axis=0)"
+            ],
+            "explanation": "<code>today</code> (3,) minus a (3,) mean, divided by a (3,) std: one z-score per column, shape (3,)."
+          }
+        },
+        {
+          "title": "Check (1)",
+          "html": "<p>With the notebook's data:</p><div class=\"code-block\">get_temp_zscore(5)    # [1.0883 1.3019 1.5811]\nget_temp_zscore(4)    # [ 0.1179  0.7846 -0.6298]\nget_temp_zscore(28)   # [-0.4358 -0.9037     nan]   + a RuntimeWarning</div><div class=\"why-box\"><b>Why <code>nan</code> for 28 January?</b> It didn't rain on any day from 25 to 31 January, so PRCP's std over the window is 0 and the z-score is 0 ÷ 0. Your code is right; the data has no spread to measure.</div>"
+        },
+        {
+          "title": "(2) TMAX with rain vs without",
+          "html": "<p>Use the PRCP column (index 2) to pick rows, then read TMAX (index 0). \"Rain\" means PRCP above 0 <b>and</b> not the 999.9 missing marker.</p>",
+          "item": {
+            "type": "write",
+            "tokens": [
+              {
+                "pattern": "==\\s*0",
+                "flags": "",
+                "hint": "no rain: PRCP == 0"
+              },
+              {
+                "pattern": ">\\s*0",
+                "flags": "",
+                "hint": "rain: PRCP > 0"
+              },
+              {
+                "pattern": "<\\s*999\\.9|!=\\s*999\\.9",
+                "flags": "",
+                "hint": "exclude the 999.9 missing marker"
+              },
+              {
+                "pattern": "&",
+                "flags": "",
+                "hint": "combine the rain conditions with &"
+              },
+              {
+                "pattern": "np\\.mean\\s*\\(",
+                "flags": "",
+                "hint": "average with np.mean"
+              }
+            ],
+            "solution": "prcp = X[:, 2]\nno_rain = prcp == 0\nrain = (prcp > 0) & (prcp < 999.9)\nprint(\"No rain:\", np.mean(X[no_rain, 0]))\nprint(\"Rain:\", np.mean(X[rain, 0]))",
+            "hint": [
+              "Two masks from the PRCP column; the rain one needs two conditions.",
+              "rain = (prcp > 0) & (prcp < 999.9), then np.mean(X[rain, 0])"
+            ],
+            "explanation": "No rain: −9.82 °C over 27 days. Rain: −11.7 °C over 2 days. The 2 missing days are left out of both."
+          }
+        }
+      ]
+    },
+    {
+      "id": "wk-27",
+      "topic": "np6",
+      "icon": "🧭",
+      "includeDrills": false,
+      "title": "Comprehensive question (2.7), step by step",
+      "desc": "Rotate 100 random vectors, normalise them, and give similar vectors the same number, without comparing every pair.",
+      "steps": [
+        {
+          "title": "(1) Rotate all 100 vectors",
+          "html": "<p><code>A = random.randn(100, 3)</code> is 100 row vectors. <code>gen_R_3d(p)</code> builds a rotation from three angles; give it three random angles in [0, 2π).</p>",
+          "item": {
+            "type": "cloze",
+            "template": "p = random.rand(3) * 2 * np.___\nR = gen_R_3d(p)\nrotated = A @ R.___\nprint(rotated.shape)   # (100, 3)",
+            "blanks": [
+              {
+                "answers": [
+                  "pi"
+                ],
+                "hint": "A full turn is 2π."
+              },
+              {
+                "answers": [
+                  "T"
+                ],
+                "hint": "Row vectors: transpose R."
+              }
+            ],
+            "explanation": "R rotates a column vector as <code>R @ v</code>; for rows that's <code>A @ R.T</code>. (<code>A @ R</code> applies the reverse rotation, which is still random, so it also passes.)"
+          }
+        },
+        {
+          "title": "(2) Make every row length 1",
+          "html": "<p>One norm per row, kept as a (100, 1) column so the division broadcasts across each row.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "norms = LA.norm(rotated, axis=___, keepdims=___)\nunit = rotated / norms\nprint(LA.norm(unit, axis=1)[:5])   # [1. 1. 1. 1. 1.]",
+            "blanks": [
+              {
+                "answers": [
+                  "1"
+                ],
+                "hint": "Per row."
+              },
+              {
+                "answers": [
+                  "True"
+                ],
+                "hint": "Keep the column shape (100, 1)."
+              }
+            ],
+            "explanation": "Without keepdims, norms would be (100,), and (100, 3) / (100,) raises a broadcasting error."
+          }
+        },
+        {
+          "title": "(3) Stack the vectors and their negatives",
+          "html": "<p>Side by side means along the columns, axis=1: (100, 3) and (100, 3) become (100, 6).</p>",
+          "item": {
+            "type": "cloze",
+            "template": "both = np.concatenate([unit, ___unit], axis=___)\nprint(both.shape)   # (100, 6)",
+            "blanks": [
+              {
+                "answers": [
+                  "-"
+                ],
+                "hint": "\"multiplied by −1\""
+              },
+              {
+                "answers": [
+                  "1"
+                ],
+                "hint": "Horizontally."
+              }
+            ],
+            "explanation": "<code>np.hstack([unit, -unit])</code> is the same thing. axis=0 would stack them vertically into (200, 3)."
+          }
+        },
+        {
+          "title": "(4) Each vector's group number",
+          "html": "<p>The six columns of <code>both</code> are the inner products with +x, +y, +z, −x, −y, −z (see the tutorial). The group is the column with the largest value, stored as a (100, 1) column.</p>",
+          "item": {
+            "type": "write",
+            "tokens": [
+              {
+                "pattern": "np\\.argmax\\s*\\(\\s*both",
+                "flags": "",
+                "hint": "np.argmax over both"
+              },
+              {
+                "pattern": "axis\\s*=\\s*1",
+                "flags": "",
+                "hint": "per row: axis=1"
+              },
+              {
+                "pattern": "reshape\\s*\\(\\s*-1\\s*,\\s*1\\s*\\)|reshape\\s*\\(\\s*100\\s*,\\s*1\\s*\\)|keepdims\\s*=\\s*True",
+                "flags": "",
+                "hint": "make it (100, 1): reshape(-1, 1)"
+              }
+            ],
+            "solution": "labels = np.argmax(both, axis=1).reshape(-1, 1)\nprint(labels.shape)",
+            "hint": [
+              "argmax gives the column index of the largest value.",
+              "np.argmax(both, axis=1) is (100,); reshape(-1, 1) makes it a column."
+            ],
+            "explanation": "Each label is 0–5. The hint's \"avoid the inner product\" is exactly this: (3) already built the six inner products."
+          }
+        },
+        {
+          "title": "(5) Check that it worked",
+          "html": "<p>For unit vectors, <code>unit @ unit.T</code> is the cosine between every pair. Pairs with the same label should have a much higher average cosine than pairs with different labels.</p>",
+          "item": {
+            "type": "cloze",
+            "template": "cos = unit @ unit.___                # (100, 100)\nsame = labels == labels.___          # (100, 100) True/False\nprint(np.mean(cos[same]), np.mean(cos[~same]))",
+            "blanks": [
+              {
+                "answers": [
+                  "T"
+                ],
+                "hint": "Rows against rows: transpose the second."
+              },
+              {
+                "answers": [
+                  "T"
+                ],
+                "hint": "(100, 1) against (1, 100) broadcasts to every pair."
+              }
+            ],
+            "explanation": "<code>labels == labels.T</code> broadcasts a column against a row, comparing every pair at once."
+          }
+        },
+        {
+          "title": "The whole solution",
+          "html": "<div class=\"code-block\"># (1)\np = random.rand(3) * 2 * np.pi\nR = gen_R_3d(p)\nrotated = A @ R.T\n\n# (2)\nunit = rotated / LA.norm(rotated, axis=1, keepdims=True)\n\n# (3)\nboth = np.concatenate([unit, -unit], axis=1)\n\n# (4)\nlabels = np.argmax(both, axis=1).reshape(-1, 1)\n\n# (5)\ncos = unit @ unit.T\nsame = labels == labels.T\noff_diag = ~np.eye(100, dtype=bool)      # ignore each vector paired with itself\nprint(\"same group:\", np.mean(cos[same &amp; off_diag]))\nprint(\"different :\", np.mean(cos[~same]))</div><p>One run gave <b>0.68</b> for same-group pairs and <b>−0.14</b> for different-group pairs. Your numbers will differ because A and R are random, but same-group should be clearly higher. That's the \"with high probability\" the question promises.</p>"
+        }
+      ]
+    }
   ],
-
   "reference": [
-    { "tab": "Tab One", "title": "Heading inside the tab",
-      "html": "<p>Formulas, tables, syntax — whatever you want open beside you during practice.</p><table class=\"data-table\"><tr><th>Thing</th><th>Meaning</th></tr><tr><td>A</td><td>B</td></tr></table>" }
+    {
+      "tab": "January 2010",
+      "title": "Index ↔ date ↔ weekday (1 Jan = index 0 = Friday)",
+      "html": "<table class=\"data-table\"><tr><th>Fri</th><th>Sat</th><th>Sun</th><th><b>Mon ★</b></th><th>Tue</th><th>Wed</th><th>Thu</th></tr><tr><td>Jan 1<br><small>index 0</small></td><td>Jan 2<br><small>index 1</small></td><td>Jan 3<br><small>index 2</small></td><td><b>Jan 4<br><small>index 3</small></b></td><td>Jan 5<br><small>index 4</small></td><td>Jan 6<br><small>index 5</small></td><td>Jan 7<br><small>index 6</small></td></tr><tr><td>Jan 8<br><small>index 7</small></td><td>Jan 9<br><small>index 8</small></td><td>Jan 10<br><small>index 9</small></td><td><b>Jan 11<br><small>index 10</small></b></td><td>Jan 12<br><small>index 11</small></td><td>Jan 13<br><small>index 12</small></td><td>Jan 14<br><small>index 13</small></td></tr><tr><td>Jan 15<br><small>index 14</small></td><td>Jan 16<br><small>index 15</small></td><td>Jan 17<br><small>index 16</small></td><td><b>Jan 18<br><small>index 17</small></b></td><td>Jan 19<br><small>index 18</small></td><td>Jan 20<br><small>index 19</small></td><td>Jan 21<br><small>index 20</small></td></tr><tr><td>Jan 22<br><small>index 21</small></td><td>Jan 23<br><small>index 22</small></td><td>Jan 24<br><small>index 23</small></td><td><b>Jan 25<br><small>index 24</small></b></td><td>Jan 26<br><small>index 25</small></td><td>Jan 27<br><small>index 26</small></td><td>Jan 28<br><small>index 27</small></td></tr><tr><td>Jan 29<br><small>index 28</small></td><td>Jan 30<br><small>index 29</small></td><td>Jan 31<br><small>index 30</small></td><td></td><td></td><td></td><td></td></tr></table><p>Mondays: indexes 3, 10, 17, 24, so <code>jan_tmax[3::7]</code>. Fridays: 0, 7, 14, 21, 28, so <code>[::7]</code>. Window around date d: <code>X[d-4 : d+3]</code>. Missing PRCP (999.9): indexes 4 and 5.</p>"
+    },
+    {
+      "tab": "Indexing",
+      "title": "1D and 2D indexing",
+      "html": "<table class=\"data-table\"><tr><th>Form</th><th>Takes</th></tr><tr><td><code>a[i]</code>, <code>a[-1]</code></td><td>one element; the last</td></tr><tr><td><code>a[2:5]</code></td><td>indexes 2, 3, 4 (stop excluded)</td></tr><tr><td><code>a[3::7]</code></td><td>3, 10, 17, … to the end</td></tr><tr><td><code>a[[0, 2, 4]]</code></td><td>exactly those positions (arrays only)</td></tr><tr><td><code>a[a &gt; 0]</code>, <code>a[(a &gt; 0) &amp; (a &lt; 5)]</code></td><td>where the condition is True; <code>|</code> or, <code>~</code> not</td></tr><tr><td><code>X[r, c]</code></td><td>row r, column c</td></tr><tr><td><code>X[r]</code> / <code>X[:, c]</code></td><td>a whole row / a whole column</td></tr><tr><td><code>X[[0, 2]]</code> / <code>X[:, [0, 2]]</code></td><td>rows 0 and 2 / columns 0 and 2</td></tr><tr><td><code>X[[0, 2], [1, 3]]</code></td><td>the <b>pairs</b> (0, 1) and (2, 3)</td></tr><tr><td><code>X[np.ix_([0, 2], [1, 3])]</code></td><td>the 2 × 2 <b>submatrix</b></td></tr><tr><td><code>X[::3, :2]</code></td><td>every 3rd row, first two columns</td></tr><tr><td><code>X[X[:, 2] == 0, 0]</code></td><td>column 0 for rows where column 2 is 0</td></tr></table>"
+    },
+    {
+      "tab": "Axis & shape",
+      "title": "axis=0 vs axis=1, reshape",
+      "html": "<table class=\"data-table\"><tr><th>X is (31, 3)</th><th>Result</th></tr><tr><td><code>np.mean(X)</code></td><td>one number</td></tr><tr><td><code>np.mean(X, axis=0)</code></td><td>(3,): one per <b>column</b></td></tr><tr><td><code>np.mean(X, axis=1)</code></td><td>(31,): one per <b>row</b></td></tr><tr><td><code>LA.norm(X, axis=1, keepdims=True)</code></td><td>(31, 1): per row, as a column</td></tr><tr><td><code>a.reshape(3, -1)</code></td><td>3 rows, columns worked out</td></tr><tr><td><code>a.reshape(-1, 1)</code> / <code>(1, -1)</code></td><td>a column / a row vector</td></tr><tr><td><code>np.concatenate([P, Q], axis=1)</code></td><td>side by side (columns add up)</td></tr><tr><td><code>np.concatenate([P, Q], axis=0)</code></td><td>stacked (rows add up)</td></tr></table><p><b>The axis you name is the one that disappears.</b></p>"
+    },
+    {
+      "tab": "Functions",
+      "title": "Everything the notebook calls",
+      "html": "<table class=\"data-table\"><tr><th>Call</th><th>Does</th></tr><tr><td><code>np.array(lst)</code> / <code>a.tolist()</code></td><td>list → array / array → list</td></tr><tr><td><code>np.loadtxt(URL, delimiter=\",\", usecols=[6,7,8], skiprows=1)</code></td><td>read a CSV into an array</td></tr><tr><td><code>a.shape</code>, <code>len(a)</code></td><td>size: <code>(31, 3)</code>, 31</td></tr><tr><td><code>np.mean</code>, <code>np.std</code>, <code>np.sum</code>, <code>np.max</code>, <code>np.min</code></td><td>summaries (take <code>axis=</code>)</td></tr><tr><td><code>np.argmax(a, axis=1)</code></td><td>the <b>position</b> of the largest in each row</td></tr><tr><td><code>np.sqrt</code>, <code>np.exp</code>, <code>np.log1p</code>, <code>np.expm1</code></td><td>per element: √x, eˣ, log(1+x), eˣ−1</td></tr><tr><td><code>np.concatenate</code>, <code>np.hstack</code></td><td>join arrays</td></tr><tr><td><code>np.arange(1, 4)</code></td><td>[1 2 3] (stop excluded)</td></tr><tr><td><code>np.pi</code>, <code>np.e</code>, <code>np.inf</code></td><td>constants</td></tr></table>"
+    },
+    {
+      "tab": "Random & linalg",
+      "title": "numpy.random and numpy.linalg",
+      "html": "<table class=\"data-table\"><tr><th>Call</th><th>Does</th></tr><tr><td><code>random.rand(n, m)</code></td><td>uniform [0, 1)</td></tr><tr><td><code>random.randn(n, m)</code></td><td>normal, mean 0, std 1</td></tr><tr><td><code>random.normal(mu, sigma, shape)</code></td><td>normal with your mean and std</td></tr><tr><td><code>random.randint(low, high, shape)</code></td><td>integers low … high−1</td></tr><tr><td><code>random.seed(seed=32)</code></td><td>reproducible results</td></tr><tr><td><code>A.T</code>, <code>np.transpose(A)</code></td><td>transpose</td></tr><tr><td><code>A @ B</code>, <code>np.matmul</code>, <code>np.dot</code></td><td>matrix product / dot product</td></tr><tr><td><code>LA.det(A)</code>, <code>LA.inv(A)</code></td><td>determinant, inverse (LinAlgError if singular)</td></tr><tr><td><code>LA.norm(x)</code>, <code>ord=1</code>, <code>ord=np.inf</code></td><td>L2, L1 (sum of abs), L∞ (largest abs)</td></tr></table>"
+    },
+    {
+      "tab": "Formulas",
+      "title": "Statistics and vectors",
+      "html": "<div class=\"formula-box\"><div class=\"math-eq\">μ = Σx ÷ N</div></div><div class=\"formula-box\"><div class=\"math-eq\">σ = √( Σ (x − μ)² ÷ N )</div></div><div class=\"formula-box\"><div class=\"math-eq\">z = (x − μ) ÷ σ</div></div><div class=\"formula-box\"><div class=\"math-eq\">‖a‖₂ = √( Σ a² ),&nbsp;&nbsp; normalize(a) = a ÷ ‖a‖₂</div></div><div class=\"formula-box\"><div class=\"math-eq\">cos θ = a·b ÷ (‖a‖ ‖b‖)</div></div><div class=\"code-block\">mu    = np.mean(x)\nsigma = np.sqrt(np.sum((x - mu) ** 2) / len(x))   # == np.std(x)\nz     = (x - mu) / sigma\nnorm  = np.sqrt(np.sum(a ** 2))                   # == LA.norm(a)\ncos   = (a @ b) / (LA.norm(a) * LA.norm(b))</div>"
+    }
   ],
-
   "glossary": [
-    { "term": "A term", "topic": "t1", "def": "Its definition. <code>Markup</code> works." }
+    {
+      "term": "ndarray",
+      "topic": "np1",
+      "def": "NumPy's array type (<code>numpy.ndarray</code>). Every element has the same type, and maths on it works element by element."
+    },
+    {
+      "term": "element-wise",
+      "topic": "np1",
+      "def": "Applied to each element separately. <code>a + b</code> on arrays adds position 0 to position 0, 1 to 1, and so on. The notebook calls this <i>universal</i>."
+    },
+    {
+      "term": "broadcasting",
+      "topic": "np1",
+      "def": "NumPy stretching a length-1 operand (such as a single number, or a (100, 1) column) to match the other array. Lengths that are neither equal nor 1 raise ValueError."
+    },
+    {
+      "term": "aggregation function",
+      "topic": "np1",
+      "def": "A function that turns many values into one, or one per axis: <code>np.mean</code>, <code>np.std</code>, <code>np.sum</code>, <code>np.max</code>, <code>np.min</code>."
+    },
+    {
+      "term": "np.inf",
+      "topic": "np5",
+      "def": "Infinity. What NumPy returns for division by zero, with a warning, instead of raising an error. <code>2 / np.inf</code> is 0.0."
+    },
+    {
+      "term": "nan",
+      "topic": "math",
+      "def": "\"Not a number\": the result of 0 ÷ 0, for example a z-score in a window where every value is the same."
+    },
+    {
+      "term": "shape",
+      "topic": "np1",
+      "def": "An array's size as a tuple. A 1D array of 31 values has shape <code>(31,)</code>; the weather table is <code>(31, 3)</code>."
+    },
+    {
+      "term": "index",
+      "topic": "pre",
+      "def": "A position in a list or array, counted from 0. Negative indexes count from the end."
+    },
+    {
+      "term": "slice",
+      "topic": "pre",
+      "def": "<code>a[start:stop:step]</code>: a run of elements. <code>stop</code> is never included; any part may be left out."
+    },
+    {
+      "term": "step",
+      "topic": "pre",
+      "def": "The third part of a slice: how far to jump each time. <code>a[3::7]</code> takes 3, 10, 17, …"
+    },
+    {
+      "term": "alias",
+      "topic": "pre",
+      "def": "The short name a library is imported under: <code>import numpy as np</code>, <code>from numpy import linalg as LA</code>."
+    },
+    {
+      "term": "mean",
+      "topic": "math",
+      "def": "The average: the sum of the values ÷ how many there are. <code>np.mean(a)</code>."
+    },
+    {
+      "term": "standard deviation",
+      "topic": "math",
+      "def": "How spread out values are around the mean: √( Σ (x − μ)² ÷ N ). <code>np.std(a)</code>. Zero means every value is the same."
+    },
+    {
+      "term": "z-score",
+      "topic": "math",
+      "def": "How many standard deviations a value is from the mean: (x − μ) ÷ σ."
+    },
+    {
+      "term": "standardise",
+      "topic": "math",
+      "def": "Replace every value with its z-score, so each column has mean 0 and std 1 and different units become comparable."
+    },
+    {
+      "term": "L2 norm",
+      "topic": "math",
+      "def": "The length of a vector: √(sum of squares of its elements). <code>LA.norm(x)</code>."
+    },
+    {
+      "term": "L1 norm",
+      "topic": "np5",
+      "def": "The sum of absolute values. <code>LA.norm(x, ord=1)</code>."
+    },
+    {
+      "term": "normalise",
+      "topic": "math",
+      "def": "Divide a vector by its L2 norm so its new length is exactly 1."
+    },
+    {
+      "term": "dot product",
+      "topic": "math",
+      "def": "Multiply matching elements and add them up: (1, 2, 3)·(6, 7, 8) = 44. <code>x @ y</code>."
+    },
+    {
+      "term": "cosine similarity",
+      "topic": "math",
+      "def": "cos θ = a·b ÷ (‖a‖ ‖b‖): 1 for the same direction, 0 at right angles, −1 for opposite directions."
+    },
+    {
+      "term": "boolean indexing",
+      "topic": "np2",
+      "def": "Indexing with a True/False array to keep only the True positions: <code>a[a &gt; 0]</code>, <code>X[X[:, 2] == 0]</code>."
+    },
+    {
+      "term": "mask",
+      "topic": "np2",
+      "def": "The True/False array used in boolean indexing, e.g. <code>dry = X[:, 2] == 0</code>."
+    },
+    {
+      "term": "missing value",
+      "topic": "np2",
+      "def": "A reading that wasn't recorded, stored as a marker number (999.9 in the PRCP column). Filter it out before averaging."
+    },
+    {
+      "term": "axis",
+      "topic": "np3",
+      "def": "A direction in an array. In 2D, axis 0 runs down the rows and axis 1 across the columns. The axis you pass to a summary is the one that disappears."
+    },
+    {
+      "term": "reshape",
+      "topic": "np3",
+      "def": "Rearrange the same elements into a new shape. <code>-1</code> means \"work this size out\". It can't change the element count."
+    },
+    {
+      "term": "Hadamard product",
+      "topic": "np3",
+      "def": "The element-wise product <code>a * b</code> of two same-shape arrays. It isn't matrix multiplication."
+    },
+    {
+      "term": "np.ix_",
+      "topic": "np4",
+      "def": "Turns a row list and a column list into a grid index, so <code>a[np.ix_(rows, cols)]</code> gives a submatrix instead of paired elements."
+    },
+    {
+      "term": "keepdims",
+      "topic": "np5",
+      "def": "An option on summaries: keep the collapsed axis as size 1, e.g. (100, 1) instead of (100,), so the result broadcasts back over the original."
+    },
+    {
+      "term": "seed",
+      "topic": "np5",
+      "def": "A starting value for the random generator. The same seed gives the same \"random\" numbers every run."
+    },
+    {
+      "term": "uniform distribution",
+      "topic": "np5",
+      "def": "Every value in a range equally likely. <code>random.rand</code> samples [0, 1)."
+    },
+    {
+      "term": "normal distribution",
+      "topic": "np5",
+      "def": "The bell curve. <code>random.randn</code> has mean 0 and std 1; <code>random.normal(mu, sigma, shape)</code> sets both."
+    },
+    {
+      "term": "transpose",
+      "topic": "np5",
+      "def": "Swap rows and columns: shape (n, m) becomes (m, n). <code>A.T</code>. It does nothing to a 1D array."
+    },
+    {
+      "term": "matrix multiplication",
+      "topic": "np5",
+      "def": "<code>A @ B</code>: each result entry is a row of A dotted with a column of B. Needs (n × k) @ (k × m), and order matters."
+    },
+    {
+      "term": "determinant",
+      "topic": "np5",
+      "def": "A single number from a square matrix (<code>LA.det</code>). Zero means the matrix is singular."
+    },
+    {
+      "term": "singular matrix",
+      "topic": "np5",
+      "def": "A square matrix with determinant 0. It has no inverse, so <code>LA.inv</code> raises LinAlgError."
+    },
+    {
+      "term": "rotation matrix",
+      "topic": "np6",
+      "def": "A matrix that turns vectors without changing their lengths or the angles between them."
+    },
+    {
+      "term": "argmax",
+      "topic": "np6",
+      "def": "The <b>position</b> of the largest value: <code>np.argmax(a, axis=1)</code> gives one column index per row."
+    },
+    {
+      "term": "LSH",
+      "topic": "np6",
+      "def": "Locality-sensitive hashing: assigning group numbers so that similar items probably share one, without comparing every pair. 2.7 uses the cross-polytope version from the Reformer paper."
+    }
   ]
 }
-
 </script>
 
 <script>
