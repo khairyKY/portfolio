@@ -2,5 +2,8 @@
   "framework": "astro",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm ci"
+  "installCommand": "npm ci",
+  "redirects": [
+    { "source": "/project/networks-study-guide", "destination": "/project/study-guides", "permanent": true }
+  ]
 }
