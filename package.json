@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node scripts/stamp-icon.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
