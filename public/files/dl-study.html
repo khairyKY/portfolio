@@ -8466,6 +8466,9 @@ document.addEventListener("click", (e) => {
   card.addEventListener("click", open);
   card.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
   view.querySelector("#wqBackHome").addEventListener("click", () => { view.classList.add("hide"); setup.classList.remove("hide"); });
+  // Any route back to the menu (the template's Home button, goHome(), …) only knows its own views: leave with the menu.
+  new MutationObserver(() => { if (!setup.classList.contains("hide")) view.classList.add("hide"); })
+    .observe(setup, { attributes: true, attributeFilter: ["class"] });
   view.querySelector(".wq-chips").addEventListener("click", e => {
     const c = e.target.closest(".chip"); if (!c) return;
     view.querySelectorAll(".wq-chips .chip").forEach(x => x.classList.toggle("on", x === c));
