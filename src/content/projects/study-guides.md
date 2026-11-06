@@ -1,6 +1,6 @@
 ---
 title: "Study Guides"
-description: "Community study resources for Embedded Systems, Algorithms, Computer Networks, Software Engineering, Operating Systems, Cryptography, Computer Vision, Deep Learning, Economics & Sustainable Development, and Python — offline-first HTML with interactive features. Free to download and share."
+description: "Community study resources for Embedded Systems, Digital VLSI, Algorithms, Computer Networks, Software Engineering, Operating Systems, Cryptography, Computer Vision, Deep Learning, Economics & Sustainable Development, and Python — offline-first HTML with interactive features. Free to download and share."
 tags: ["Frontend"]
 date: 2025
 tech: ["HTML/CSS", "JavaScript", "Python"]
@@ -13,6 +13,7 @@ Interactive study guides for my computer-science courses: tutorials, flash cards
 
 <div class="guide-grid">
 <a class="guide-card" href="/files/embedded-systems-study.html"><span class="gc-code">CSE 324/325</span><span class="gc-title">Embedded Systems</span><span class="gc-sub">Course study guide</span><span class="gc-open">Open guide →</span></a>
+<a class="guide-card" href="/files/verilog-study.html"><span class="gc-code">ECE 432</span><span class="gc-title">Verilog Coding</span><span class="gc-sub">Combinational and sequential circuits, guided builds, and interactive timing labs</span><span class="gc-open">Open guide →</span></a>
 <a class="guide-card" href="/files/CSE326_study.html"><span class="gc-code">CSE 326</span><span class="gc-title">Algorithms</span><span class="gc-sub">Analysis &amp; Design of Algorithms</span><span class="gc-open">Open guide →</span></a>
 <a class="guide-card" href="/files/computer-networks-study-v2.html"><span class="gc-code">CSE 328/329</span><span class="gc-title">Computer Networks</span><span class="gc-sub">Course study guide</span><span class="gc-open">Open guide →</span></a>
 <a class="guide-card" href="/files/cse322-323-software-engineering-study.html"><span class="gc-code">CSE 322/323</span><span class="gc-title">Software Engineering</span><span class="gc-sub">Course study guide</span><span class="gc-open">Open guide →</span></a>
