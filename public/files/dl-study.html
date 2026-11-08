@@ -2708,6 +2708,8 @@
   :root[data-theme=dark] :is(.code-block,pre.code,.fill-template,.solution-panel .solution-code,.write-editor-container){border:1px solid #3a332a}
   :root[data-theme=dark] code{color:inherit}
   :root[data-theme=dark] .katex{color:inherit}
+    :root[data-theme=dark] .mode-card#modeCardPdf{background:linear-gradient(135deg,#2c2118,#3a2a1c);border-color:#b8743a}
+  :root[data-theme=dark] .mode-card#modeCardPdf .mc-title{color:#f3c9a0}:root[data-theme=dark] .mode-card#modeCardPdf .mc-desc{color:#d9a97c}
   /* @dark-end */
   @media (prefers-color-scheme: dark){
 /* @dark-begin */
@@ -2872,6 +2874,8 @@
   :root:not([data-theme=light]) :is(.code-block,pre.code,.fill-template,.solution-panel .solution-code,.write-editor-container){border:1px solid #3a332a}
   :root:not([data-theme=light]) code{color:inherit}
   :root:not([data-theme=light]) .katex{color:inherit}
+    :root:not([data-theme=light]) .mode-card#modeCardPdf{background:linear-gradient(135deg,#2c2118,#3a2a1c);border-color:#b8743a}
+  :root:not([data-theme=light]) .mode-card#modeCardPdf .mc-title{color:#f3c9a0}:root:not([data-theme=light]) .mode-card#modeCardPdf .mc-desc{color:#d9a97c}
     }
 
 
@@ -2902,6 +2906,8 @@
     .arrow-hint-container{display:none!important}   /* covers the lesson on phones; the button speaks for itself */
     .data-table,.prof-vis{max-width:100%}
   }
+  .mode-card#modeCardPdf{background:linear-gradient(135deg,#fdf3ea,#f6e2cf);border-color:#a8541d;text-decoration:none;color:inherit;display:block}
+  .mode-card#modeCardPdf .mc-title{color:#7a3a12}.mode-card#modeCardPdf .mc-desc{color:#9a5a2a}
 
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%23161614%22%2F%3E%20%3Cpath%20d%3D%22M17%2015v34M40%2015%2021%2033M26%2029l14%2020%22%20fill%3D%22none%22%20stroke%3D%22%23f7f1de%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3Ccircle%20cx%3D%2252%22%20cy%3D%2248%22%20r%3D%224.5%22%20fill%3D%22%23ED6F5C%22%2F%3E%20%3C%2Fsvg%3E" data-portfolio-icon>
@@ -9255,12 +9261,25 @@ document.addEventListener("click", (e) => {
     if (h.get("mode")) { const c = document.getElementById("modeCard" + (h.get("mode") === "proofs" ? "Proofs" : "Written")); if (c) c.click(); return; }
     const t = +h.get("t"), s = +h.get("s") || 1;
     if (!t || typeof TUTORIALS === "undefined" || !TUTORIALS[t]) return;
-    const card = document.querySelector(".tut-card"); if (card) card.click();
+    // leave the home screen exactly as the Tutorial Mode card would: hide every other view, show the tutorial view
+    ["setup", "tutPick", "quiz", "results", "codingPick", "codingView", "flashView", "profView", "writtenView", "proofsView"]
+      .forEach(id => { const el = document.getElementById(id); if (el) el.classList.add("hide"); });
+    document.getElementById("tutView").classList.remove("hide");
     state.tutTopic = t; state.tutStep = Math.min(s, TUTORIALS[t].length) - 1; renderTutStep();
     window.scrollTo(0, 0);
   }
   window.addEventListener("hashchange", go);
   if (document.readyState === "complete") go(); else window.addEventListener("load", go);
+})();
+
+/* 📄 Midterm crash course PDF: a menu card that opens the printable reference (same folder as this page). */
+(function () {
+  const after = document.getElementById("modeCardProofs") || document.getElementById("modeCardWritten") || document.getElementById("modeCardQuiz");
+  if (!after) return;
+  const a = document.createElement("a");
+  a.className = "mode-card"; a.id = "modeCardPdf"; a.href = "CSE433-DL-Midterm-Zero-to-Hero.pdf"; a.target = "_blank"; a.rel = "noopener";
+  a.innerHTML = '<div class="mc-icon">📄</div><div class="mc-title">Midterm crash-course PDF</div><div class="mc-desc">The printable one-night reference: every in-scope lecture, step-by-step pen-and-paper problems, slide figures and a formula sheet</div>';
+  after.insertAdjacentElement("afterend", a);
 })();
 
 </script>
